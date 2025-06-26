@@ -527,19 +527,17 @@
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  display: inline-flex;
+  display: flex; /* Cambiado de inline-flex a flex */
   align-items: center;
-  gap: 0.5rem;
-  width:80%;
   justify-content: center;
+  gap: 0.5rem;
+  width: 80%;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   position: relative;
   backdrop-filter: blur(10px);
   overflow: hidden;
-  align-self: center;
-  justify-self: center;
-  display: flex;
+  margin: 0 auto; /* Agregado para centrar horizontalmente */
 }
 
 [data-theme="light"] .news-btn {
@@ -585,6 +583,7 @@
 .carousel-card-right .news-btn {
   padding: 0.6rem 1rem; /* Reducido de 0.8rem 1.4rem */
   font-size: 0.75rem; /* Reducido de 0.8rem */
+  width: 85%; /* Ajustado el ancho para cards laterales */
 }
 
 /* Navegación del carrusel */

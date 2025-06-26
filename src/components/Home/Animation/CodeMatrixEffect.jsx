@@ -1,99 +1,52 @@
-"use client";
+"use client"
 
-import { useRef, useEffect } from "react";
-import { useTheme } from "../../../context/ThemeContext";
+import { useRef, useEffect } from "react"
+import { useTheme } from "../../../context/ThemeContext"
 
-// ===== VARIABLES DE CONFIGURACIÓN =====
+// ===== CONFIGURACIÓN MEJORADA =====
 const ANIMATION_CONFIG = {
-  // Velocidad de la animación
   speed: {
-    base: 0.02, // ↓ Más lento
-    variation: 0.08, // ↓ Menos variación
-    timeMultiplier: 0.01, // ↓ Menos FPS
+    base: 0.03,
+    variation: 0.12,
+    timeMultiplier: 0.016,
   },
-  // Configuración de destellos/brillo
   glow: {
     enabled: true,
-    intensity: 0.1, // ↓ Menos intenso
-    frequency: 0.01, // ↓ Menos frecuente
-    duration: 15, // ↓ Menos duradero
+    intensity: 0.15,
+    frequency: 0.02,
+    duration: 20,
+    blurRadius: 15,
+    colorIntensity: 0.8,
   },
-  // Opacidad de símbolos
   opacity: {
     darkTheme: {
-      base: 0.2, // Opacidad base en tema oscuro
-      grayRange: [140, 200], // Rango de valores de gris
+      base: 0.3,
+      grayRange: [120, 255],
     },
     lightTheme: {
-      base: 0.2, // Opacidad base en tema claro
-      grayRange: [100, 140], // Rango de valores de gris
+      base: 0.25,
+      grayRange: [80, 160],
     },
   },
-
-  // Configuración visual
   visual: {
-    fontSize: 16,
-    columnSpacing: 2.5, // Multiplicador del fontSize para espaciado
-    fadeBackground: 12, // Intensidad del fade del fondo (hex)
-    resetProbability: 0.9995, // Probabilidad de reset (más alto = menos resets)
+    fontSize: 18,
+    columnSpacing: 2.2,
+    fadeBackground: 15,
+    resetProbability: 0.9992,
+    specialSymbolChance: 0.15,
   },
-};
+  waves: {
+    enabled: true,
+    amplitude: 1,
+    frequency: 0.02,
+    speed: 0.01,
+  },
+}
 
-// Símbolos y términos específicos para cada línea de investigación
+// Símbolos expandidos y categorizados por líneas de investigación
 const RESEARCH_SYMBOLS = {
-  ontologies: [
-    // Ontologías y Web Semántica
-    "RDF",
-    "OWL",
-    "SPARQL",
-    "URI",
-    "XML",
-    "RDFS",
-    "Turtle",
-    "N3",
-    "JSON-LD",
-    "Protégé",
-    "Jena",
-    "Sesame",
-    "Virtuoso",
-    "DBpedia",
-    "FOAF",
-    "SKOS",
-    "⟨⟩",
-    "∀",
-    "∃",
-    "⊆",
-    "⊇",
-    "≡",
-    "⊤",
-    "⊥",
-    "∩",
-    "∪",
-  ],
+  
   nlp: [
-    // Procesamiento del Lenguaje Natural
-    "NLP",
-    "TOKEN",
-    "PARSE",
-    "STEM",
-    "POS",
-    "NER",
-    "NLTK",
-    "spaCy",
-    "BERT",
-    "GPT",
-    "Transformer",
-    "Word2Vec",
-    "GloVe",
-    "FastText",
-    "Corpus",
-    "Lemma",
-    "Syntax",
-    "Semantic",
-    "Pragmatic",
-    "Morphology",
-    "Phonology",
-    "Lexicon",
     "λ",
     "Σ",
     "∈",
@@ -106,36 +59,7 @@ const RESEARCH_SYMBOLS = {
     "¬",
   ],
   robotics: [
-    // Robótica y Sistemas Embebidos
-    "IoT",
-    "Arduino",
-    "Raspberry",
-    "PWM",
-    "GPIO",
-    "I2C",
-    "SPI",
-    "UART",
-    "CAN",
-    "Sensor",
-    "Actuator",
-    "Servo",
-    "Stepper",
-    "PID",
-    "ROS",
-    "Gazebo",
-    "SLAM",
-    "Lidar",
-    "IMU",
-    "GPS",
-    "Bluetooth",
-    "WiFi",
-    "LoRa",
-    "Zigbee",
-    "MQTT",
-    "→",
-    "↑",
-    "↓",
-    "←",
+
     "⟲",
     "⟳",
     "⚡",
@@ -144,119 +68,11 @@ const RESEARCH_SYMBOLS = {
     "📡",
   ],
   ai: [
-    // Sistemas Inteligentes
     "AI",
     "ML",
     "DL",
-    "NN",
-    "CNN",
-    "RNN",
-    "LSTM",
-    "GAN",
-    "SVM",
-    "KNN",
-    "Random Forest",
-    "Gradient",
-    "Backprop",
-    "Epoch",
-    "Batch",
-    "Learning Rate",
-    "Overfitting",
-    "Regularization",
-    "Cross-validation",
-    "Feature",
-    "Dataset",
-    "TensorFlow",
-    "PyTorch",
-    "Keras",
-    "Scikit",
-    "Pandas",
-    "NumPy",
-    "∇",
-    "∂",
-    "∑",
-    "∏",
-    "∞",
-    "α",
-    "β",
-    "γ",
-    "δ",
-    "ε",
-    "θ",
-    "λ",
-    "μ",
-    "σ",
-  ],
-  education: [
-    // Educación en las Ciencias de la Computación
-    "Pedagogía",
-    "Didáctica",
-    "E-learning",
-    "MOOC",
-    "LMS",
-    "Moodle",
-    "Canvas",
-    "Gamification",
-    "Assessment",
-    "Rubric",
-    "Competency",
-    "Curriculum",
-    "STEM",
-    "Constructivism",
-    "Bloom",
-    "Piaget",
-    "Vygotsky",
-    "Scaffolding",
-    "Metacognition",
-    "UX",
-    "UI",
-    "Accessibility",
-    "Responsive",
-    "Adaptive",
-    "Personalization",
-    "α",
-    "β",
-    "γ",
-    "δ",
-    "ε",
-    "ζ",
-    "η",
-    "θ",
-    "ι",
-    "κ",
-    "λ",
-    "μ",
   ],
   languages: [
-    // Lenguajes de Programación
-    "Compiler",
-    "Interpreter",
-    "Lexer",
-    "Parser",
-    "AST",
-    "CFG",
-    "BNF",
-    "EBNF",
-    "Yacc",
-    "Bison",
-    "Flex",
-    "ANTLR",
-    "LLVM",
-    "GCC",
-    "Clang",
-    "JIT",
-    "AOT",
-    "Syntax",
-    "Semantic",
-    "Pragmatic",
-    "Type System",
-    "Garbage Collection",
-    "Lambda",
-    "Closure",
-    "Monad",
-    "Functor",
-    "Polymorphism",
-    "Inheritance",
     "{",
     "}",
     "[",
@@ -272,270 +88,292 @@ const RESEARCH_SYMBOLS = {
     "⊨",
   ],
   ethics: [
-    // Ética en Ciencias de la Computación
-    "Ethics",
-    "Privacy",
-    "GDPR",
-    "Bias",
-    "Fairness",
-    "Transparency",
-    "Accountability",
-    "Explainability",
-    "Trust",
-    "Security",
-    "Consent",
-    "Anonymization",
-    "Pseudonymization",
-    "Algorithmic Justice",
-    "Digital Rights",
-    "AI Ethics",
-    "Responsible AI",
-    "Human-centered",
-    "Inclusive",
-    "Equitable",
-    "Sustainable",
-    "Democratic",
     "⚖️",
     "🛡️",
     "🔒",
-    "🤝",
-    "✓",
-    "⚠️",
     "🔍",
-    "👁️",
     "🌍",
     "⭐",
   ],
-};
+  complexity: [
+    "NEXP",    "co-NP",    "L",
+    "NP",
+    "P",
+    "NL",
+  ],
+  
 
-// Combinar todos los símbolos con pesos diferentes para cada categoría
+}
+
+// Crear símbolos ponderados con mayor variedad
 const createWeightedSymbols = () => {
-  const weighted = [];
+  const weighted = []
 
-  // Agregar símbolos con diferentes frecuencias
   Object.entries(RESEARCH_SYMBOLS).forEach(([category, symbols]) => {
     symbols.forEach((symbol) => {
-      // Términos técnicos aparecen más frecuentemente
-      const weight = symbol.length > 3 ? 3 : 1;
-      for (let i = 0; i < weight; i++) {
-        weighted.push({ symbol, category });
+      // Términos técnicos largos aparecen menos frecuentemente
+      const weight = symbol.length > 8 ? 1 : symbol.length > 4 ? 2 : 3
+      // Símbolos especiales tienen peso extra
+      const isSpecial = /[⟨⟩∀∃⊆⊇≡⊤⊥∩∪→↔∧∨¬λΣ∈γδεθμσ∇∂∑∏∞αβ⚖️🛡️🔒🤝✓⚠️🔍👁️🌍⭐⚡🔧⚙️📡⟲⟳]/.test(symbol)
+      const finalWeight = isSpecial ? weight + 1 : weight
+
+      for (let i = 0; i < finalWeight; i++) {
+        weighted.push({ symbol, category, isSpecial })
       }
-    });
-  });
+    })
+  })
 
-  return weighted;
-};
+  return weighted
+}
 
-const WEIGHTED_SYMBOLS = createWeightedSymbols();
+const WEIGHTED_SYMBOLS = createWeightedSymbols()
 
 // eslint-disable-next-line react/prop-types
 const CodeMatrixEffect = ({ children }) => {
-  const canvasRef = useRef(null);
-  const { theme } = useTheme();
+  const canvasRef = useRef(null)
+  const { theme } = useTheme()
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d")
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resizeCanvas();
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resizeCanvas()
 
-    // Configuración usando variables
-    const fontSize = ANIMATION_CONFIG.visual.fontSize;
-    const columnSpacing = fontSize * ANIMATION_CONFIG.visual.columnSpacing;
-    const columns = Math.floor(canvas.width / columnSpacing);
+    const fontSize = ANIMATION_CONFIG.visual.fontSize
+    const columnSpacing = fontSize * ANIMATION_CONFIG.visual.columnSpacing
+    const columns = Math.floor(canvas.width / columnSpacing)
 
-    // Arrays para cada columna
-    const drops = new Array(columns).fill(0).map(() => Math.random() * -50);
+    // Arrays mejorados para cada columna
+    const drops = new Array(columns).fill(0).map(() => Math.random() * -100)
     const speeds = new Array(columns)
       .fill(0)
-      .map(
-        () =>
-          Math.random() * ANIMATION_CONFIG.speed.variation +
-          ANIMATION_CONFIG.speed.base
-      );
-    const symbols = new Array(columns)
-      .fill(0)
-      .map(() => Math.floor(Math.random() * WEIGHTED_SYMBOLS.length));
+      .map(() => Math.random() * ANIMATION_CONFIG.speed.variation + ANIMATION_CONFIG.speed.base)
+    const symbols = new Array(columns).fill(0).map(() => Math.floor(Math.random() * WEIGHTED_SYMBOLS.length))
     const categories = new Array(columns)
       .fill(0)
-      .map(
-        () =>
-          Object.keys(RESEARCH_SYMBOLS)[
-            Math.floor(Math.random() * Object.keys(RESEARCH_SYMBOLS).length)
-          ]
-      );
+      .map(() => Object.keys(RESEARCH_SYMBOLS)[Math.floor(Math.random() * Object.keys(RESEARCH_SYMBOLS).length)])
+    const trails = new Array(columns).fill(0).map(() => [])
+    const waveOffsets = new Array(columns).fill(0).map(() => Math.random() * Math.PI * 2)
 
-    // Arrays para efectos de destello
+    // Arrays para efectos especiales
     const glowEffects = new Array(columns).fill(0).map(() => ({
       active: false,
       intensity: 0,
       duration: 0,
-      color: [255, 255, 255], // RGB
-    }));
+      color: [255, 255, 255],
+    }))
 
-    let animationId;
-    let time = 0;
+    const pulseEffects = new Array(columns).fill(0).map(() => ({
+      active: false,
+      phase: 0,
+      amplitude: 0,
+    }))
+
+    let animationId
+    let time = 0
 
     const animate = () => {
-      time += ANIMATION_CONFIG.speed.timeMultiplier;
+      time += ANIMATION_CONFIG.speed.timeMultiplier
 
-      // Fondo con desvanecimiento configurable
-      ctx.fillStyle = `${theme.token.backgroundColor}${ANIMATION_CONFIG.visual.fadeBackground.toString(16).padStart(2, "0")}`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Fondo con desvanecimiento mejorado
+      const fadeAlpha = ANIMATION_CONFIG.visual.fadeBackground.toString(16).padStart(2, "0")
+      ctx.fillStyle = `${theme.token.backgroundColor}${fadeAlpha}`
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Dibujar matriz de código cayendo
-      ctx.font = `${fontSize}px 'Courier New', monospace`;
+      ctx.font = `${fontSize}px 'Fira Code', 'Courier New', monospace`
+
+      const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+      const opacityConfig = isDarkTheme ? ANIMATION_CONFIG.opacity.darkTheme : ANIMATION_CONFIG.opacity.lightTheme
 
       for (let i = 0; i < drops.length; i++) {
-        // Seleccionar símbolo
-        const symbolData = WEIGHTED_SYMBOLS[symbols[i]];
-        const symbol = symbolData.symbol;
+        const symbolData = WEIGHTED_SYMBOLS[symbols[i]]
+        const symbol = symbolData.symbol
+        const isSpecial = symbolData.isSpecial
 
-        const isDarkTheme = theme.token.backgroundColor === "#0a0a0a";
-        const opacityConfig = isDarkTheme
-          ? ANIMATION_CONFIG.opacity.darkTheme
-          : ANIMATION_CONFIG.opacity.lightTheme;
+        // Posición con efecto de onda
+        const baseX = i * columnSpacing + columnSpacing / 2
+        let waveX = baseX
 
-        // Generar destello ocasionalmente
-        if (
-          ANIMATION_CONFIG.glow.enabled &&
-          Math.random() < ANIMATION_CONFIG.glow.frequency
-        ) {
+        if (ANIMATION_CONFIG.waves.enabled) {
+          waveOffsets[i] += ANIMATION_CONFIG.waves.speed
+          waveX += Math.sin(waveOffsets[i] + time * ANIMATION_CONFIG.waves.frequency) * ANIMATION_CONFIG.waves.amplitude
+        }
+
+        const y = drops[i] * (fontSize * 1.9)
+
+        // Generar efectos especiales
+        if (ANIMATION_CONFIG.glow.enabled && Math.random() < ANIMATION_CONFIG.glow.frequency) {
           glowEffects[i] = {
             active: true,
             intensity: ANIMATION_CONFIG.glow.intensity,
             duration: ANIMATION_CONFIG.glow.duration,
-            color: [
-              opacityConfig.grayRange[0] +
-                Math.random() *
-                  (opacityConfig.grayRange[1] - opacityConfig.grayRange[0]),
-              opacityConfig.grayRange[0] +
-                Math.random() *
-                  (opacityConfig.grayRange[1] - opacityConfig.grayRange[0]),
-              opacityConfig.grayRange[0] +
-                Math.random() *
-                  (opacityConfig.grayRange[1] - opacityConfig.grayRange[0]),
-            ],
-          };
-        }
-
-        // Aplicar efecto de destello si está activo
-        if (glowEffects[i].active) {
-          const glow = glowEffects[i];
-          const glowIntensity =
-            (glow.duration / ANIMATION_CONFIG.glow.duration) * glow.intensity;
-
-          // Configurar glow
-          ctx.shadowBlur = ANIMATION_CONFIG.glow.blurRadius * glowIntensity;
-          ctx.shadowColor = `rgba(${glow.color[0]}, ${glow.color[1]}, ${glow.color[2]}, ${ANIMATION_CONFIG.glow.colorIntensity * glowIntensity})`;
-
-          // Color más brillante para el símbolo con glow
-          const brightValue = Math.min(255, glow.color[0] + 50);
-          ctx.fillStyle = `rgba(${brightValue}, ${brightValue}, ${brightValue}, ${opacityConfig.base + glowIntensity * 0.4})`;
-
-          // Reducir duración del glow
-          glow.duration--;
-          if (glow.duration <= 0) {
-            glow.active = false;
+            color: isSpecial
+              ? [0, 229, 255]
+              : [
+                  opacityConfig.grayRange[0] +
+                    Math.random() * (opacityConfig.grayRange[1] - opacityConfig.grayRange[0]),
+                  opacityConfig.grayRange[0] +
+                    Math.random() * (opacityConfig.grayRange[1] - opacityConfig.grayRange[0]),
+                  opacityConfig.grayRange[0] +
+                    Math.random() * (opacityConfig.grayRange[1] - opacityConfig.grayRange[0]),
+                ],
           }
+        }
+
+        // Efecto de pulso para símbolos especiales
+        if (isSpecial && Math.random() < 0.01) {
+          pulseEffects[i] = {
+            active: true,
+            phase: 0,
+            amplitude: 0.3,
+          }
+        }
+
+        // Aplicar efectos visuales
+        let finalOpacity = opacityConfig.base
+        let finalSize = fontSize
+        let glowRadius = 0
+        let shadowColor = "transparent"
+
+        // Efecto de brillo
+        if (glowEffects[i].active) {
+          const glow = glowEffects[i]
+          const glowIntensity = (glow.duration / ANIMATION_CONFIG.glow.duration) * glow.intensity
+
+          glowRadius = ANIMATION_CONFIG.glow.blurRadius * glowIntensity
+          shadowColor = `rgba(${glow.color[0]}, ${glow.color[1]}, ${glow.color[2]}, ${ANIMATION_CONFIG.glow.colorIntensity * glowIntensity})`
+          finalOpacity += glowIntensity * 0.5
+
+          glow.duration--
+          if (glow.duration <= 0) {
+            glow.active = false
+          }
+        }
+
+        // Efecto de pulso
+        if (pulseEffects[i].active) {
+          const pulse = pulseEffects[i]
+          pulse.phase += 0.2
+          const pulseFactor = 1 + Math.sin(pulse.phase) * pulse.amplitude
+          finalSize *= pulseFactor
+          finalOpacity *= pulseFactor
+
+          if (pulse.phase >= Math.PI * 2) {
+            pulse.active = false
+          }
+        }
+
+        // Configurar estilo
+        ctx.shadowBlur = glowRadius
+        ctx.shadowColor = shadowColor
+        ctx.font = `${finalSize}px 'Fira Code', 'Courier New', monospace`
+
+        // Color basado en categoría y efectos
+        let color
+        if (isSpecial) {
+          color = `rgba(0, 229, 255, ${finalOpacity})`
         } else {
-          // Sin glow - configuración normal
-          ctx.shadowBlur = 0;
-          ctx.shadowColor = "transparent";
-
           const grayValue =
-            opacityConfig.grayRange[0] +
-            Math.random() *
-              (opacityConfig.grayRange[1] - opacityConfig.grayRange[0]);
-          ctx.fillStyle = `rgba(${grayValue}, ${grayValue}, ${grayValue}, ${opacityConfig.base})`;
+            opacityConfig.grayRange[0] + Math.random() * (opacityConfig.grayRange[1] - opacityConfig.grayRange[0])
+          color = `rgba(${grayValue}, ${grayValue}, ${grayValue}, ${finalOpacity})`
         }
 
-        // Dibujar símbolo con espaciado configurable
-        const x = i * columnSpacing + columnSpacing / 2;
-        const y = drops[i] * (fontSize * 1.8);
+        ctx.fillStyle = color
 
-        // Solo dibujar si está en pantalla
+        // Dibujar símbolo si está en pantalla
         if (y > -fontSize && y < canvas.height + fontSize) {
-          ctx.fillText(symbol, x, y);
+          ctx.fillText(symbol, waveX, y)
+
+          // Agregar al trail
+          trails[i].push({ x: waveX, y: y, opacity: finalOpacity * 0.3, symbol: symbol })
+          if (trails[i].length > 8) {
+            trails[i].shift()
+          }
         }
 
-        // Mover gota hacia abajo usando velocidad configurable
-        drops[i] += speeds[i];
+        // Dibujar trail
+        trails[i].forEach((trailPoint, index) => {
+          const trailOpacity = trailPoint.opacity * (index / trails[i].length) * 0.5
+          ctx.fillStyle = `rgba(100, 100, 100, ${trailOpacity})`
+          ctx.font = `${fontSize * (0.7 + index * 0.05)}px 'Fira Code', 'Courier New', monospace`
+          ctx.fillText(trailPoint.symbol, trailPoint.x, trailPoint.y)
+        })
 
-        // Resetear cuando llega al final o según probabilidad configurable
+        // Resetear configuración
+        ctx.shadowBlur = 0
+        ctx.shadowColor = "transparent"
+        ctx.font = `${fontSize}px 'Fira Code', 'Courier New', monospace`
+
+        // Mover gota
+        drops[i] += speeds[i]
+
+        // Resetear cuando llega al final
         if (
-          drops[i] * (fontSize * 1.8) > canvas.height + 100 ||
+          drops[i] * (fontSize * 1.9) > canvas.height + 150 ||
           Math.random() > ANIMATION_CONFIG.visual.resetProbability
         ) {
-          drops[i] = Math.random() * -20 - 10;
+          drops[i] = Math.random() * -50 - 20
+          trails[i] = []
 
-          // Cambiar símbolo y categoría ocasionalmente
-          if (Math.random() > 0.8) {
-            symbols[i] = Math.floor(Math.random() * WEIGHTED_SYMBOLS.length);
+          // Cambiar símbolo ocasionalmente
+          if (Math.random() > 0.7) {
+            symbols[i] = Math.floor(Math.random() * WEIGHTED_SYMBOLS.length)
             categories[i] =
-              Object.keys(RESEARCH_SYMBOLS)[
-                Math.floor(Math.random() * Object.keys(RESEARCH_SYMBOLS).length)
-              ];
+              Object.keys(RESEARCH_SYMBOLS)[Math.floor(Math.random() * Object.keys(RESEARCH_SYMBOLS).length)]
           }
 
-          // Reset del glow effect
-          glowEffects[i].active = false;
+          // Reset efectos
+          glowEffects[i].active = false
+          pulseEffects[i].active = false
         }
       }
 
-      animationId = requestAnimationFrame(animate);
-    };
+      animationId = requestAnimationFrame(animate)
+    }
 
-    animate();
+    animate()
 
-    // Manejar redimensionamiento
+    // Manejo de redimensionamiento mejorado
     const handleResize = () => {
-      resizeCanvas();
-      const newColumns = Math.floor(canvas.width / columnSpacing);
+      resizeCanvas()
+      const newColumns = Math.floor(canvas.width / columnSpacing)
 
-      // Redimensionar arrays
-      drops.length = newColumns;
-      speeds.length = newColumns;
-      symbols.length = newColumns;
-      categories.length = newColumns;
-      glowEffects.length = newColumns;
-
-      for (let i = 0; i < newColumns; i++) {
-        if (drops[i] === undefined) drops[i] = Math.random() * -20 - 10;
-        if (speeds[i] === undefined)
-          speeds[i] =
-            Math.random() * ANIMATION_CONFIG.speed.variation +
-            ANIMATION_CONFIG.speed.base;
-        if (symbols[i] === undefined)
-          symbols[i] = Math.floor(Math.random() * WEIGHTED_SYMBOLS.length);
-        if (categories[i] === undefined)
-          categories[i] =
-            Object.keys(RESEARCH_SYMBOLS)[
-              Math.floor(Math.random() * Object.keys(RESEARCH_SYMBOLS).length)
-            ];
-        if (glowEffects[i] === undefined)
-          glowEffects[i] = {
-            active: false,
-            intensity: 0,
-            duration: 0,
-            color: [255, 255, 255],
-          };
+      // Redimensionar arrays manteniendo datos existentes
+      const resizeArray = (arr, defaultValue) => {
+        arr.length = newColumns
+        for (let i = 0; i < newColumns; i++) {
+          if (arr[i] === undefined) {
+            arr[i] = typeof defaultValue === "function" ? defaultValue() : defaultValue
+          }
+        }
       }
-    };
 
-    window.addEventListener("resize", handleResize);
+      resizeArray(drops, () => Math.random() * -50 - 20)
+      resizeArray(speeds, () => Math.random() * ANIMATION_CONFIG.speed.variation + ANIMATION_CONFIG.speed.base)
+      resizeArray(symbols, () => Math.floor(Math.random() * WEIGHTED_SYMBOLS.length))
+      resizeArray(
+        categories,
+        () => Object.keys(RESEARCH_SYMBOLS)[Math.floor(Math.random() * Object.keys(RESEARCH_SYMBOLS).length)],
+      )
+      resizeArray(trails, () => [])
+      resizeArray(waveOffsets, () => Math.random() * Math.PI * 2)
+      resizeArray(glowEffects, () => ({ active: false, intensity: 0, duration: 0, color: [255, 255, 255] }))
+      resizeArray(pulseEffects, () => ({ active: false, phase: 0, amplitude: 0 }))
+    }
+
+    window.addEventListener("resize", handleResize)
 
     // Cleanup
     return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [theme]);
+      cancelAnimationFrame(animationId)
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [theme])
 
   return (
     <div
@@ -577,7 +415,7 @@ const CodeMatrixEffect = ({ children }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CodeMatrixEffect;
+export default CodeMatrixEffect

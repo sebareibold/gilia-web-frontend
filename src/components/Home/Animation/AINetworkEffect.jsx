@@ -4,14 +4,103 @@ import { useRef, useEffect } from "react"
 import * as THREE from "three"
 import { useTheme } from "../../../context/ThemeContext"
 
-// Componente que genera una red neuronal animada con palabras de IA flotantes
+// Datos de las líneas de investigación con representación futurista
+const RESEARCH_NODES = [
+  {
+    id: 1,
+    name: "Ontologías y Web Semántica",
+    shortName: "ONT",
+    keywords: ["RDF", "OWL", "SPARQL", "URI", "Semantic Web"],
+    color: "#00E5FF",
+    position: { x: 0.15, y: 0.25 },
+    connections: [2, 3, 6],
+  },
+  {
+    id: 2,
+    name: "Procesamiento de Lenguaje Natural",
+    shortName: "NLP",
+    keywords: ["Tokenización", "Análisis", "Corpus", "BERT", "GPT"],
+    color: "#76FF03",
+    position: { x: 0.85, y: 0.2 },
+    connections: [1, 3, 4, 7],
+  },
+  {
+    id: 3,
+    name: "Sistemas Inteligentes",
+    shortName: "AI",
+    keywords: ["ML", "Deep Learning", "Redes", "Neural", "Algorithm"],
+    color: "#E91E63",
+    position: { x: 0.5, y: 0.5 },
+    connections: [1, 2, 4, 5, 6, 7],
+  },
+  {
+    id: 4,
+    name: "Robótica y Sistemas Embebidos",
+    shortName: "ROB",
+    keywords: ["IoT", "Sensores", "Arduino", "ROS", "Embedded"],
+    color: "#FF6D00",
+    position: { x: 0.8, y: 0.75 },
+    connections: [2, 3, 5],
+  },
+  {
+    id: 5,
+    name: "Educación en Ciencias de la Computación",
+    shortName: "EDU",
+    keywords: ["E-learning", "Pedagogía", "Didáctica", "MOOC", "Virtual"],
+    color: "#9C27B0",
+    position: { x: 0.2, y: 0.8 },
+    connections: [3, 4, 6],
+  },
+  {
+    id: 6,
+    name: "Lenguajes de Programación",
+    shortName: "LANG",
+    keywords: ["Compiladores", "Parsing", "Sintaxis", "AST", "Grammar"],
+    color: "#00BCD4",
+    position: { x: 0.3, y: 0.15 },
+    connections: [1, 3, 5, 7],
+  },
+  {
+    id: 7,
+    name: "Ética en Ciencias de la Computación",
+    shortName: "ETH",
+    keywords: ["Privacidad", "Transparencia", "Equidad", "AI Ethics", "Trust"],
+    color: "#795548",
+    position: { x: 0.7, y: 0.35 },
+    connections: [2, 3, 6],
+  },
+]
+
+// Términos técnicos que flotan en el fondo
+const FLOATING_TERMS = [
+  "Machine Learning",
+  "Neural Networks",
+  "Deep Learning",
+  "Natural Language Processing",
+  "Computer Vision",
+  "Reinforcement Learning",
+  "Semantic Web",
+  "Ontologies",
+  "Knowledge Graphs",
+  "Data Mining",
+  "Big Data",
+  "Cloud Computing",
+  "Artificial Intelligence",
+  "Robotics",
+  "IoT",
+  "Blockchain",
+  "Quantum Computing",
+  "Edge Computing",
+  "Cybersecurity",
+  "Human-Computer Interaction",
+]
+
 // eslint-disable-next-line react/prop-types
 const AINetworkEffect = ({ children }) => {
   const mountRef = useRef(null)
   const { theme } = useTheme()
 
   useEffect(() => {
-    // Configuración inicial de la escena
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 
@@ -19,277 +108,340 @@ const AINetworkEffect = ({ children }) => {
     renderer.setSize(window.innerWidth, window.innerHeight)
     mountRef.current.appendChild(renderer.domElement)
 
-    // Configuración de la red neuronal
-    const layers = [8, 12, 16, 12, 8] // Neuronas por capa
-    const layerSpacing = 4
-    const neuronSpacing = 1.5
-    const networkWidth = (layers.length - 1) * layerSpacing
-    const maxNeurons = Math.max(...layers)
-    const networkHeight = (maxNeurons - 1) * neuronSpacing
-
-    // Arrays para almacenar nodos y conexiones
-    const neurons = []
+    // Variables de animación
+    let animationFrameId
+    let time = 0
+    const nodes = []
     const connections = []
-    const pulses = []
+    const dataPackets = []
+    const backgroundParticles = []
+    const floatingTexts = []
 
-    // Colores para diferentes tipos de neuronas
-    const colors = {
-      input: new THREE.Color(theme.token.colorTextBase).multiplyScalar(0.8),
-      hidden: new THREE.Color(theme.token.colorTextSecondary),
-      output: new THREE.Color(theme.token.colorTextBase),
-      connection: new THREE.Color(theme.token.colorTextBase).multiplyScalar(0.3),
-    }
+    // Colores basados en el tema
+    const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+    const baseColor = isDarkTheme ? 0xffffff : 0x000000
+    const accentColor = isDarkTheme ? 0x00e5ff : 0x0066cc
 
-    // Crear neuronas por capas
-    layers.forEach((neuronCount, layerIndex) => {
-      const layerNeurons = []
-      const x = layerIndex * layerSpacing - networkWidth / 2
+    // Inicializar nodos de investigación
+    const initializeNodes = () => {
+      RESEARCH_NODES.forEach((nodeData) => {
+        // Geometría del nodo (esfera con anillos)
+        const nodeGroup = new THREE.Group()
 
-      for (let i = 0; i < neuronCount; i++) {
-        const y = i * neuronSpacing - ((neuronCount - 1) * neuronSpacing) / 2
-        const z = (Math.random() - 0.5) * 2
-
-        // Geometría de la neurona
-        const geometry = new THREE.SphereGeometry(0.08, 12, 12)
-
-        // Material según el tipo de capa
-        let color = colors.hidden
-        if (layerIndex === 0) color = colors.input
-        if (layerIndex === layers.length - 1) color = colors.output
-
-        const material = new THREE.MeshBasicMaterial({
-          color: color,
+        // Esfera central
+        const sphereGeometry = new THREE.SphereGeometry(0.15, 16, 16)
+        const sphereMaterial = new THREE.MeshBasicMaterial({
+          color: new THREE.Color(nodeData.color),
           transparent: true,
-          opacity: 0.7,
+          opacity: 0.8,
         })
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+        nodeGroup.add(sphere)
 
-        const neuron = new THREE.Mesh(geometry, material)
-        neuron.position.set(x, y, z)
-
-        // Datos adicionales para animación
-        neuron.userData = {
-          layer: layerIndex,
-          index: i,
-          baseOpacity: 0.7,
-          activity: Math.random(),
-          lastActivation: 0,
-          connections: [],
+        // Anillos orbitales
+        for (let i = 0; i < 3; i++) {
+          const ringGeometry = new THREE.RingGeometry(0.2 + i * 0.1, 0.22 + i * 0.1, 16)
+          const ringMaterial = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(nodeData.color),
+            transparent: true,
+            opacity: 0.3 - i * 0.1,
+            side: THREE.DoubleSide,
+          })
+          const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+          ring.rotation.x = Math.random() * Math.PI
+          ring.rotation.y = Math.random() * Math.PI
+          ring.userData = { rotationSpeed: (Math.random() - 0.5) * 0.02 }
+          nodeGroup.add(ring)
         }
 
-        layerNeurons.push(neuron)
-        scene.add(neuron)
-      }
-      neurons.push(layerNeurons)
-    })
+        // Posicionar nodo
+        nodeGroup.position.set(
+          (nodeData.position.x - 0.5) * 20,
+          (nodeData.position.y - 0.5) * 15,
+          (Math.random() - 0.5) * 5,
+        )
 
-    // Crear conexiones entre capas
-    for (let layerIndex = 0; layerIndex < layers.length - 1; layerIndex++) {
-      const currentLayer = neurons[layerIndex]
-      const nextLayer = neurons[layerIndex + 1]
+        nodeGroup.userData = {
+          ...nodeData,
+          pulsePhase: Math.random() * Math.PI * 2,
+          activity: 0,
+          lastActivity: 0,
+          baseScale: 1,
+        }
 
-      currentLayer.forEach((neuron1, i) => {
-        nextLayer.forEach((neuron2, j) => {
-          // Crear conexión con probabilidad variable
-          const connectionProbability = 0.6 + Math.random() * 0.4
-          if (Math.random() < connectionProbability) {
-            const points = [neuron1.position, neuron2.position]
+        nodes.push(nodeGroup)
+        scene.add(nodeGroup)
+      })
+    }
+
+    // Crear conexiones entre nodos
+    const createConnections = () => {
+      RESEARCH_NODES.forEach((nodeData) => {
+        const fromNode = nodes.find((n) => n.userData.id === nodeData.id)
+
+        nodeData.connections.forEach((toId) => {
+          const toNode = nodes.find((n) => n.userData.id === toId)
+          if (fromNode && toNode) {
+            // Línea de conexión
+            const points = [fromNode.position, toNode.position]
             const geometry = new THREE.BufferGeometry().setFromPoints(points)
 
             const material = new THREE.LineBasicMaterial({
-              color: colors.connection,
+              color: baseColor,
               transparent: true,
-              opacity: 0.1,
+              opacity: 0.2,
             })
 
             const connection = new THREE.Line(geometry, material)
             connection.userData = {
-              from: neuron1,
-              to: neuron2,
-              weight: Math.random() * 2 - 1, // Peso de -1 a 1
-              baseOpacity: 0.1,
+              from: fromNode,
+              to: toNode,
+              strength: Math.random() * 0.5 + 0.3,
               active: false,
+              lastPulse: 0,
+              baseOpacity: 0.2,
             }
 
             connections.push(connection)
             scene.add(connection)
-
-            // Agregar referencia en las neuronas
-            neuron1.userData.connections.push(connection)
           }
         })
       })
     }
 
-    // Crear pulsos de datos
-    const createPulse = (connection) => {
-      const geometry = new THREE.SphereGeometry(0.03, 8, 8)
-      const material = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(theme.token.colorTextBase),
+    // Crear partículas de fondo
+    const createBackgroundParticles = () => {
+      const particleGeometry = new THREE.BufferGeometry()
+      const particleCount = 200
+      const positions = new Float32Array(particleCount * 3)
+      const velocities = new Float32Array(particleCount * 3)
+
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 50
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 30
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 20
+
+        velocities[i * 3] = (Math.random() - 0.5) * 0.02
+        velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.02
+        velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.02
+      }
+
+      particleGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+      particleGeometry.setAttribute("velocity", new THREE.BufferAttribute(velocities, 3))
+
+      const particleMaterial = new THREE.PointsMaterial({
+        color: baseColor,
+        size: 0.05,
         transparent: true,
-        opacity: 0.8,
+        opacity: 0.6,
       })
 
-      const pulse = new THREE.Mesh(geometry, material)
-      pulse.position.copy(connection.userData.from.position)
+      const particles = new THREE.Points(particleGeometry, particleMaterial)
+      backgroundParticles.push(particles)
+      scene.add(particles)
+    }
 
-      pulse.userData = {
+    // Crear textos flotantes
+    const createFloatingTexts = () => {
+      // Esta función crearía sprites de texto, pero por simplicidad usaremos partículas adicionales
+      for (let i = 0; i < 15; i++) {
+        const textGeometry = new THREE.SphereGeometry(0.02, 8, 8)
+        const textMaterial = new THREE.MeshBasicMaterial({
+          color: accentColor,
+          transparent: true,
+          opacity: 0.4,
+        })
+
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial)
+        textMesh.position.set((Math.random() - 0.5) * 40, (Math.random() - 0.5) * 25, (Math.random() - 0.5) * 15)
+
+        textMesh.userData = {
+          velocity: new THREE.Vector3(
+            (Math.random() - 0.5) * 0.01,
+            (Math.random() - 0.5) * 0.01,
+            (Math.random() - 0.5) * 0.01,
+          ),
+          term: FLOATING_TERMS[Math.floor(Math.random() * FLOATING_TERMS.length)],
+        }
+
+        floatingTexts.push(textMesh)
+        scene.add(textMesh)
+      }
+    }
+
+    // Crear paquete de datos
+    const createDataPacket = (connection) => {
+      const packetGeometry = new THREE.SphereGeometry(0.05, 8, 8)
+      const packetMaterial = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(connection.userData.from.userData.color),
+        transparent: true,
+        opacity: 0.9,
+      })
+
+      const packet = new THREE.Mesh(packetGeometry, packetMaterial)
+      packet.position.copy(connection.userData.from.position)
+
+      packet.userData = {
         connection: connection,
         progress: 0,
-        speed: 0.02 + Math.random() * 0.03,
+        speed: 0.015 + Math.random() * 0.02,
         life: 1.0,
       }
 
-      pulses.push(pulse)
-      scene.add(pulse)
+      dataPackets.push(packet)
+      scene.add(packet)
     }
 
-    // Crear partículas de datos flotantes
-    const dataParticles = []
-    const particleGeometry = new THREE.SphereGeometry(0.02, 6, 6)
+    // Inicializar todo
+    initializeNodes()
+    createConnections()
+    createBackgroundParticles()
+    createFloatingTexts()
 
-    for (let i = 0; i < 30; i++) {
-      const material = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(theme.token.colorTextSecondary),
-        transparent: true,
-        opacity: 0.3,
-      })
-
-      const particle = new THREE.Mesh(particleGeometry, material)
-      particle.position.set((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 10)
-
-      particle.userData = {
-        velocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.01,
-          (Math.random() - 0.5) * 0.01,
-          (Math.random() - 0.5) * 0.01,
-        ),
-        life: Math.random() * 100 + 50,
-      }
-
-      dataParticles.push(particle)
-      scene.add(particle)
-    }
-
-    camera.position.set(0, 0, 12)
-
-    let animationFrameId
-    let time = 0
+    camera.position.set(0, 0, 15)
 
     const animate = () => {
-      animationFrameId = requestAnimationFrame(animate)
-      time += 0.016 // ~60fps
+      time += 0.016
 
-      // Simular activación de red neuronal
-      if (Math.random() < 0.1) {
-        // 10% de probabilidad por frame
-        // Activar neurona de entrada aleatoria
-        const inputLayer = neurons[0]
-        const randomNeuron = inputLayer[Math.floor(Math.random() * inputLayer.length)]
-        randomNeuron.userData.activity = 1.0
-        randomNeuron.userData.lastActivation = time
+      // Actividad aleatoria en nodos
+      if (Math.random() < 0.08) {
+        const randomNode = nodes[Math.floor(Math.random() * nodes.length)]
+        randomNode.userData.activity = 1.0
+        randomNode.userData.lastActivity = time
 
-        // Crear pulsos desde esta neurona
-        randomNeuron.userData.connections.forEach((connection) => {
-          if (Math.random() < 0.7) {
-            // 70% de probabilidad
-            createPulse(connection)
-            connection.userData.active = true
-          }
-        })
+        // Crear paquetes de datos
+        connections
+          .filter((conn) => conn.userData.from === randomNode)
+          .forEach((conn) => {
+            if (Math.random() < 0.6) {
+              conn.userData.active = true
+              conn.userData.lastPulse = time
+              createDataPacket(conn)
+            }
+          })
       }
 
-      // Animar neuronas
-      neurons.forEach((layer) => {
-        layer.forEach((neuron) => {
-          const userData = neuron.userData
+      // Animar nodos
+      nodes.forEach((node) => {
+        const userData = node.userData
 
-          // Decaimiento de actividad
-          userData.activity *= 0.95
+        // Decaimiento de actividad
+        userData.activity *= 0.96
 
-          // Pulsación basada en actividad
-          const scale = 1 + userData.activity * 0.3
-          neuron.scale.setScalar(scale)
+        // Efecto de pulso
+        userData.pulsePhase += 0.03
+        const pulse = Math.sin(userData.pulsePhase) * 0.2 + 1
+        const activityScale = 1 + userData.activity * 0.5
+        node.scale.setScalar(userData.baseScale * pulse * activityScale)
 
-          // Opacidad basada en actividad
-          const opacity = userData.baseOpacity + userData.activity * 0.3
-          neuron.material.opacity = opacity
-
-          // Movimiento sutil
-          neuron.position.y += Math.sin(time * 2 + userData.index) * 0.002
-          neuron.position.z += Math.cos(time * 1.5 + userData.layer) * 0.001
+        // Rotación de anillos
+        node.children.forEach((child, index) => {
+          if (index > 0) {
+            // Skip the central sphere
+            child.rotation.x += child.userData.rotationSpeed
+            child.rotation.y += child.userData.rotationSpeed * 0.7
+          }
         })
+
+        // Movimiento sutil
+        node.position.y += Math.sin(time * 1.5 + userData.id) * 0.003
+        node.position.x += Math.cos(time * 1.2 + userData.id) * 0.002
+
+        // Actualizar opacidad basada en actividad
+        const sphere = node.children[0]
+        sphere.material.opacity = 0.8 + userData.activity * 0.2
       })
 
       // Animar conexiones
       connections.forEach((connection) => {
         const userData = connection.userData
+        const isActive = time - userData.lastPulse < 3.0
 
-        if (userData.active) {
-          userData.active = false
-          connection.material.opacity = Math.min(userData.baseOpacity * 3, 0.4)
+        if (isActive) {
+          connection.material.opacity = userData.baseOpacity + 0.4
+          connection.material.color.setHex(accentColor)
         } else {
-          connection.material.opacity *= 0.95
-          if (connection.material.opacity < userData.baseOpacity) {
-            connection.material.opacity = userData.baseOpacity
-          }
+          connection.material.opacity = userData.baseOpacity
+          connection.material.color.setHex(baseColor)
         }
+
+        userData.active = isActive
       })
 
-      // Animar pulsos
-      for (let i = pulses.length - 1; i >= 0; i--) {
-        const pulse = pulses[i]
-        const userData = pulse.userData
+      // Animar paquetes de datos
+      for (let i = dataPackets.length - 1; i >= 0; i--) {
+        const packet = dataPackets[i]
+        const userData = packet.userData
 
         userData.progress += userData.speed
-        userData.life -= 0.02
+        userData.life -= 0.008
 
         if (userData.progress >= 1 || userData.life <= 0) {
-          // Activar neurona destino
-          const targetNeuron = userData.connection.userData.to
-          targetNeuron.userData.activity = Math.max(targetNeuron.userData.activity, 0.8)
+          // Activar nodo destino
+          const targetNode = userData.connection.userData.to
+          targetNode.userData.activity = Math.max(targetNode.userData.activity, 0.8)
 
-          // Crear nuevos pulsos desde la neurona activada
-          if (userData.progress >= 1) {
-            targetNeuron.userData.connections.forEach((conn) => {
-              if (Math.random() < 0.5) {
-                createPulse(conn)
-                conn.userData.active = true
-              }
-            })
-          }
-
-          scene.remove(pulse)
-          pulses.splice(i, 1)
+          scene.remove(packet)
+          dataPackets.splice(i, 1)
         } else {
-          // Interpolar posición del pulso
+          // Interpolar posición
           const from = userData.connection.userData.from.position
           const to = userData.connection.userData.to.position
-          pulse.position.lerpVectors(from, to, userData.progress)
-          pulse.material.opacity = userData.life * 0.8
+          packet.position.lerpVectors(from, to, userData.progress)
+          packet.material.opacity = userData.life * 0.9
+
+          // Rotación del paquete
+          packet.rotation.x += 0.1
+          packet.rotation.y += 0.07
         }
       }
 
-      // Animar partículas de datos
-      dataParticles.forEach((particle) => {
-        particle.position.add(particle.userData.velocity)
-        particle.rotation.x += 0.02
-        particle.rotation.y += 0.01
+      // Animar partículas de fondo
+      backgroundParticles.forEach((particleSystem) => {
+        const positions = particleSystem.geometry.attributes.position.array
+        const velocities = particleSystem.geometry.attributes.velocity.array
 
-        // Resetear si sale de los límites
-        if (particle.position.length() > 15) {
-          particle.position.set((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 10)
+        for (let i = 0; i < positions.length; i += 3) {
+          positions[i] += velocities[i]
+          positions[i + 1] += velocities[i + 1]
+          positions[i + 2] += velocities[i + 2]
+
+          // Resetear si sale de los límites
+          if (Math.abs(positions[i]) > 25) velocities[i] *= -1
+          if (Math.abs(positions[i + 1]) > 15) velocities[i + 1] *= -1
+          if (Math.abs(positions[i + 2]) > 10) velocities[i + 2] *= -1
+        }
+
+        particleSystem.geometry.attributes.position.needsUpdate = true
+      })
+
+      // Animar textos flotantes
+      floatingTexts.forEach((textMesh) => {
+        textMesh.position.add(textMesh.userData.velocity)
+
+        // Resetear posición si sale de los límites
+        if (textMesh.position.length() > 30) {
+          textMesh.position.set((Math.random() - 0.5) * 40, (Math.random() - 0.5) * 25, (Math.random() - 0.5) * 15)
         }
 
         // Efecto de respiración
-        const breathe = 1 + Math.sin(time * 3 + particle.position.x) * 0.2
-        particle.scale.setScalar(breathe)
+        const breathe = 1 + Math.sin(time * 2 + textMesh.position.x) * 0.3
+        textMesh.scale.setScalar(breathe)
+
+        // Rotación sutil
+        textMesh.rotation.x += 0.01
+        textMesh.rotation.y += 0.008
       })
 
-      // Rotación muy sutil de toda la red
-      scene.rotation.y += 0.0005
-      scene.rotation.x = Math.sin(time * 0.1) * 0.05
+      // Rotación muy sutil de toda la escena
+      scene.rotation.y += 0.0003
+      scene.rotation.x = Math.sin(time * 0.1) * 0.02
+
+      // Efecto de zoom sutil
+      camera.position.z = 15 + Math.sin(time * 0.05) * 0.5
 
       renderer.render(scene, camera)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -308,11 +460,35 @@ const AINetworkEffect = ({ children }) => {
     // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId)
-      if (mountRef.current) {
+      if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement)
       }
       renderer.dispose()
       window.removeEventListener("resize", handleResize)
+
+      // Limpiar geometrías y materiales
+      nodes.forEach((node) => {
+        node.children.forEach((child) => {
+          if (child.geometry) child.geometry.dispose()
+          if (child.material) child.material.dispose()
+        })
+      })
+      connections.forEach((conn) => {
+        if (conn.geometry) conn.geometry.dispose()
+        if (conn.material) conn.material.dispose()
+      })
+      dataPackets.forEach((packet) => {
+        if (packet.geometry) packet.geometry.dispose()
+        if (packet.material) packet.material.dispose()
+      })
+      backgroundParticles.forEach((particles) => {
+        if (particles.geometry) particles.geometry.dispose()
+        if (particles.material) particles.material.dispose()
+      })
+      floatingTexts.forEach((text) => {
+        if (text.geometry) text.geometry.dispose()
+        if (text.material) text.material.dispose()
+      })
     }
   }, [theme])
 
@@ -324,6 +500,7 @@ const AINetworkEffect = ({ children }) => {
         width: "100vw",
         height: "100vh",
         background: "var(--backgroundColor)",
+        overflow: "hidden",
       }}
     >
       {children && (
