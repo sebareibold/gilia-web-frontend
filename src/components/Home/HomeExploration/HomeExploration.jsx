@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import {
   ArrowRightOutlined,
   BulbOutlined,
@@ -9,30 +9,76 @@ import {
   RocketOutlined,
   ThunderboltOutlined,
   StarOutlined,
+  LeftOutlined,
+  RightOutlined,
 } from "@ant-design/icons"
 import { useTheme } from "../../../context/ThemeContext"
-import { API_BASE_URL } from "../../../config/apiConfig"
 import Loader from "../../Loader/Loader"
 import "./HomeExploration.css"
 
-// Swiper
-import { Swiper, SwiperSlide } from "swiper/react"
-import { EffectCoverflow, Pagination, Navigation, Mousewheel, Keyboard, Autoplay } from "swiper/modules"
+// Mock data para novedades con imágenes
+const mockNovedades = [
+  {
+    id: 1,
+    Titulo: "Nueva Publicación en Revista Internacional de IA",
+    Descripcion:
+      "Nuestro equipo ha publicado un artículo sobre procesamiento de lenguaje natural en la revista IEEE Transactions on AI, destacando avances en modelos de comprensión de texto en español.",
+    Enlace: "https://www.ieee.org/publications/",
+    imagen: "/imagenRandom.png?height=200&width=300",
+  },
+  {
+    id: 2,
+    Titulo: "Participación en Conferencia Mundial de Inteligencia Artificial",
+    Descripcion:
+      "Presentación de tres ponencias magistrales en la conferencia ICAI 2024, incluyendo trabajos sobre ética en IA, sistemas inteligentes y robótica educativa.",
+    Enlace: "https://www.icai-conference.org/",
+    imagen: "/imagenRandom.png?height=200&width=300",
+  },
+  {
+    id: 3,
+    Titulo: "Nuevo Proyecto Internacional de Investigación",
+    Descripcion:
+      "Inicio de proyecto colaborativo con universidades de Brasil y Chile sobre sistemas inteligentes adaptativos, financiado por el programa Horizon Europe.",
+    Enlace: "https://ec.europa.eu/programmes/horizon2020/",
+    imagen: "/imagenRandom.png?height=200&width=300",
+  },
+  {
+    id: 4,
+    Titulo: "Premio a la Innovación Tecnológica",
+    Descripcion:
+      "Reconocimiento nacional por el desarrollo de un sistema de traducción automática español-guaraní, promoviendo la preservación de lenguas originarias.",
+    Enlace: "https://www.conicet.gov.ar/",
+    imagen: "/imagenRandom.png?height=200&width=300",
+  },
+  {
+    id: 5,
+    Titulo: "Lanzamiento de Plataforma Educativa",
+    Descripcion:
+      "Presentación oficial de nuestra plataforma de e-learning con IA integrada, diseñada para personalizar la experiencia de aprendizaje en ciencias de la computación.",
+    Enlace: "https://www.edx.org/",
+    imagen: "/imagenRandom.png?height=200&width=300",
+  },
+  {
+    id: 6,
+    Titulo: "Colaboración con Empresas Tecnológicas",
+    Descripcion:
+      "Establecimiento de alianzas estratégicas con empresas líderes en tecnología para el desarrollo de soluciones innovadoras en inteligencia artificial.",
+    Enlace: "https://www.google.com/ai/",
+    imagen: "/imagenRandom.png?height=200&width=300",
+  },
+]
 
-import "swiper/css"
-import "swiper/css/effect-coverflow"
-import "swiper/css/pagination"
-import "swiper/css/navigation"
-
-const STRAPI_API_ENDPOINT = `${API_BASE_URL}/api/novedads`
-
-// Array expandido de iconos futuristas para rotar
+// Array de iconos para rotar
 const newsIcons = [BulbOutlined, BookOutlined, ExperimentOutlined, RocketOutlined, ThunderboltOutlined, StarOutlined]
 
 export default function HomeExploration() {
   const [novedades, setNovedades] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false)
+  const autoPlayRef = useRef(null)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
@@ -41,70 +87,18 @@ export default function HomeExploration() {
       setLoading(true)
       setError(null)
       try {
-        const response = await fetch(STRAPI_API_ENDPOINT)
+        // Simular llamada a API
+        await new Promise((resolve) => setTimeout(resolve, 1000))
 
-        if (!response.ok) {
-          let errorData
-          try {
-            errorData = await response.json()
-          } catch (parseError) {
-            errorData = { message: response.statusText }
-          }
-          throw new Error(
-            `HTTP error! status: ${response.status} - ${errorData?.error?.message || errorData?.message || "Error desconocido"}`,
-          )
-        }
-
-        const result = await response.json()
-        console.log("Datos recibidos de Strapi:", result)
-
-        if (result && Array.isArray(result.data)) {
-          setNovedades(result.data)
-        } else {
-          console.warn("La estructura de datos recibida no es la esperada:", result)
-          setNovedades([])
-        }
+        // Por ahora usar mock data
+        setNovedades(mockNovedades)
+        // Marcar como cargado inicialmente después de un pequeño delay
+        setTimeout(() => setHasInitiallyLoaded(true), 1500)
       } catch (err) {
         console.error("Error detallado al obtener datos:", err)
         setError(err.message || "Ocurrió un error al cargar las novedades.")
-        // Mock data para demostración
-        setNovedades([
-          {
-            id: 1,
-            Titulo: "Nueva Publicación en Revista Internacional de IA",
-            Descripcion:
-              "Nuestro equipo ha publicado un artículo sobre procesamiento de lenguaje natural en la revista IEEE Transactions on AI, destacando avances en modelos de comprensión de texto en español.",
-            Enlace: "#",
-          },
-          {
-            id: 2,
-            Titulo: "Participación en Conferencia Mundial de Inteligencia Artificial",
-            Descripcion:
-              "Presentación de tres ponencias magistrales en la conferencia ICAI 2024, incluyendo trabajos sobre ética en IA, sistemas inteligentes y robótica educativa.",
-            Enlace: "#",
-          },
-          {
-            id: 3,
-            Titulo: "Nuevo Proyecto Internacional de Investigación",
-            Descripcion:
-              "Inicio de proyecto colaborativo con universidades de Brasil y Chile sobre sistemas inteligentes adaptativos, financiado por el programa Horizon Europe.",
-            Enlace: "#",
-          },
-          {
-            id: 4,
-            Titulo: "Premio a la Innovación Tecnológica",
-            Descripcion:
-              "Reconocimiento nacional por el desarrollo de un sistema de traducción automática español-guaraní, promoviendo la preservación de lenguas originarias.",
-            Enlace: "#",
-          },
-          {
-            id: 5,
-            Titulo: "Lanzamiento de Plataforma Educativa",
-            Descripcion:
-              "Presentación oficial de nuestra plataforma de e-learning con IA integrada, diseñada para personalizar la experiencia de aprendizaje en ciencias de la computación.",
-            Enlace: "#",
-          },
-        ])
+        setNovedades(mockNovedades) // Fallback a mock data
+        setTimeout(() => setHasInitiallyLoaded(true), 1500)
       } finally {
         setLoading(false)
       }
@@ -112,6 +106,73 @@ export default function HomeExploration() {
 
     fetchData()
   }, [])
+
+  // Auto-play del carrusel
+  useEffect(() => {
+    if (novedades.length > 0 && hasInitiallyLoaded && !isTransitioning) {
+      autoPlayRef.current = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % novedades.length)
+      }, 50000)
+
+      return () => {
+        if (autoPlayRef.current) {
+          clearInterval(autoPlayRef.current)
+        }
+      }
+    }
+  }, [novedades.length, hasInitiallyLoaded, isTransitioning])
+
+  const handleTransition = (newIndex) => {
+    if (isTransitioning || newIndex === currentIndex) return
+
+    // Pausar auto-play durante transición manual
+    if (autoPlayRef.current) {
+      clearInterval(autoPlayRef.current)
+    }
+
+    setIsTransitioning(true)
+    setCurrentIndex(newIndex)
+
+    // Resetear el estado de transición
+    setTimeout(() => {
+      setIsTransitioning(false)
+    }, 600) // Duración más corta para mejor UX
+  }
+
+  const handlePrevious = () => {
+    const newIndex = currentIndex === 0 ? novedades.length - 1 : currentIndex - 1
+    handleTransition(newIndex)
+  }
+
+  const handleNext = () => {
+    const newIndex = (currentIndex + 1) % novedades.length
+    handleTransition(newIndex)
+  }
+
+  const handleIndicatorClick = (index) => {
+    handleTransition(index)
+  }
+
+  // Función para obtener las 3 cards visibles sin cambiar keys
+  const getVisibleCards = () => {
+    if (novedades.length === 0) return []
+
+    const cards = []
+    for (let i = 0; i < 3; i++) {
+      const dataIndex = (currentIndex - 1 + i + novedades.length) % novedades.length
+      const position = i === 0 ? "left" : i === 1 ? "center" : "right"
+
+      cards.push({
+        data: novedades[dataIndex],
+        position: position,
+        iconIndex: dataIndex,
+        // Key estable basado en la posición, no en el contenido
+        key: `position-${i}`,
+        dataId: novedades[dataIndex].id,
+      })
+    }
+    return cards
+  }
 
   if (loading) {
     return (
@@ -159,6 +220,8 @@ export default function HomeExploration() {
     )
   }
 
+  const visibleCards = getVisibleCards()
+
   return (
     <div className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="exploration-container">
@@ -171,238 +234,80 @@ export default function HomeExploration() {
           </p>
         </div>
 
-        <div className="news-carousel-container">
-          <Swiper
-            effect={"coverflow"}
-            grabCursor={true}
-            centeredSlides={true}
-            initialSlide={novedades.length > 0 ? Math.floor(novedades.length / 2) : 0}
-            slidesPerView={"auto"}
-            spaceBetween={30}
-            coverflowEffect={{
-              rotate: 15,
-              stretch: 0,
-              depth: 200,
-              modifier: 1,
-              slideShadows: false,
-            }}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            navigation={true}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            loop={novedades.length > 1}
-            modules={[EffectCoverflow, Pagination, Navigation, Mousewheel, Keyboard, Autoplay]}
-            className="news-swiper"
-            breakpoints={{
-              320: {
-                slidesPerView: 1,
-                spaceBetween: 20,
-                coverflowEffect: {
-                  rotate: 0,
-                  stretch: 0,
-                  depth: 100,
-                  modifier: 1,
-                },
-              },
-              768: {
-                slidesPerView: "auto",
-                spaceBetween: 30,
-                coverflowEffect: {
-                  rotate: 15,
-                  stretch: 0,
-                  depth: 200,
-                  modifier: 1,
-                },
-              },
-            }}
+        <div className={`custom-carousel-container ${hasInitiallyLoaded ? "loaded" : ""}`}>
+          {/* Botón anterior */}
+          <button
+            className="carousel-nav-btn carousel-nav-prev"
+            onClick={handlePrevious}
+            aria-label="Anterior"
+            disabled={isTransitioning}
           >
-            {novedades.map((novedad, index) => {
-              const IconComponent = newsIcons[index % newsIcons.length]
+            <LeftOutlined />
+          </button>
+
+          {/* Cards del carrusel */}
+          <div className={`carousel-track ${isTransitioning ? "transitioning" : ""}`}>
+            {visibleCards.map((card) => {
+              const IconComponent = newsIcons[card.iconIndex % newsIcons.length]
 
               return (
-                <SwiperSlide
-                  key={novedad.id}
-                  data-history={novedad.titulo || `novedad-${novedad.id}`}
-                  className="news-slide"
-                  style={{
-                    width: "350px",
-                    height: "auto",
-                  }}
+                <div
+                  key={card.key} // Key estable basado en posición
+                  className={`carousel-card carousel-card-${card.position} ${hasInitiallyLoaded ? "loaded" : ""}`}
+                  data-id={card.dataId} // Para debugging
                 >
                   <div className="news-content">
-                    <div className="news-icon">
-                      <IconComponent />
+                    {/* Imagen de la novedad */}
+                    <div className="news-image-container">
+                      <img src={card.data.imagen || "/placeholder.svg"} alt={card.data.Titulo} className="news-image" />
                     </div>
 
-                    <h3 className="news-title">{novedad?.Titulo || "Título no disponible"}</h3>
+                    <div className="news-text-content">
+                      <h3 className="news-title">{card.data.Titulo || "Título no disponible"}</h3>
 
-                    <p className="news-description">{novedad?.Descripcion || "Descripción no disponible."}</p>
+                      <p className="news-description">{card.data.Descripcion || "Descripción no disponible."}</p>
 
-                    <div className="news-cta">
-                      <a
-                        className="news-btn"
-                        href={novedad?.Enlace || "#"}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Ver Más
-                        <ArrowRightOutlined />
-                      </a>
+                      <div className="news-cta">
+                        <a
+                          className="news-btn"
+                          href={card.data.Enlace || "#"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Ver Más
+                          <ArrowRightOutlined />
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </SwiperSlide>
+                </div>
               )
             })}
-          </Swiper>
+          </div>
+
+          {/* Botón siguiente */}
+          <button
+            className="carousel-nav-btn carousel-nav-next"
+            onClick={handleNext}
+            aria-label="Siguiente"
+            disabled={isTransitioning}
+          >
+            <RightOutlined />
+          </button>
         </div>
 
-        {/* Estadísticas adicionales */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "1.5rem",
-            marginTop: "3rem",
-          }}
-        >
-          <div
-            className="news-slide"
-            style={{
-              minHeight: "auto",
-              padding: "1.5rem",
-              textAlign: "center",
-              cursor: "default",
-            }}
-          >
-            <div className="news-icon" style={{ margin: "0 auto 1rem auto" }}>
-              <BookOutlined />
-            </div>
-            <h4
-              style={{
-                color: "var(--colorTextBase)",
-                fontSize: "1.5rem",
-                fontWeight: "600",
-                marginBottom: "0.5rem",
-              }}
-            >
-              50+
-            </h4>
-            <p
-              style={{
-                color: "var(--colorTextSecondary)",
-                fontSize: "0.9rem",
-                margin: 0,
-              }}
-            >
-              Publicaciones
-            </p>
-          </div>
-
-          <div
-            className="news-slide"
-            style={{
-              minHeight: "auto",
-              padding: "1.5rem",
-              textAlign: "center",
-              cursor: "default",
-            }}
-          >
-            <div className="news-icon" style={{ margin: "0 auto 1rem auto" }}>
-              <ExperimentOutlined />
-            </div>
-            <h4
-              style={{
-                color: "var(--colorTextBase)",
-                fontSize: "1.5rem",
-                fontWeight: "600",
-                marginBottom: "0.5rem",
-              }}
-            >
-              25+
-            </h4>
-            <p
-              style={{
-                color: "var(--colorTextSecondary)",
-                fontSize: "0.9rem",
-                margin: 0,
-              }}
-            >
-              Proyectos Activos
-            </p>
-          </div>
-
-          <div
-            className="news-slide"
-            style={{
-              minHeight: "auto",
-              padding: "1.5rem",
-              textAlign: "center",
-              cursor: "default",
-            }}
-          >
-            <div className="news-icon" style={{ margin: "0 auto 1rem auto" }}>
-              <RocketOutlined />
-            </div>
-            <h4
-              style={{
-                color: "var(--colorTextBase)",
-                fontSize: "1.5rem",
-                fontWeight: "600",
-                marginBottom: "0.5rem",
-              }}
-            >
-              15+
-            </h4>
-            <p
-              style={{
-                color: "var(--colorTextSecondary)",
-                fontSize: "0.9rem",
-                margin: 0,
-              }}
-            >
-              Investigadores
-            </p>
-          </div>
-
-          <div
-            className="news-slide"
-            style={{
-              minHeight: "auto",
-              padding: "1.5rem",
-              textAlign: "center",
-              cursor: "default",
-            }}
-          >
-            <div className="news-icon" style={{ margin: "0 auto 1rem auto" }}>
-              <StarOutlined />
-            </div>
-            <h4
-              style={{
-                color: "var(--colorTextBase)",
-                fontSize: "1.5rem",
-                fontWeight: "600",
-                marginBottom: "0.5rem",
-              }}
-            >
-              8+
-            </h4>
-            <p
-              style={{
-                color: "var(--colorTextSecondary)",
-                fontSize: "0.9rem",
-                margin: 0,
-              }}
-            >
-              Años de Experiencia
-            </p>
-          </div>
+        {/* Indicadores de posición */}
+        <div className="carousel-indicators">
+          {novedades.map((_, index) => (
+            <button
+              key={index}
+              className={`carousel-indicator ${index === currentIndex ? "active" : ""}`}
+              onClick={() => handleIndicatorClick(index)}
+              aria-label={`Ir a novedad ${index + 1}`}
+              disabled={isTransitioning}
+            />
+          ))}
         </div>
       </div>
     </div>
