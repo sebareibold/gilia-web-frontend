@@ -11,65 +11,119 @@ import {
   StarOutlined,
   LeftOutlined,
   RightOutlined,
+  ShareAltOutlined,
+  EyeOutlined,
+  FireOutlined,
+  TrophyOutlined,
+  TeamOutlined,
 } from "@ant-design/icons"
 import { useTheme } from "../../../context/ThemeContext"
-import Loader from "../../Loader/Loader"
 import "./HomeExploration.css"
 
-// Mock data para novedades con imágenes
+// Mock data para novedades mejorado sin fechas
 const mockNovedades = [
   {
     id: 1,
-    Titulo: "Nueva Publicación en Revista Internacional de IA",
+    Titulo: "Revolucionario Modelo de IA para Procesamiento de Lenguaje Natural",
     Descripcion:
-      "Nuestro equipo ha publicado un artículo sobre procesamiento de lenguaje natural en la revista IEEE Transactions on AI, destacando avances en modelos de comprensión de texto en español.",
+      "Desarrollo de un modelo de inteligencia artificial que supera a los enfoques existentes en un 15% en tareas de comprensión de texto y análisis de sentimientos para el español.",
     Enlace: "https://www.ieee.org/publications/",
-    imagen: "/imagenRandom.png?height=200&width=300",
+    imagen: "/imagenRandom.png",
+    categoria: "Investigación",
+    vistas: 1250,
+    destacado: true,
   },
   {
     id: 2,
-    Titulo: "Participación en Conferencia Mundial de Inteligencia Artificial",
+    Titulo: "Participación Destacada en ICAI 2024",
     Descripcion:
-      "Presentación de tres ponencias magistrales en la conferencia ICAI 2024, incluyendo trabajos sobre ética en IA, sistemas inteligentes y robótica educativa.",
+      "Tres ponencias magistrales sobre ética en IA, sistemas adaptativos y robótica educativa. Nuestros investigadores fueron keynote speakers principales.",
     Enlace: "https://www.icai-conference.org/",
-    imagen: "/imagenRandom.png?height=200&width=300",
+    imagen: "/imagenRandom.png",
+    categoria: "Conferencia",
+    vistas: 890,
+    destacado: false,
   },
   {
     id: 3,
-    Titulo: "Nuevo Proyecto Internacional de Investigación",
+    Titulo: "Proyecto Horizon Europe Multinacional",
     Descripcion:
-      "Inicio de proyecto colaborativo con universidades de Brasil y Chile sobre sistemas inteligentes adaptativos, financiado por el programa Horizon Europe.",
+      "Colaboración internacional con universidades de Brasil y Chile, financiado con 2.5 millones de euros para desarrollar sistemas inteligentes adaptativos.",
     Enlace: "https://ec.europa.eu/programmes/horizon2020/",
-    imagen: "/imagenRandom.png?height=200&width=300",
+    imagen: "/imagenRandom.png",
+    categoria: "Proyecto",
+    vistas: 2100,
+    destacado: true,
   },
   {
     id: 4,
-    Titulo: "Premio a la Innovación Tecnológica",
+    Titulo: "Premio Nacional: Traductor Español-Guaraní",
     Descripcion:
-      "Reconocimiento nacional por el desarrollo de un sistema de traducción automática español-guaraní, promoviendo la preservación de lenguas originarias.",
+      "Reconocimiento del Ministerio de Ciencia por desarrollar el primer sistema de traducción automática que preserva lenguas originarias digitalmente.",
     Enlace: "https://www.conicet.gov.ar/",
-    imagen: "/imagenRandom.png?height=200&width=300",
+    imagen: "/imagenRandom.png",
+    categoria: "Premio",
+    vistas: 1750,
+    destacado: false,
   },
   {
     id: 5,
-    Titulo: "Lanzamiento de Plataforma Educativa",
+    Titulo: "Plataforma Educativa con IA Personalizada",
     Descripcion:
-      "Presentación oficial de nuestra plataforma de e-learning con IA integrada, diseñada para personalizar la experiencia de aprendizaje en ciencias de la computación.",
+      "Lanzamiento exitoso de nuestra plataforma de e-learning que adapta contenido y metodología según el perfil de cada estudiante. Más de 1000 usuarios activos.",
     Enlace: "https://www.edx.org/",
-    imagen: "/imagenRandom.png?height=200&width=300",
+    imagen: "/imagenRandom.png",
+    categoria: "Lanzamiento",
+    vistas: 3200,
+    destacado: true,
   },
   {
     id: 6,
-    Titulo: "Colaboración con Empresas Tecnológicas",
+    Titulo: "Colaboración Internacional en Robótica",
     Descripcion:
-      "Establecimiento de alianzas estratégicas con empresas líderes en tecnología para el desarrollo de soluciones innovadoras en inteligencia artificial.",
-    Enlace: "https://www.google.com/ai/",
-    imagen: "/imagenRandom.png?height=200&width=300",
+      "Nuevo proyecto de investigación en robótica educativa con universidades europeas, enfocado en el desarrollo de asistentes pedagógicos inteligentes.",
+    Enlace: "https://www.robotics-education.org/",
+    imagen: "/imagenRandom.png",
+    categoria: "Colaboración",
+    vistas: 980,
+    destacado: false,
+  },
+  {
+    id: 7,
+    Titulo: "Avances en Procesamiento de Voz",
+    Descripcion:
+      "Desarrollo de tecnologías de reconocimiento y síntesis de voz para dialectos regionales, mejorando la accesibilidad tecnológica en comunidades locales.",
+    Enlace: "https://www.speech-tech.org/",
+    imagen: "/imagenRandom.png",
+    categoria: "Tecnología",
+    vistas: 1420,
+    destacado: true,
+  },
+  {
+    id: 8,
+    Titulo: "Publicación en Nature AI",
+    Descripcion:
+      "Artículo científico sobre redes neuronales explicables publicado en una de las revistas más prestigiosas del campo de la inteligencia artificial.",
+    Enlace: "https://www.nature.com/",
+    imagen: "/imagenRandom.png",
+    categoria: "Publicación",
+    vistas: 2850,
+    destacado: true,
   },
 ]
 
-// Array de iconos para rotar
-const newsIcons = [BulbOutlined, BookOutlined, ExperimentOutlined, RocketOutlined, ThunderboltOutlined, StarOutlined]
+// Array de iconos para rotar con más variedad
+const newsIcons = [
+  BulbOutlined,
+  BookOutlined,
+  ExperimentOutlined,
+  RocketOutlined,
+  ThunderboltOutlined,
+  StarOutlined,
+  FireOutlined,
+  TrophyOutlined,
+  TeamOutlined,
+]
 
 export default function HomeExploration() {
   const [novedades, setNovedades] = useState([])
@@ -77,10 +131,27 @@ export default function HomeExploration() {
   const [error, setError] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false)
+  const [cardsPerView, setCardsPerView] = useState(3)
   const autoPlayRef = useRef(null)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+
+  // Determinar cuántas cards mostrar según el tamaño de pantalla
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      if (window.innerWidth >= 1200) {
+        setCardsPerView(3)
+      } else if (window.innerWidth >= 768) {
+        setCardsPerView(2)
+      } else {
+        setCardsPerView(1)
+      }
+    }
+
+    updateCardsPerView()
+    window.addEventListener("resize", updateCardsPerView)
+    return () => window.removeEventListener("resize", updateCardsPerView)
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,17 +159,12 @@ export default function HomeExploration() {
       setError(null)
       try {
         // Simular llamada a API
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
-        // Por ahora usar mock data
+        await new Promise((resolve) => setTimeout(resolve, 1200))
         setNovedades(mockNovedades)
-        // Marcar como cargado inicialmente después de un pequeño delay
-        setTimeout(() => setHasInitiallyLoaded(true), 1500)
       } catch (err) {
         console.error("Error detallado al obtener datos:", err)
         setError(err.message || "Ocurrió un error al cargar las novedades.")
         setNovedades(mockNovedades) // Fallback a mock data
-        setTimeout(() => setHasInitiallyLoaded(true), 1500)
       } finally {
         setLoading(false)
       }
@@ -109,10 +175,13 @@ export default function HomeExploration() {
 
   // Auto-play del carrusel
   useEffect(() => {
-    if (novedades.length > 0 && hasInitiallyLoaded && !isTransitioning) {
+    if (novedades.length > 0 && !isTransitioning) {
       autoPlayRef.current = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % novedades.length)
-      }, 50000)
+        setCurrentIndex((prevIndex) => {
+          const maxIndex = Math.max(0, novedades.length - cardsPerView)
+          return prevIndex >= maxIndex ? 0 : prevIndex + 1
+        })
+      }, 6000)
 
       return () => {
         if (autoPlayRef.current) {
@@ -120,10 +189,11 @@ export default function HomeExploration() {
         }
       }
     }
-  }, [novedades.length, hasInitiallyLoaded, isTransitioning])
+  }, [novedades.length, isTransitioning, cardsPerView])
 
   const handleTransition = (newIndex) => {
-    if (isTransitioning || newIndex === currentIndex) return
+    const maxIndex = Math.max(0, novedades.length - cardsPerView)
+    if (isTransitioning || newIndex === currentIndex || newIndex < 0 || newIndex > maxIndex) return
 
     // Pausar auto-play durante transición manual
     if (autoPlayRef.current) {
@@ -136,16 +206,17 @@ export default function HomeExploration() {
     // Resetear el estado de transición
     setTimeout(() => {
       setIsTransitioning(false)
-    }, 600) // Duración más corta para mejor UX
+    }, 800)
   }
 
   const handlePrevious = () => {
-    const newIndex = currentIndex === 0 ? novedades.length - 1 : currentIndex - 1
+    const newIndex = currentIndex === 0 ? Math.max(0, novedades.length - cardsPerView) : currentIndex - 1
     handleTransition(newIndex)
   }
 
   const handleNext = () => {
-    const newIndex = (currentIndex + 1) % novedades.length
+    const maxIndex = Math.max(0, novedades.length - cardsPerView)
+    const newIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1
     handleTransition(newIndex)
   }
 
@@ -153,163 +224,169 @@ export default function HomeExploration() {
     handleTransition(index)
   }
 
-  // Función para obtener las 3 cards visibles sin cambiar keys
-  const getVisibleCards = () => {
-    if (novedades.length === 0) return []
-
-    const cards = []
-    for (let i = 0; i < 3; i++) {
-      const dataIndex = (currentIndex - 1 + i + novedades.length) % novedades.length
-      const position = i === 0 ? "left" : i === 1 ? "center" : "right"
-
-      cards.push({
-        data: novedades[dataIndex],
-        position: position,
-        iconIndex: dataIndex,
-        // Key estable basado en la posición, no en el contenido
-        key: `position-${i}`,
-        dataId: novedades[dataIndex].id,
-      })
+  const formatViews = (views) => {
+    if (views >= 1000) {
+      return `${(views / 1000).toFixed(1)}k`
     }
-    return cards
+    return views.toString()
+  }
+
+  const getVisibleCards = () => {
+    return novedades.slice(currentIndex, currentIndex + cardsPerView)
+  }
+
+  const getTotalSlides = () => {
+    return Math.max(0, novedades.length - cardsPerView + 1)
   }
 
   if (loading) {
     return (
-      <div className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="exploration-container">
-          <div className="loading-container">
-            <Loader />
-            <p className="loading-text">Cargando novedades...</p>
+          <div className="carousel-loading">
+            <div className="loading-spinner" />
+            <span className="loading-text">Cargando las últimas novedades...</span>
           </div>
         </div>
-      </div>
+      </section>
     )
   }
 
-  if (error) {
+  if (error || !novedades || novedades.length === 0) {
     return (
-      <div className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="exploration-container">
-          <div className="error-container">
-            <div className="news-icon">
+          <div className="section-header">
+            <div className="section-badge">
               <ExperimentOutlined />
+              <span>Novedades</span>
             </div>
-            <h2 className="error-title">Error al cargar novedades</h2>
-            <p className="error-text">No se pudieron cargar las novedades.</p>
-            <p className="error-details">{error}</p>
+            <h2 className="section-title">No hay novedades disponibles</h2>
+            <p className="section-description">
+              Vuelve a consultar más tarde para ver las últimas actualizaciones de nuestro equipo de investigación.
+            </p>
           </div>
         </div>
-      </div>
-    )
-  }
-
-  if (!novedades || novedades.length === 0) {
-    return (
-      <div className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
-        <div className="exploration-container">
-          <div className="error-container">
-            <div className="news-icon">
-              <BookOutlined />
-            </div>
-            <h2 className="error-title">No hay novedades</h2>
-            <p className="error-text">Vuelve a consultar más tarde.</p>
-          </div>
-        </div>
-      </div>
+      </section>
     )
   }
 
   const visibleCards = getVisibleCards()
+  const totalSlides = getTotalSlides()
 
   return (
-    <div className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+    <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="exploration-container">
+        {/* Header de sección */}
         <div className="section-header">
-          <p className="section-subtitle">Últimas</p>
-          <h2 className="section-title">Novedades</h2>
+          <div className="section-badge">
+            <StarOutlined />
+            <span>Últimas Novedades</span>
+          </div>
+          <h2 className="section-title">Descubre Nuestros Últimos Avances</h2>
           <p className="section-description">
-            Mantente al día con nuestras investigaciones, publicaciones y avances en inteligencia artificial y
-            procesamiento de lenguaje natural.
+            Mantente al día con nuestras investigaciones más recientes, publicaciones destacadas y logros
+            revolucionarios en inteligencia artificial, procesamiento de lenguaje natural y tecnologías emergentes.
           </p>
         </div>
 
-        <div className={`custom-carousel-container ${hasInitiallyLoaded ? "loaded" : ""}`}>
-          {/* Botón anterior */}
-          <button
-            className="carousel-nav-btn carousel-nav-prev"
-            onClick={handlePrevious}
-            aria-label="Anterior"
-            disabled={isTransitioning}
-          >
-            <LeftOutlined />
-          </button>
-
-          {/* Cards del carrusel */}
-          <div className={`carousel-track ${isTransitioning ? "transitioning" : ""}`}>
-            {visibleCards.map((card) => {
-              const IconComponent = newsIcons[card.iconIndex % newsIcons.length]
-
-              return (
-                <div
-                  key={card.key} // Key estable basado en posición
-                  className={`carousel-card carousel-card-${card.position} ${hasInitiallyLoaded ? "loaded" : ""}`}
-                  data-id={card.dataId} // Para debugging
+        {/* Carrusel multi-card */}
+        <div className="multi-card-carousel">
+          <div className="carousel-container">
+            {/* Controles de navegación */}
+            {totalSlides > 1 && (
+              <div className="carousel-navigation">
+                <button
+                  className="carousel-nav-btn carousel-nav-prev"
+                  onClick={handlePrevious}
+                  disabled={isTransitioning}
+                  aria-label="Noticias anteriores"
                 >
-                  <div className="news-content">
-                    {/* Imagen de la novedad */}
-                    <div className="news-image-container">
-                      <img src={card.data.imagen || "/placeholder.svg"} alt={card.data.Titulo} className="news-image" />
-                    </div>
+                  <LeftOutlined />
+                </button>
+                <button
+                  className="carousel-nav-btn carousel-nav-next"
+                  onClick={handleNext}
+                  disabled={isTransitioning}
+                  aria-label="Siguientes noticias"
+                >
+                  <RightOutlined />
+                </button>
+              </div>
+            )}
 
-                    <div className="news-text-content">
-                      <h3 className="news-title">{card.data.Titulo || "Título no disponible"}</h3>
+            {/* Track del carrusel */}
+            <div className="carousel-track">
+              {visibleCards.map((novedad, index) => {
+                const NewsIcon = newsIcons[(currentIndex + index) % newsIcons.length]
+                return (
+                  <div key={`${novedad.id}-${currentIndex}`} className="carousel-slide">
+                    <div className="news-card">
+                      {/* Imagen */}
+                      <div className="news-image-container">
+                        <img
+                          src={novedad.imagen || "/placeholder.svg?height=300&width=400"}
+                          alt={novedad.Titulo}
+                          className="news-image"
+                          loading="lazy"
+                        />
+                        <div className="news-image-overlay">
+                          <NewsIcon />
+                        </div>
+                      </div>
 
-                      <p className="news-description">{card.data.Descripcion || "Descripción no disponible."}</p>
+                      {/* Contenido */}
+                      <div className="news-content">
+                        <div className="news-meta">
+                          <span className="news-category">{novedad.categoria}</span>
+                          <div className="news-views">
+                            <EyeOutlined />
+                            <span>{formatViews(novedad.vistas)}</span>
+                          </div>
+                        </div>
 
-                      <div className="news-cta">
-                        <a
-                          className="news-btn"
-                          href={card.data.Enlace || "#"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          Ver Más
-                          <ArrowRightOutlined />
-                        </a>
+                        <h3 className="news-title">{novedad.Titulo}</h3>
+
+                        <p className="news-description">{novedad.Descripcion}</p>
+
+                        <div className="news-actions">
+                          <a
+                            href={novedad.Enlace}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="news-btn-primary"
+                          >
+                            <span>Leer más</span>
+                            <ArrowRightOutlined />
+                          </a>
+                          <button className="news-btn-secondary" aria-label="Compartir noticia">
+                            <ShareAltOutlined />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
 
-          {/* Botón siguiente */}
-          <button
-            className="carousel-nav-btn carousel-nav-next"
-            onClick={handleNext}
-            aria-label="Siguiente"
-            disabled={isTransitioning}
-          >
-            <RightOutlined />
-          </button>
-        </div>
-
-        {/* Indicadores de posición */}
-        <div className="carousel-indicators">
-          {novedades.map((_, index) => (
-            <button
-              key={index}
-              className={`carousel-indicator ${index === currentIndex ? "active" : ""}`}
-              onClick={() => handleIndicatorClick(index)}
-              aria-label={`Ir a novedad ${index + 1}`}
-              disabled={isTransitioning}
-            />
-          ))}
+          {/* Indicadores */}
+          {totalSlides > 1 && (
+            <div className="carousel-indicators">
+              {Array.from({ length: totalSlides }, (_, index) => (
+                <button
+                  key={index}
+                  className={`carousel-indicator ${index === currentIndex ? "active" : ""}`}
+                  onClick={() => handleIndicatorClick(index)}
+                  disabled={isTransitioning}
+                  aria-label={`Ir al grupo de noticias ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </section>
   )
 }

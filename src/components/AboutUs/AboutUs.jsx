@@ -1,153 +1,379 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import {
+  TeamOutlined,
+  BookOutlined,
+  TrophyOutlined,
+  GlobalOutlined,
+  MailOutlined,
+  LinkedinOutlined,
+  GithubOutlined,
+  TwitterOutlined,
+  BulbOutlined,
+  RocketOutlined,
+  ExperimentOutlined,
+  StarOutlined,
+} from "@ant-design/icons"
 import { useTheme } from "../../context/ThemeContext"
-import { TeamOutlined, UserOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons"
 import Loader from "../Loader/Loader"
-import { fetchAboutUsData } from "./AboutAPI"
-import PeopleCard from "./PeopleCard"
-import { API_BASE_URL } from "../../config/apiConfig"
-import "../shared/FuturisticStyles.css"
+import "./AboutUs.css"
 
-const AboutUs = () => {
+// Mock data mejorado para el equipo
+const mockTeamData = {
+  about: {
+    mision:
+      "Desarrollar soluciones innovadoras en inteligencia artificial y procesamiento de lenguaje natural que contribuyan al avance científico y tecnológico, con un enfoque especial en lenguas con recursos limitados y aplicaciones socialmente relevantes.",
+    vision:
+      "Ser un grupo de investigación de referencia internacional en IA y lenguajes, reconocido por la excelencia académica, la innovación tecnológica y el impacto social de nuestras contribuciones.",
+    valores: [
+      "Excelencia académica",
+      "Innovación tecnológica",
+      "Colaboración internacional",
+      "Impacto social",
+      "Ética en IA",
+    ],
+  },
+  people: [
+    {
+      id: 1,
+      nombre: "Dr. María Elena Rodríguez",
+      cargo: "Directora del Grupo",
+      email: "maria.rodriguez@gilia.edu.ar",
+      imagen: "/placeholder.svg?height=120&width=120",
+      descripcion:
+        "Especialista en procesamiento de lenguaje natural con más de 15 años de experiencia. Lidera proyectos de investigación en traducción automática y análisis de sentimientos.",
+      especialidades: ["NLP", "Machine Learning", "Traducción Automática", "Análisis de Sentimientos"],
+      linkedin: "https://linkedin.com/in/maria-rodriguez",
+      github: "https://github.com/mrodriguez",
+      activo: true,
+    },
+    {
+      id: 2,
+      nombre: "Dr. Carlos Mendoza",
+      cargo: "Investigador Senior",
+      email: "carlos.mendoza@gilia.edu.ar",
+      imagen: "/placeholder.svg?height=120&width=120",
+      descripcion:
+        "Experto en sistemas inteligentes y robótica educativa. Ha publicado más de 50 artículos en revistas internacionales de primer nivel.",
+      especialidades: ["Robótica", "Sistemas Inteligentes", "IA Educativa", "Computer Vision"],
+      linkedin: "https://linkedin.com/in/carlos-mendoza",
+      github: "https://github.com/cmendoza",
+      activo: true,
+    },
+    {
+      id: 3,
+      nombre: "Dra. Ana Sofía López",
+      cargo: "Investigadora Postdoctoral",
+      email: "ana.lopez@gilia.edu.ar",
+      imagen: "/placeholder.svg?height=120&width=120",
+      descripcion:
+        "Especializada en ética de la inteligencia artificial y sistemas de recomendación. Coordina proyectos de colaboración internacional.",
+      especialidades: ["Ética en IA", "Sistemas de Recomendación", "Fairness", "Explainable AI"],
+      linkedin: "https://linkedin.com/in/ana-lopez",
+      twitter: "https://twitter.com/ana_lopez_ai",
+      activo: true,
+    },
+    {
+      id: 4,
+      nombre: "Mg. Roberto Silva",
+      cargo: "Investigador Junior",
+      email: "roberto.silva@gilia.edu.ar",
+      imagen: "/placeholder.svg?height=120&width=120",
+      descripcion:
+        "Doctorando en ciencias de la computación, enfocado en deep learning y redes neuronales para procesamiento de texto.",
+      especialidades: ["Deep Learning", "Neural Networks", "Text Mining", "Python"],
+      github: "https://github.com/rsilva",
+      twitter: "https://twitter.com/roberto_silva",
+      activo: true,
+    },
+    {
+      id: 5,
+      nombre: "Lic. Valentina Torres",
+      cargo: "Desarrolladora de Software",
+      email: "valentina.torres@gilia.edu.ar",
+      imagen: "/placeholder.svg?height=120&width=120",
+      descripcion:
+        "Especialista en desarrollo de aplicaciones web y móviles para proyectos de investigación. Experta en tecnologías modernas de frontend y backend.",
+      especialidades: ["React", "Node.js", "Python", "UI/UX Design"],
+      github: "https://github.com/vtorres",
+      linkedin: "https://linkedin.com/in/valentina-torres",
+      activo: true,
+    },
+    {
+      id: 6,
+      nombre: "Ing. Diego Ramírez",
+      cargo: "Administrador de Sistemas",
+      email: "diego.ramirez@gilia.edu.ar",
+      imagen: "/placeholder.svg?height=120&width=120",
+      descripcion:
+        "Responsable de la infraestructura tecnológica del grupo. Especialista en cloud computing y administración de clusters de cómputo de alto rendimiento.",
+      especialidades: ["DevOps", "Cloud Computing", "Docker", "Kubernetes"],
+      linkedin: "https://linkedin.com/in/diego-ramirez",
+      github: "https://github.com/dramirez",
+      activo: true,
+    },
+  ],
+  objectives: [
+    {
+      id: 1,
+      titulo: "Investigación de Vanguardia",
+      descripcion:
+        "Desarrollar investigación de alta calidad en inteligencia artificial, con especial énfasis en procesamiento de lenguaje natural y sistemas inteligentes adaptativos.",
+      icono: "BulbOutlined",
+    },
+    {
+      id: 2,
+      titulo: "Formación de Recursos Humanos",
+      descripcion:
+        "Formar investigadores y profesionales altamente capacitados en IA, contribuyendo al desarrollo del capital humano en ciencia y tecnología.",
+      icono: "TeamOutlined",
+    },
+    {
+      id: 3,
+      titulo: "Transferencia Tecnológica",
+      descripcion:
+        "Transferir conocimiento y tecnología al sector productivo y social, generando impacto real en la sociedad a través de nuestras innovaciones.",
+      icono: "RocketOutlined",
+    },
+    {
+      id: 4,
+      titulo: "Colaboración Internacional",
+      descripcion:
+        "Establecer y mantener colaboraciones estratégicas con instituciones de investigación de prestigio internacional para potenciar nuestro impacto.",
+      icono: "GlobalOutlined",
+    },
+  ],
+}
+
+const iconMap = {
+  BulbOutlined: BulbOutlined,
+  TeamOutlined: TeamOutlined,
+  RocketOutlined: RocketOutlined,
+  GlobalOutlined: GlobalOutlined,
+  ExperimentOutlined: ExperimentOutlined,
+  StarOutlined: StarOutlined,
+}
+
+export default function AboutUs() {
+  const [aboutData, setAboutData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [stats, setStats] = useState({
+    members: 0,
+    publications: 0,
+    projects: 0,
+    awards: 0,
+  })
   const { theme } = useTheme()
-  const [data, setData] = useState(null)
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
   useEffect(() => {
-    const getData = async () => {
-      const fetchedData = await fetchAboutUsData(API_BASE_URL)
-      console.log(fetchedData)
-      setData(fetchedData)
+    const fetchData = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        // Simular llamada a API
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        setAboutData(mockTeamData)
+
+        // Animar estadísticas
+        setTimeout(() => {
+          animateStats()
+        }, 500)
+      } catch (err) {
+        console.error("Error al obtener datos del equipo:", err)
+        setError(err.message || "Error al cargar la información del equipo")
+        setAboutData(mockTeamData) // Fallback
+      } finally {
+        setLoading(false)
+      }
     }
 
-    getData()
+    fetchData()
   }, [])
 
-  if (!data) {
+  const animateStats = () => {
+    const targets = { members: 6, publications: 150, projects: 25, awards: 8 }
+    const duration = 2000
+    const steps = 60
+
+    Object.keys(targets).forEach((key) => {
+      const target = targets[key]
+      const increment = target / steps
+      let current = 0
+
+      const timer = setInterval(() => {
+        current += increment
+        if (current >= target) {
+          current = target
+          clearInterval(timer)
+        }
+        setStats((prev) => ({ ...prev, [key]: Math.floor(current) }))
+      }, duration / steps)
+    })
+  }
+
+  if (loading) {
     return (
-      <div className="futuristic-container" data-theme={isDarkTheme ? "dark" : "light"}>
-        <div className="futuristic-loading">
+      <section className="about-us-section" data-theme={isDarkTheme ? "dark" : "light"}>
+        <div className="about-container">
           <Loader />
         </div>
-      </div>
+      </section>
     )
   }
 
-  const ordenarPorRol = (people) => {
-    if (!Array.isArray(people)) return []
-    const roleOrder = ["Director", "Investigador", "Colaborador", "Becario"]
-    return people.sort((a, b) => roleOrder.indexOf(a.role_person) - roleOrder.indexOf(b.role_person))
+  if (error || !aboutData) {
+    return (
+      <section className="about-us-section" data-theme={isDarkTheme ? "dark" : "light"}>
+        <div className="about-container">
+          <div className="about-header">
+            <h2 className="about-title">Error al cargar información</h2>
+            <p className="about-description">
+              No se pudo cargar la información del equipo. Por favor, intenta nuevamente más tarde.
+            </p>
+          </div>
+        </div>
+      </section>
+    )
   }
 
-  const sortedPeople = data.people ? ordenarPorRol(data.people) : []
-
   return (
-    <div className="futuristic-container" data-theme={isDarkTheme ? "dark" : "light"}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        {/* Header Section */}
-        <div className="futuristic-card" style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div className="futuristic-badge" style={{ marginBottom: "1rem" }}>
-            <TeamOutlined style={{ marginRight: "0.5rem" }} />
-            Nuestro Equipo
+    <section className="about-us-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <div className="about-container">
+        {/* Header */}
+        <div className="about-header">
+          <div className="about-badge">
+            <TeamOutlined />
+            <span>Nuestro Equipo</span>
           </div>
-
-          <h1 className="futuristic-title">¿Quiénes Somos?</h1>
-
-          <p className="futuristic-subtitle">
-            {data.description ||
-              "Somos un grupo de investigación dedicado a explorar las fronteras del conocimiento en inteligencia artificial, procesamiento de lenguaje natural y tecnologías emergentes."}
-          </p>
+          <h2 className="about-title">Conoce a GILIA</h2>
+          <p className="about-description">{aboutData.about.mision}</p>
         </div>
 
-        {/* Team Image */}
-        {data.image && (
-          <div className="futuristic-card" style={{ marginBottom: "2rem", textAlign: "center" }}>
-            <img
-              src={`${API_BASE_URL}${data.image?.url}`}
-              alt="Imagen del equipo"
-              style={{
-                width: "100%",
-                maxHeight: "400px",
-                objectFit: "cover",
-                borderRadius: "4px",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
-              }}
-            />
+        {/* Estadísticas del equipo */}
+        <div className="team-stats">
+          <div className="team-stat">
+            <div className="team-stat-icon">
+              <TeamOutlined />
+            </div>
+            <span className="team-stat-number">{stats.members}</span>
+            <span className="team-stat-label">Miembros del Equipo</span>
           </div>
-        )}
-
-        {/* Team Members */}
-        <div className="futuristic-card" style={{ marginBottom: "2rem" }}>
-          <h2
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "600",
-              color: "var(--colorTextBase)",
-              marginBottom: "1.5rem",
-              textAlign: "center",
-            }}
-          >
-            <UserOutlined style={{ marginRight: "0.5rem" }} />
-            Equipo de Investigación
-          </h2>
-
-          <div className="futuristic-grid futuristic-grid-4">
-            {sortedPeople.map((person) => (
-              <PeopleCard key={person.id} person={person} theme={theme} />
-            ))}
+          <div className="team-stat">
+            <div className="team-stat-icon">
+              <BookOutlined />
+            </div>
+            <span className="team-stat-number">{stats.publications}+</span>
+            <span className="team-stat-label">Publicaciones</span>
+          </div>
+          <div className="team-stat">
+            <div className="team-stat-icon">
+              <ExperimentOutlined />
+            </div>
+            <span className="team-stat-number">{stats.projects}+</span>
+            <span className="team-stat-label">Proyectos Activos</span>
+          </div>
+          <div className="team-stat">
+            <div className="team-stat-icon">
+              <TrophyOutlined />
+            </div>
+            <span className="team-stat-number">{stats.awards}</span>
+            <span className="team-stat-label">Reconocimientos</span>
           </div>
         </div>
 
-        {/* Information Section */}
-        <div className="futuristic-card">
-          <h2
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "600",
-              color: "var(--colorTextBase)",
-              marginBottom: "1.5rem",
-              textAlign: "center",
-            }}
-          >
-            Información Adicional
-          </h2>
+        {/* Grid de miembros del equipo */}
+        <div className="team-grid">
+          {aboutData.people.map((member) => (
+            <div key={member.id} className="team-member-card">
+              <div className="member-avatar-container">
+                <img src={member.imagen || "/placeholder.svg"} alt={member.nombre} className="member-avatar" />
+                {member.activo && <div className="member-status" />}
+              </div>
 
-          <div
-            style={{
-              fontSize: "1rem",
-              color: "var(--colorTextSecondary)",
-              lineHeight: "1.6",
-              textAlign: "justify",
-            }}
-          >
-            {data.information ||
-              "Nuestro grupo se dedica a la investigación de vanguardia en múltiples áreas de las ciencias de la computación, con especial énfasis en inteligencia artificial, procesamiento de lenguaje natural, sistemas inteligentes y ética en la computación."}
+              <div className="member-info">
+                <h3 className="member-name">{member.nombre}</h3>
+                <div className="member-role">{member.cargo}</div>
+                <p className="member-description">{member.descripcion}</p>
+
+                <div className="member-specialties">
+                  {member.especialidades.map((specialty, index) => (
+                    <span key={index} className="specialty-tag">
+                      {specialty}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="member-contact">
+                  <a href={`mailto:${member.email}`} className="contact-btn" title="Email">
+                    <MailOutlined />
+                  </a>
+                  {member.linkedin && (
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="contact-btn"
+                      title="LinkedIn"
+                    >
+                      <LinkedinOutlined />
+                    </a>
+                  )}
+                  {member.github && (
+                    <a
+                      href={member.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="contact-btn"
+                      title="GitHub"
+                    >
+                      <GithubOutlined />
+                    </a>
+                  )}
+                  {member.twitter && (
+                    <a
+                      href={member.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="contact-btn"
+                      title="Twitter"
+                    >
+                      <TwitterOutlined />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Sección de objetivos */}
+        <div className="objectives-section">
+          <div className="objectives-header">
+            <h3 className="objectives-title">Nuestros Objetivos</h3>
+            <p className="objectives-description">
+              Los pilares fundamentales que guían nuestra investigación y desarrollo en inteligencia artificial.
+            </p>
           </div>
 
-          <hr className="futuristic-divider" />
-
-          <div className="futuristic-grid futuristic-grid-2" style={{ marginTop: "1.5rem" }}>
-            <div className="futuristic-list-item">
-              <h3 style={{ color: "var(--colorTextBase)", marginBottom: "0.5rem" }}>
-                <MailOutlined style={{ marginRight: "0.5rem" }} />
-                Contacto
-              </h3>
-              <p style={{ color: "var(--colorTextSecondary)", margin: 0 }}>gilia@universidad.edu.ar</p>
-            </div>
-
-            <div className="futuristic-list-item">
-              <h3 style={{ color: "var(--colorTextBase)", marginBottom: "0.5rem" }}>
-                <PhoneOutlined style={{ marginRight: "0.5rem" }} />
-                Ubicación
-              </h3>
-              <p style={{ color: "var(--colorTextSecondary)", margin: 0 }}>Facultad de Ciencias Exactas y Naturales</p>
-            </div>
+          <div className="objectives-grid">
+            {aboutData.objectives.map((objective) => {
+              const IconComponent = iconMap[objective.icono] || BulbOutlined
+              return (
+                <div key={objective.id} className="objective-card">
+                  <div className="objective-icon">
+                    <IconComponent />
+                  </div>
+                  <h4 className="objective-title">{objective.titulo}</h4>
+                  <p className="objective-description">{objective.descripcion}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
-
-export default AboutUs
