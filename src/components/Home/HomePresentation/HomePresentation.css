@@ -1,0 +1,442 @@
+.hero-container {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* Hero content - sin fondo, solo hover */
+.hero-content {
+  text-align: center;
+  max-width: 900px;
+  padding: 2rem;
+  z-index: 2;
+  position: relative;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Gradiente angular solo en hover */
+.hero-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .hero-content::before {
+  background: linear-gradient(45deg, transparent, rgba(100, 116, 139, 0.15), transparent);
+}
+
+/* Hover intensifica el efecto */
+.hero-content:hover {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.hero-content:hover::before {
+  opacity: 1;
+}
+
+[data-theme="light"] .hero-content:hover {
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  background: rgba(100, 116, 139, 0.06);
+  box-shadow: 0 0 20px rgba(71, 85, 105, 0.12);
+}
+
+/* Badge futurista con brillo reducido */
+.hero-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"] .hero-badge {
+  background: rgba(100, 116, 139, 0.06);
+  border: 1px solid rgba(71, 85, 105, 0.25);
+  color: #0f172a;
+  box-shadow: 0 0 10px rgba(71, 85, 105, 0.12);
+}
+
+.hero-badge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  border-radius: 4px;
+  opacity: 1;
+}
+
+[data-theme="light"] .hero-badge::before {
+  background: linear-gradient(45deg, transparent, rgba(100, 116, 139, 0.1), transparent);
+}
+
+.hero-badge:hover {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .hero-badge:hover {
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  background: rgba(100, 116, 139, 0.12);
+  box-shadow: 0 0 20px rgba(71, 85, 105, 0.2);
+}
+
+.hero-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--colorTextBase);
+  margin-bottom: 1rem;
+  position: relative;
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+[data-theme="light"] .hero-title {
+  text-shadow: 0 2px 15px rgba(255, 255, 255, 0.9);
+}
+
+.hero-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--colorTextBase), transparent);
+  border-radius: 1px;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--colorTextBase), var(--colorTextSecondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+}
+
+[data-theme="light"] .gradient-text {
+  filter: drop-shadow(0 3px 6px rgba(255, 255, 255, 0.9));
+}
+
+@supports not (-webkit-background-clip: text) {
+  .gradient-text {
+    color: var(--colorTextBase);
+    background: none;
+    -webkit-text-fill-color: unset;
+  }
+}
+
+.hero-subtitle {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 300;
+  color: var(--colorTextBase);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  position: relative;
+}
+
+[data-theme="light"] .hero-subtitle {
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+/* Botones futuristas con brillo reducido */
+.cta-primary,
+.cta-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  position: relative;
+  margin: 0 1px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"] .cta-primary,
+[data-theme="light"] .cta-secondary {
+  background: rgba(100, 116, 139, 0.04);
+  border: 1px solid rgba(71, 85, 105, 0.25);
+  color: #0f172a;
+  box-shadow: 0 0 10px rgba(71, 85, 105, 0.12);
+}
+
+.cta-primary::before,
+.cta-secondary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  border-radius: 4px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .cta-primary::before,
+[data-theme="light"] .cta-secondary::before {
+  background: linear-gradient(45deg, transparent, rgba(100, 116, 139, 0.1), transparent);
+}
+
+/* Hover intensifica el efecto */
+.cta-primary:hover,
+.cta-secondary:hover {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .cta-primary:hover,
+[data-theme="light"] .cta-secondary:hover {
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  background: rgba(100, 116, 139, 0.1);
+  box-shadow: 0 0 20px rgba(71, 85, 105, 0.2);
+}
+
+/* Primary button - efecto ligeramente más intenso */
+.cta-primary {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .cta-primary {
+  background: rgba(100, 116, 139, 0.08);
+  border: 1px solid rgba(71, 85, 105, 0.35);
+  box-shadow: 0 0 15px rgba(71, 85, 105, 0.15);
+}
+
+.cta-primary::before {
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+}
+
+[data-theme="light"] .cta-primary::before {
+  background: linear-gradient(45deg, transparent, rgba(100, 116, 139, 0.15), transparent);
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  z-index: 1;
+  position: relative;
+}
+
+/* Stats futuristas con brillo muy reducido */
+.stat-item {
+  text-align: center;
+  padding: 0.8rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 80px;
+  position: relative;
+  margin: 0 1px;
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .stat-item {
+  background: rgba(100, 116, 139, 0.04);
+  border: 1px solid rgba(71, 85, 105, 0.2);
+  color: #0f172a;
+  box-shadow: 0 0 8px rgba(71, 85, 105, 0.08);
+}
+
+.stat-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+  border-radius: 4px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .stat-item::before {
+  background: linear-gradient(45deg, transparent, rgba(100, 116, 139, 0.08), transparent);
+}
+
+/* Hover intensifica el efecto */
+.stat-item:hover {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .stat-item:hover {
+  border: 1px solid rgba(71, 85, 105, 0.35);
+  background: rgba(100, 116, 139, 0.08);
+  box-shadow: 0 0 15px rgba(71, 85, 105, 0.15);
+}
+
+.stat-number {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: inherit;
+  display: block;
+  margin-bottom: 0.3rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="light"] .stat-number {
+  text-shadow: 0 2px 6px rgba(255, 255, 255, 0.8);
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+[data-theme="light"] .stat-label {
+  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .hero-container {
+    min-height: calc(100vh - 70px);
+    padding: 1rem;
+  }
+
+  .hero-content {
+    padding: 1.5rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+    padding: 0.7rem 1.2rem;
+    font-size: 0.8rem;
+  }
+
+  .hero-stats {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .stat-item {
+    min-width: 70px;
+    padding: 0.6rem;
+  }
+
+  .stat-number {
+    font-size: 1.2rem;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    padding: 1rem;
+  }
+
+  .hero-badge {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .hero-stats {
+    gap: 0.8rem;
+  }
+
+  .stat-item {
+    min-width: 60px;
+    padding: 0.5rem;
+  }
+
+  .stat-number {
+    font-size: 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+  }
+}

@@ -1,0 +1,153 @@
+/* Import modern sans-serif font */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+* {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+}
+
+.bg-indigo-600 {
+  background-color: transparent;
+}
+
+body {
+  background-color: var(--backgroundColor);
+  color: var(--colorTextBase);
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding-top: 80px; /* Add padding for fixed navbar */
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--backgroundColorSecondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--borderColor);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--colorTextMuted);
+}
+
+/* Global card styling */
+.futuristic-card {
+  background: var(--cardBackground);
+  border: 1px solid var(--cardBorder);
+  border-radius: 12px;
+  box-shadow: var(--shadowSecondary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.futuristic-card:hover {
+  box-shadow: var(--shadowHover);
+  transform: translateY(-2px);
+}
+
+/* Button styles */
+.btn-primary {
+  background: var(--buttonPrimary);
+  color: var(--backgroundColor);
+  border: 1px solid var(--buttonPrimary);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: var(--colorTextSecondary);
+  border-color: var(--colorTextSecondary);
+}
+
+.btn-secondary {
+  background: var(--buttonSecondary);
+  color: var(--colorTextBase);
+  border: 1px solid var(--borderColor);
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--efectColorHover);
+}
+
+/* Input styles */
+.input-field {
+  background: var(--inputBackground);
+  border: 1px solid var(--borderColor);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--colorTextBase);
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--colorTextBase);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography hierarchy */
+.text-hero {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.text-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.text-subtitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.text-body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.text-small {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  body {
+    padding-top: 70px; /* Adjust for mobile navbar */
+  }
+
+  .text-hero {
+    font-size: 2.5rem;
+  }
+
+  .text-title {
+    font-size: 2rem;
+  }
+
+  .text-subtitle {
+    font-size: 1.25rem;
+  }
+}

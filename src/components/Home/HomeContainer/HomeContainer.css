@@ -1,0 +1,3 @@
+body::-webkit-scrollbar {
+    display: none; /* Para Chrome, Safari y Edge */
+}

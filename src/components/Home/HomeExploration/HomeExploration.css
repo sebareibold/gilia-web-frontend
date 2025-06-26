@@ -1,0 +1,618 @@
+.exploration-section {
+  padding: 6rem 2rem;
+  background: var(--backgroundColor);
+  min-height: 100vh;
+  position: relative;
+}
+
+.exploration-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--borderColor), transparent);
+}
+
+.exploration-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+  position: relative;
+}
+
+.section-subtitle {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--colorTextSecondary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 600;
+  color: var(--colorTextBase);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.section-description {
+  font-size: 0.95rem;
+  color: var(--colorTextSecondary);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* Carrusel futurista mejorado */
+.news-carousel-container {
+  position: relative;
+  padding: 2rem 0;
+  margin: 2rem 0;
+}
+
+.news-swiper {
+  padding: 2rem 0 4rem 0;
+  position: relative;
+  overflow: visible;
+}
+
+/* Cards de novedades con efectos futuristas completos */
+.news-slide {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 2rem;
+  height: auto;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  margin: 0 2px;
+  backdrop-filter: blur(15px);
+  cursor: pointer;
+}
+
+[data-theme="light"] .news-slide {
+  background: rgba(100, 116, 139, 0.02);
+}
+
+/* Gradiente angular de fondo */
+.news-slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    transparent 25%,
+    transparent 75%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  border-radius: 8px;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+[data-theme="light"] .news-slide::before {
+  background: linear-gradient(
+    135deg,
+    rgba(100, 116, 139, 0.04) 0%,
+    transparent 25%,
+    transparent 75%,
+    rgba(100, 116, 139, 0.04) 100%
+  );
+}
+
+/* Línea de escaneo superior */
+.news-slide::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  animation: scanLine 3s linear infinite;
+  animation-play-state: paused;
+}
+
+[data-theme="light"] .news-slide::after {
+  background: linear-gradient(90deg, transparent, rgba(71, 85, 105, 0.4), transparent);
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Estado hover - efectos futuristas completos */
+.news-slide:hover {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15), inset 0 0 30px rgba(255, 255, 255, 0.05);
+  transform: translateY(-8px) scale(1.02);
+}
+
+[data-theme="light"] .news-slide:hover {
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  background: rgba(100, 116, 139, 0.06);
+  box-shadow: 0 0 30px rgba(71, 85, 105, 0.12), inset 0 0 30px rgba(100, 116, 139, 0.03);
+}
+
+.news-slide:hover::after {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+/* Estado activo del carrusel */
+.news-slide.swiper-slide-active {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.2), inset 0 0 40px rgba(255, 255, 255, 0.08);
+  transform: scale(1.05);
+}
+
+[data-theme="light"] .news-slide.swiper-slide-active {
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  background: rgba(100, 116, 139, 0.08);
+  box-shadow: 0 0 40px rgba(71, 85, 105, 0.15), inset 0 0 40px rgba(100, 116, 139, 0.05);
+}
+
+.news-slide.swiper-slide-active::after {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+/* Slides previos y siguientes */
+.news-slide.swiper-slide-prev,
+.news-slide.swiper-slide-next {
+  opacity: 0.7;
+  transform: scale(0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="light"] .news-slide.swiper-slide-prev,
+[data-theme="light"] .news-slide.swiper-slide-next {
+  border: 1px solid rgba(71, 85, 105, 0.2);
+  background: rgba(100, 116, 139, 0.02);
+}
+
+/* Contenido de las cards */
+.news-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* Icono futurista */
+.news-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: var(--colorTextSecondary);
+  font-size: 1.2rem;
+  transition: all 0.4s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+[data-theme="light"] .news-icon {
+  background: rgba(100, 116, 139, 0.04);
+  border-color: rgba(71, 85, 105, 0.25);
+}
+
+.news-icon::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(255, 255, 255, 0.08) 100%);
+  border-radius: 8px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .news-icon::before {
+  background: linear-gradient(45deg, rgba(100, 116, 139, 0.1) 0%, transparent 50%, rgba(100, 116, 139, 0.1) 100%);
+}
+
+.news-slide:hover .news-icon {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--colorTextBase);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+[data-theme="light"] .news-slide:hover .news-icon {
+  border-color: rgba(71, 85, 105, 0.4);
+  background: rgba(100, 116, 139, 0.08);
+  box-shadow: 0 0 20px rgba(71, 85, 105, 0.15);
+}
+
+/* Título futurista */
+.news-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--colorTextSecondary);
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.news-title::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--colorTextBase), transparent);
+  transition: width 0.4s ease;
+}
+
+.news-slide:hover .news-title {
+  color: var(--colorTextBase);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="light"] .news-slide:hover .news-title {
+  text-shadow: 0 0 10px rgba(71, 85, 105, 0.2);
+}
+
+.news-slide:hover .news-title::after {
+  width: 60px;
+}
+
+/* Descripción */
+.news-description {
+  font-size: 0.9rem;
+  color: var(--colorTextSecondary);
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 2rem;
+  font-weight: 300;
+  transition: color 0.4s ease;
+}
+
+.news-slide:hover .news-description {
+  color: var(--colorTextBase);
+}
+
+/* Botón futurista */
+.news-cta {
+  margin-top: auto;
+}
+
+.news-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--colorTextSecondary);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 500;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+[data-theme="light"] .news-btn {
+  background: rgba(100, 116, 139, 0.04);
+  border: 1px solid rgba(71, 85, 105, 0.2);
+}
+
+.news-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+[data-theme="light"] .news-btn::before {
+  background: linear-gradient(90deg, transparent, rgba(100, 116, 139, 0.2), transparent);
+}
+
+.news-btn:hover {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--colorTextBase);
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.2), inset 0 0 25px rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .news-btn:hover {
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  background: rgba(100, 116, 139, 0.08);
+  box-shadow: 0 0 25px rgba(71, 85, 105, 0.15), inset 0 0 25px rgba(100, 116, 139, 0.03);
+}
+
+.news-btn:hover::before {
+  left: 100%;
+}
+
+/* Navegación del carrusel */
+.swiper-button-next,
+.swiper-button-prev {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  color: var(--colorTextSecondary);
+  backdrop-filter: blur(15px);
+  transition: all 0.4s ease;
+}
+
+[data-theme="light"] .swiper-button-next,
+[data-theme="light"] .swiper-button-prev {
+  background: rgba(100, 116, 139, 0.04);
+  border: 1px solid rgba(71, 85, 105, 0.25);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--colorTextBase);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+[data-theme="light"] .swiper-button-next:hover,
+[data-theme="light"] .swiper-button-prev:hover {
+  background: rgba(100, 116, 139, 0.08);
+  border-color: rgba(71, 85, 105, 0.4);
+  box-shadow: 0 0 20px rgba(71, 85, 105, 0.15);
+}
+
+/* Paginación futurista */
+.swiper-pagination {
+  bottom: 0 !important;
+  padding-top: 2rem;
+}
+
+.swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  opacity: 1 !important;
+  width: 12px !important;
+  height: 12px !important;
+  margin: 0 6px !important;
+  transition: all 0.4s ease !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+[data-theme="light"] .swiper-pagination-bullet {
+  background: rgba(71, 85, 105, 0.3) !important;
+  border: 1px solid rgba(100, 116, 139, 0.2) !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--colorTextBase) !important;
+  border-color: var(--colorTextBase) !important;
+  transform: scale(1.3) !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4) !important;
+}
+
+[data-theme="light"] .swiper-pagination-bullet-active {
+  box-shadow: 0 0 15px rgba(71, 85, 105, 0.3) !important;
+}
+
+/* Estados de carga y error con estilos futuristas */
+.loading-container,
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin: 2rem 0;
+  padding: 2rem;
+  backdrop-filter: blur(15px);
+  position: relative;
+}
+
+[data-theme="light"] .loading-container,
+[data-theme="light"] .error-container {
+  background: rgba(100, 116, 139, 0.02);
+  border-color: rgba(71, 85, 105, 0.1);
+}
+
+.loading-container::before,
+.error-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%, rgba(255, 255, 255, 0.03) 100%);
+  border-radius: 8px;
+  opacity: 1;
+}
+
+[data-theme="light"] .loading-container::before,
+[data-theme="light"] .error-container::before {
+  background: linear-gradient(135deg, rgba(100, 116, 139, 0.04) 0%, transparent 50%, rgba(100, 116, 139, 0.04) 100%);
+}
+
+.loading-text {
+  font-size: 0.9rem;
+  color: var(--colorTextSecondary);
+  margin-top: 1rem;
+  font-weight: 300;
+  position: relative;
+  z-index: 2;
+}
+
+.error-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--colorTextBase);
+  margin-bottom: 0.8rem;
+  position: relative;
+  z-index: 2;
+}
+
+.error-text {
+  color: var(--colorTextSecondary);
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 2;
+}
+
+.error-details {
+  font-size: 0.8rem;
+  color: var(--colorTextMuted);
+  font-weight: 300;
+  position: relative;
+  z-index: 2;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .exploration-section {
+    padding: 4rem 1rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+
+  .section-description {
+    font-size: 0.9rem;
+  }
+
+  .news-slide {
+    padding: 1.5rem;
+    min-height: 320px;
+  }
+
+  .news-title {
+    font-size: 1.1rem;
+    min-height: 50px;
+  }
+
+  .news-description {
+    font-size: 0.85rem;
+  }
+
+  .news-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+  }
+
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exploration-section {
+    padding: 3rem 1rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .news-slide {
+    padding: 1.2rem;
+    min-height: 280px;
+  }
+
+  .news-title {
+    font-size: 1rem;
+    min-height: 45px;
+  }
+
+  .news-btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.75rem;
+  }
+
+  .news-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+}

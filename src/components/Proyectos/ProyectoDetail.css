@@ -1,0 +1,16 @@
+.font-playwrite {
+  font-family: "Playwrite AU QLD", cursive;
+  font-optical-sizing: auto;
+  font-style: normal;
+  margin-bottom: 2%;
+  font-size: 200%;
+  font-weight:300; /* Cambiar el grosor aquí (por ejemplo, 600 para semi-negrita) */
+}
+
+.font-josefin {
+  font-family: 'Josefin Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-size: 120%;
+  line-height: 1.9;
+  font-weight: 300; /* Cambiar el grosor aquí (por ejemplo, 400 para normal) */
+}

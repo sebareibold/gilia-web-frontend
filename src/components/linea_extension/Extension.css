@@ -1,0 +1,97 @@
+/*para ver la lista de lineas de extension*/
+.card {
+  background-color: var(--backgroundColorSecondary);
+  border: 1px solid var(--shadowbotom);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px var(--shadowtop);
+}
+
+.card-button {
+  background-color: var(--colorPrimario);
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-button:hover {
+  background-color: var(--efectColorHover);
+}
+
+.card-link {
+  color: var(--colorPrimario);
+  text-decoration: none;
+}
+
+.card-link:hover {
+  color: var(--colorTextBaseHover);
+  text-decoration: none;
+}
+/* Estilo para los enlaces de exploración */
+.explore-link {
+  color: var(--colorTextBase);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.explore-link:hover {
+  color: var(--colorTextBaseHover);
+}
+
+/* Estilo para el botón de explorar (ver proyectos) */
+.explore-btn {
+  background: none;
+  border: none;
+  color: var(--colorTextBase);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+.explore-btn:hover {
+  color: var(--colorTextBaseHover);
+}
+
+/* Estilos para la lista de proyectos */
+.project-list {
+  animation: fadeIn 0.5s ease-out forwards;
+  background-color: var(--backgroundColorSecondary);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Estilos para cada item de la lista de proyectos */
+.project-item a {
+  display: block;
+  padding: 0.75rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--colorTextBase);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+}
+
+/* Al hacer hover o focus en un proyecto */
+.project-item a:hover,
+.project-item a:focus {
+  background-color: var(--efectColorHover);
+  border-color: transparent;
+  color: var(--colorTextBaseHover);
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08); /* sutil sombra para levantarlo */
+}
+
+
+/* Animación de fadeIn para la lista de proyectos */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,656 @@
+@font-face {
+  font-family: "Anurati-gilia";
+  src: url("../../Assets/fonts/Anurati.otf") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Futuristic Navbar Container */
+.futuristic-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Theme-aware navbar background */
+.futuristic-navbar[data-theme="light"] {
+  background: rgba(248, 250, 252, 0.95);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+}
+
+.futuristic-navbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffffff, transparent);
+  animation: scanLine 3s linear infinite;
+}
+
+.futuristic-navbar[data-theme="light"]::before {
+  background: linear-gradient(90deg, transparent, #64748b, transparent);
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.navbar-grid {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+/* Logo Section */
+.futuristic-logo {
+  font-family: "Anurati-gilia", sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 4px;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.futuristic-navbar[data-theme="light"] .futuristic-logo {
+  color: #1e293b;
+  text-shadow: 0 0 20px rgba(30, 41, 59, 0.2);
+}
+
+.futuristic-logo::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ffffff, transparent);
+  transition: width 0.3s ease;
+}
+
+.futuristic-navbar[data-theme="light"] .futuristic-logo::after {
+  background: linear-gradient(90deg, #475569, transparent);
+}
+
+.futuristic-logo:hover::after {
+  width: 100%;
+}
+
+.futuristic-logo:hover {
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+  transform: scale(1.05);
+}
+
+.futuristic-navbar[data-theme="light"] .futuristic-logo:hover {
+  text-shadow: 0 0 30px rgba(30, 41, 59, 0.4);
+}
+
+/* Navigation Menu */
+.futuristic-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.nav-section {
+  position: relative;
+}
+
+/* Default state - minimal styling with smaller text */
+.nav-item-futuristic {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.75rem;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  margin: 0 1px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+
+.futuristic-navbar[data-theme="light"] .nav-item-futuristic {
+  color: rgba(51, 65, 85, 0.85);
+}
+
+/* Hover state - show rectangular border and effects */
+.nav-item-futuristic:hover {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Hover state for light theme */
+.futuristic-navbar[data-theme="light"] .nav-item-futuristic:hover {
+  color: #1e293b;
+  border: 1px solid rgba(100, 116, 139, 0.4);
+  background: rgba(148, 163, 184, 0.08);
+  box-shadow: 0 0 15px rgba(100, 116, 139, 0.2), inset 0 0 15px rgba(148, 163, 184, 0.1);
+}
+
+.nav-item-futuristic:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: 4px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.futuristic-navbar[data-theme="light"] .nav-item-futuristic:hover::before {
+  background: linear-gradient(45deg, transparent, rgba(148, 163, 184, 0.15), transparent);
+}
+
+/* Active state - permanent rectangular border and glow */
+.nav-item-futuristic.active {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Active state for light theme */
+.futuristic-navbar[data-theme="light"] .nav-item-futuristic.active {
+  color: #0f172a;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  background: rgba(100, 116, 139, 0.12);
+  box-shadow: 0 0 20px rgba(71, 85, 105, 0.25), inset 0 0 20px rgba(100, 116, 139, 0.15);
+}
+
+.nav-item-futuristic.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.futuristic-navbar[data-theme="light"] .nav-item-futuristic.active::before {
+  background: linear-gradient(45deg, transparent, rgba(100, 116, 139, 0.2), transparent);
+}
+
+/* Research Lines Dropdown */
+.research-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  min-width: 280px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  margin-top: 8px;
+}
+
+/* Dropdown for light theme */
+.futuristic-navbar[data-theme="light"] .dropdown-content {
+  background: rgba(248, 250, 252, 0.98);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+}
+
+.research-dropdown:hover .dropdown-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dropdown-item {
+  display: block;
+  padding: 0.75rem 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 400;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+  text-transform: none;
+  letter-spacing: 0.3px;
+}
+
+/* Dropdown for light theme */
+.futuristic-navbar[data-theme="light"] .dropdown-item {
+  color: rgba(51, 65, 85, 0.8);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+  border-radius: 0 0 6px 6px;
+}
+
+.dropdown-item:first-child {
+  border-radius: 6px 6px 0 0;
+}
+
+.dropdown-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, transparent, #ffffff, transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* Dropdown for light theme */
+.futuristic-navbar[data-theme="light"] .dropdown-item::before {
+  background: linear-gradient(180deg, transparent, #64748b, transparent);
+}
+
+.dropdown-item:hover::before {
+  opacity: 1;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  padding-left: 1.75rem;
+  color: #ffffff;
+}
+
+/* Dropdown for light theme */
+.futuristic-navbar[data-theme="light"] .dropdown-item:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: #1e293b;
+}
+
+/* Actions Section */
+.nav-actions-futuristic {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Default state for action buttons - minimal and smaller */
+.action-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+/* Action buttons for light theme */
+.futuristic-navbar[data-theme="light"] .action-btn {
+  color: rgba(51, 65, 85, 0.8);
+}
+
+/* Hover state for action buttons - show border and effects */
+.action-btn:hover {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* Action buttons for light theme */
+.futuristic-navbar[data-theme="light"] .action-btn:hover {
+  border: 1px solid rgba(100, 116, 139, 0.5);
+  color: #1e293b;
+  background: rgba(148, 163, 184, 0.08);
+  box-shadow: 0 0 12px rgba(100, 116, 139, 0.25);
+}
+
+.action-btn:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+  left: 100%;
+}
+
+/* Action buttons for light theme */
+.futuristic-navbar[data-theme="light"] .action-btn:hover::before {
+  background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.2), transparent);
+}
+
+/* Admin button - icon only, smaller */
+.admin-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+/* Admin button for light theme */
+.futuristic-navbar[data-theme="light"] .admin-btn {
+  background: rgba(100, 116, 139, 0.1);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: rgba(30, 41, 59, 0.9);
+}
+
+.admin-btn:hover {
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Admin button for light theme */
+.futuristic-navbar[data-theme="light"] .admin-btn:hover {
+  background: linear-gradient(45deg, rgba(100, 116, 139, 0.15), rgba(71, 85, 105, 0.2));
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  color: #0f172a;
+  box-shadow: 0 0 15px rgba(100, 116, 139, 0.3);
+}
+
+/* Mobile Styles */
+.mobile-menu-trigger {
+  display: none;
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+/* Mobile trigger for light theme */
+.futuristic-navbar[data-theme="light"] .mobile-menu-trigger {
+  color: rgba(51, 65, 85, 0.8);
+}
+
+.mobile-menu-trigger:hover {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile trigger for light theme */
+.futuristic-navbar[data-theme="light"] .mobile-menu-trigger:hover {
+  border: 1px solid rgba(100, 116, 139, 0.4);
+  color: #1e293b;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+@media (max-width: 1200px) {
+  .navbar-grid {
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+  }
+
+  .futuristic-nav {
+    gap: 0.2rem;
+  }
+
+  .nav-item-futuristic {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  .futuristic-logo {
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+  }
+}
+
+@media (max-width: 968px) {
+  .futuristic-nav {
+    display: none;
+  }
+
+  .nav-actions-futuristic {
+    display: none;
+  }
+
+  .mobile-menu-trigger {
+    display: block;
+  }
+}
+
+/* Mobile Drawer Styles */
+.mobile-drawer {
+  background: rgba(0, 0, 0, 0.98) !important;
+  backdrop-filter: blur(20px);
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] {
+  background: rgba(248, 250, 252, 0.98) !important;
+}
+
+.mobile-drawer .ant-drawer-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .ant-drawer-header {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+.mobile-drawer .ant-drawer-body {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.mobile-nav-item {
+  display: block;
+  padding: 0.875rem 1.25rem;
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-size: 0.8rem;
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .mobile-nav-item {
+  color: rgba(51, 65, 85, 0.8) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.mobile-nav-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  padding-left: 1.75rem;
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .mobile-nav-item:hover {
+  background: rgba(148, 163, 184, 0.1) !important;
+  color: #1e293b !important;
+}
+
+.mobile-research-section {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .mobile-research-section {
+  background: rgba(100, 116, 139, 0.06);
+}
+
+.mobile-research-title {
+  padding: 0.875rem 1.25rem;
+  color: #ffffff;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-size: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .mobile-research-title {
+  color: #1e293b;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.mobile-research-item {
+  display: block;
+  padding: 0.625rem 1.75rem;
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+  font-size: 0.75rem;
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .mobile-research-item {
+  color: rgba(51, 65, 85, 0.8) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.mobile-research-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  padding-left: 2.25rem;
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .mobile-research-item:hover {
+  background: rgba(148, 163, 184, 0.12) !important;
+  color: #1e293b !important;
+}
+
+.mobile-actions {
+  padding: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* Mobile drawer for light theme */
+.mobile-drawer[data-theme="light"] .mobile-actions {
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* Ant Design Overrides */
+.ant-menu {
+  background: transparent !important;
+  border: none !important;
+}
+
+.ant-menu-item {
+  color: #ffffff !important;
+  border-radius: 0 !important;
+}
+
+.ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.ant-menu-item-selected {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.anticon {
+  color: inherit !important;
+}
+
+/* Glitch effect for logo */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.futuristic-logo:active {
+  animation: glitch 0.3s ease-in-out;
+}
