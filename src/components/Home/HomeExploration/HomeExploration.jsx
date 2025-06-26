@@ -294,7 +294,7 @@ export default function HomeExploration() {
         <div className="multi-card-carousel">
           <div className="carousel-container">
             {/* Controles de navegación */}
-            {totalSlides > 1 && (
+  
               <div className="carousel-navigation">
                 <button
                   className="carousel-nav-btn carousel-nav-prev"
@@ -313,7 +313,7 @@ export default function HomeExploration() {
                   <RightOutlined />
                 </button>
               </div>
-            )}
+            
 
             {/* Track del carrusel */}
             <div className="carousel-track">
