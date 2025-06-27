@@ -3,7 +3,9 @@ import { asyncMock } from "../../asyncMock"
 // Simulamos un servicio de API que usa asyncMock
 class ApiService {
   constructor() {
-    this.baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001"
+    // En Vite, las variables de entorno se acceden con import.meta.env
+    // y deben tener el prefijo VITE_
+    this.baseURL = import.meta.env.VITE_API_URL || "http://localhost:3001"
     this.token = null
   }
 
