@@ -88,7 +88,7 @@ const Navbar = ({ activeSection, setActiveSection }) => {
   }
 
   const handleBackofficeAccess = () => {
-    window.location.href = "/admin/dashboard"
+    window.location.href = "/admin/login"
   }
 
   const isActive = (path) => {

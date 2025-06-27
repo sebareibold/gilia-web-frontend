@@ -9,21 +9,17 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <div>Cargando...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white">Verificando autenticación...</p>
+        </div>
       </div>
     )
   }
 
   if (!isAuthenticated) {
-    // Redirigir al login pero recordar la ubicación intentada
+    // Guardar la ubicación a la que el usuario intentaba acceder
     return <Navigate to="/admin/login" state={{ from: location }} replace />
   }
 

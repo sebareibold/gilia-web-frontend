@@ -1,222 +1,162 @@
-import { API_BASE_URL } from "../config/apiConfig"
+import { asyncMock } from "../../asyncMock"
 
+// Simulamos un servicio de API que usa asyncMock
 class ApiService {
   constructor() {
-    this.baseURL = API_BASE_URL
+    this.baseURL = process.env.REACT_APP_API_URL || "http://localhost:3001"
+    this.token = null
   }
 
-  // Método para obtener headers con autenticación
-  getHeaders(includeAuth = false) {
-    const headers = {
-      "Content-Type": "application/json",
-    }
-
-    if (includeAuth) {
-      const token = localStorage.getItem("adminToken")
-      if (token) {
-        headers.Authorization = `Bearer ${token}`
-      }
-    }
-
-    return headers
+  setToken(token) {
+    this.token = token
   }
 
-  // Método genérico para hacer peticiones
-  async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`
-
+  // Método de login usando asyncMock
+  async login(credentials) {
     try {
-      const response = await fetch(url, {
-        ...options,
-        headers: {
-          ...this.getHeaders(options.auth),
-          ...options.headers,
-        },
-      })
+      console.log("ApiService - Intentando login con:", credentials)
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      // Simulamos validación de credenciales
+      if (credentials.email === "admin" && credentials.password === "admin123") {
+        const mockResponse = {
+          success: true,
+          token: "mock-jwt-token-" + Date.now(),
+          user: {
+            id: "1",
+            email: credentials.email,
+            role: "admin",
+            name: "Administrador",
+          },
+        }
+
+        console.log("ApiService - Login exitoso:", mockResponse)
+        return mockResponse
+      } else {
+        throw new Error("Credenciales inválidas")
       }
-
-      const data = await response.json()
-      return data
     } catch (error) {
-      console.error("API Request Error:", error)
+      console.error("ApiService - Error en login:", error)
       throw error
     }
   }
 
-  // Métodos de autenticación
-  async login(credentials) {
+  // Métodos para usar con asyncMock
+  async getLineasInvestigacion() {
     try {
-      const response = await this.request("/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify(credentials),
-      })
+      const response = await asyncMock.getLineasInvestigacion()
+      return { data: response, success: true }
+    } catch (error) {
+      console.error("Error al obtener líneas de investigación:", error)
+      throw error
+    }
+  }
+
+  async getPublicaciones() {
+    try {
+      const response = await asyncMock.getPublicaciones()
+      return { data: response, success: true }
+    } catch (error) {
+      console.error("Error al obtener publicaciones:", error)
+      throw error
+    }
+  }
+
+  async getProyectos() {
+    try {
+      const response = await asyncMock.getProyectos()
+      return { data: response, success: true }
+    } catch (error) {
+      console.error("Error al obtener proyectos:", error)
+      throw error
+    }
+  }
+
+  async getPersonas() {
+    try {
+      const response = await asyncMock.getPersonas()
+      return { data: response, success: true }
+    } catch (error) {
+      console.error("Error al obtener personas:", error)
+      throw error
+    }
+  }
+
+  async getExtensiones() {
+    try {
+      const response = await asyncMock.getExtensiones()
+      return { data: response, success: true }
+    } catch (error) {
+      console.error("Error al obtener extensiones:", error)
+      throw error
+    }
+  }
+
+  async getGaleria() {
+    try {
+      const response = await asyncMock.getGaleria()
+      return { data: response, success: true }
+    } catch (error) {
+      console.error("Error al obtener galería:", error)
+      throw error
+    }
+  }
+
+  // Métodos CRUD genéricos que podrás usar cuando tengas la API real
+  async create(endpoint, data) {
+    console.log(`Creando en ${endpoint}:`, data)
+    // Por ahora solo simulamos
+    return { success: true, data: { ...data, id: Date.now() } }
+  }
+
+  async update(endpoint, id, data) {
+    console.log(`Actualizando ${endpoint}/${id}:`, data)
+    // Por ahora solo simulamos
+    return { success: true, data: { ...data, id } }
+  }
+
+  async delete(endpoint, id) {
+    console.log(`Eliminando ${endpoint}/${id}`)
+    // Por ahora solo simulamos
+    return { success: true }
+  }
+
+  // Método para obtener estadísticas del dashboard
+  async getDashboardStats() {
+    try {
+      const [lineas, publicaciones, proyectos, personas, extensiones, galeria] = await Promise.all([
+        this.getLineasInvestigacion(),
+        this.getPublicaciones(),
+        this.getProyectos(),
+        this.getPersonas(),
+        this.getExtensiones(),
+        this.getGaleria(),
+      ])
 
       return {
         success: true,
-        token: response.token || response.accessToken,
-        user: response.user || response.data,
+        data: {
+          lineasInvestigacion: lineas.data?.length || 0,
+          publicaciones: publicaciones.data?.length || 0,
+          proyectos: proyectos.data?.length || 0,
+          miembros: personas.data?.length || 0,
+          extensiones: extensiones.data?.length || 0,
+          imagenes: galeria.data?.length || 0,
+        },
       }
     } catch (error) {
-      console.error("Login error:", error)
+      console.error("Error al obtener estadísticas:", error)
       return {
         success: false,
-        error: error.message,
+        data: {
+          lineasInvestigacion: 0,
+          publicaciones: 0,
+          proyectos: 0,
+          miembros: 0,
+          extensiones: 0,
+          imagenes: 0,
+        },
       }
     }
-  }
-
-  async logout() {
-    try {
-      await this.request("/api/auth/logout", {
-        method: "POST",
-        auth: true,
-      })
-    } catch (error) {
-      console.error("Logout error:", error)
-    }
-  }
-
-  // Métodos para gestión de contenido
-  async getResearchLines() {
-    return this.request("/api/linea-investigacions", { auth: true })
-  }
-
-  async createResearchLine(data) {
-    return this.request("/api/linea-investigacions", {
-      method: "POST",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async updateResearchLine(id, data) {
-    return this.request(`/api/linea-investigacions/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async deleteResearchLine(id) {
-    return this.request(`/api/linea-investigacions/${id}`, {
-      method: "DELETE",
-      auth: true,
-    })
-  }
-
-  // Métodos para posts/publicaciones
-  async getPosts() {
-    return this.request("/api/posts", { auth: true })
-  }
-
-  async createPost(data) {
-    return this.request("/api/posts", {
-      method: "POST",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async updatePost(id, data) {
-    return this.request(`/api/posts/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async deletePost(id) {
-    return this.request(`/api/posts/${id}`, {
-      method: "DELETE",
-      auth: true,
-    })
-  }
-
-  // Métodos para extensión
-  async getExtensions() {
-    return this.request("/api/extensions", { auth: true })
-  }
-
-  async createExtension(data) {
-    return this.request("/api/extensions", {
-      method: "POST",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async updateExtension(id, data) {
-    return this.request(`/api/extensions/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async deleteExtension(id) {
-    return this.request(`/api/extensions/${id}`, {
-      method: "DELETE",
-      auth: true,
-    })
-  }
-
-  // Métodos para equipo/personas
-  async getTeamMembers() {
-    return this.request("/api/team", { auth: true })
-  }
-
-  async createTeamMember(data) {
-    return this.request("/api/team", {
-      method: "POST",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async updateTeamMember(id, data) {
-    return this.request(`/api/team/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async deleteTeamMember(id) {
-    return this.request(`/api/team/${id}`, {
-      method: "DELETE",
-      auth: true,
-    })
-  }
-
-  // Métodos para galería
-  async getGalleryItems() {
-    return this.request("/api/gallery", { auth: true })
-  }
-
-  async createGalleryItem(data) {
-    return this.request("/api/gallery", {
-      method: "POST",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async updateGalleryItem(id, data) {
-    return this.request(`/api/gallery/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-      auth: true,
-    })
-  }
-
-  async deleteGalleryItem(id) {
-    return this.request(`/api/gallery/${id}`, {
-      method: "DELETE",
-      auth: true,
-    })
   }
 }
 

@@ -1,17 +1,18 @@
 "use client"
 
-import { useTheme } from "../contexts/ThemeContext"
-import Navbar from "../components/Navbar/Navbar"
+import { Outlet } from "react-router-dom"
 import { useState } from "react"
+import Navbar from "../components/Navbar/Navbar"
 
-const PublicLayout = ({ children }) => {
-  const { theme } = useTheme()
+const PublicLayout = () => {
   const [activeSection, setActiveSection] = useState("home")
 
   return (
-    <div className="public-layout" data-theme={theme.token.backgroundColor === "#0a0a0a" ? "dark" : "light"}>
+    <div className="public-layout">
       <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
-      <main className="public-content">{children}</main>
+      <main className="public-main">
+        <Outlet />
+      </main>
     </div>
   )
 }
