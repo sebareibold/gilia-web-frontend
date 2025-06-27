@@ -4,8 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useTheme } from "../../context/ThemeContext"
 import { marked } from "marked"
-import Loader from "../Loader/Loader"
-import { API_BASE_URL } from "../../config/apiConfig"
+import asyncMock from "../../../asyncMock"
 import {
   FolderOutlined,
   BookOutlined,
@@ -13,8 +12,9 @@ import {
   TeamOutlined,
   ArrowRightOutlined,
   CheckCircleOutlined,
+  BranchesOutlined,
+  StarOutlined,
 } from "@ant-design/icons"
-import "../shared/FuturisticStyles.css"
 
 const LineaExtensionDetail = () => {
   const { id } = useParams()
@@ -27,58 +27,10 @@ const LineaExtensionDetail = () => {
   useEffect(() => {
     const fetchLineaExtensionDetail = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/linea-extensions/${id}`)
-        if (!response.ok) throw new Error("Error al cargar los datos")
-        const data = await response.json()
-        setLinea(data.data)
+        const response = await asyncMock.getLineaExtension(id)
+        setLinea(response.data)
       } catch (error) {
         console.error(error)
-        // Mock data para demostración
-        setLinea({
-          id: Number.parseInt(id),
-          nombre: "Tecnología Educativa",
-          descripcion: `# Tecnología Educativa
-
-Esta línea de extensión se enfoca en el **desarrollo e implementación de herramientas tecnológicas** para mejorar los procesos de enseñanza-aprendizaje en instituciones educativas de la región.
-
-## Objetivos
-
-- Democratizar el acceso a la tecnología educativa
-- Capacitar docentes en el uso de herramientas digitales
-- Desarrollar software educativo adaptado a necesidades locales
-- Promover la innovación pedagógica mediante la tecnología
-
-## Metodología
-
-Trabajamos con un enfoque participativo que incluye:
-
-1. **Diagnóstico** de necesidades tecnológicas
-2. **Diseño colaborativo** de soluciones
-3. **Implementación** y capacitación
-4. **Seguimiento** y evaluación de impacto`,
-          instituciones:
-            "Escuela Primaria N°123, Instituto Secundario San Martín, Centro de Formación Profesional, Universidad Nacional",
-          proyectos: [
-            {
-              id: 1,
-              nombre: "Plataforma de Gestión Escolar",
-              descripcion:
-                "Sistema web para la gestión integral de instituciones educativas, incluyendo registro de estudiantes, calificaciones, asistencia y comunicación con padres.",
-            },
-            {
-              id: 2,
-              nombre: "Aulas Virtuales Interactivas",
-              descripcion:
-                "Desarrollo de entornos virtuales de aprendizaje con herramientas de gamificación y evaluación automática.",
-            },
-            {
-              id: 3,
-              nombre: "Capacitación Docente Digital",
-              descripción:
-                "Programa de formación continua para docentes en el uso de tecnologías educativas y metodologías digitales.",
-            },
-          ],
-        })
       }
     }
     fetchLineaExtensionDetail()
@@ -86,11 +38,14 @@ Trabajamos con un enfoque participativo que incluye:
 
   if (!linea) {
     return (
-      <div className="futuristic-container" data-theme={isDarkTheme ? "dark" : "light"}>
-        <div className="futuristic-loading">
-          <Loader />
+      <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+        <div className="exploration-container">
+          <div className="carousel-loading">
+            <div className="loading-spinner" />
+            <span className="loading-text">Cargando línea de extensión...</span>
+          </div>
         </div>
-      </div>
+      </section>
     )
   }
 
@@ -110,25 +65,28 @@ Trabajamos con un enfoque participativo que incluye:
   }
 
   return (
-    <div className="futuristic-container" data-theme={isDarkTheme ? "dark" : "light"}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+    <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <div className="exploration-container">
         {/* Header */}
-        <div className="futuristic-card" style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div className="futuristic-badge" style={{ marginBottom: "1rem" }}>
-            <BankOutlined style={{ marginRight: "0.5rem" }} />
-            Línea de Extensión
+        <div className="section-header">
+          <div className="section-badge">
+            <BranchesOutlined />
+            <span>Línea de Extensión</span>
           </div>
-
-          <h1 className="futuristic-title">{linea.nombre}</h1>
+          <h2 className="section-title">{linea.nombre}</h2>
+          <p className="section-description">
+            Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la
+            comunidad.
+          </p>
         </div>
 
         {/* Content */}
-        <div className="futuristic-card" style={{ marginBottom: "2rem" }}>
+        <div className="carousel-container" style={{ marginBottom: "2rem" }}>
           <div
             style={{
               fontSize: "1rem",
               lineHeight: "1.6",
-              color: "var(--colorTextSecondary)",
+              color: "var(--color-text-secondary)",
             }}
             dangerouslySetInnerHTML={{ __html: descripcionHTML }}
           />
@@ -136,114 +94,137 @@ Trabajamos con un enfoque participativo que incluye:
 
         {/* Instituciones */}
         {linea.instituciones && (
-          <div className="futuristic-card" style={{ marginBottom: "2rem" }}>
-            <h2
+          <div className="carousel-container" style={{ marginBottom: "2rem" }}>
+            <h3
               style={{
-                fontSize: "1.3rem",
-                fontWeight: "600",
-                color: "var(--colorTextBase)",
+                fontSize: "1.5rem",
+                fontWeight: "700",
+                color: "var(--color-text-primary)",
                 marginBottom: "1rem",
                 display: "flex",
                 alignItems: "center",
                 gap: "0.5rem",
+                textAlign: "center",
+                justifyContent: "center",
               }}
             >
               <BankOutlined />
               Escuelas e Instituciones Participantes
-            </h2>
+            </h3>
 
-            <div className="futuristic-list-item">
-              <p style={{ color: "var(--colorTextSecondary)", margin: 0, lineHeight: "1.6" }}>{linea.instituciones}</p>
+            <div className="news-card">
+              <div className="news-content">
+                <p style={{ color: "var(--color-text-secondary)", margin: 0, lineHeight: "1.6", textAlign: "center" }}>
+                  {linea.instituciones}
+                </p>
+              </div>
             </div>
           </div>
         )}
 
         {/* Actions */}
-        <div className="futuristic-card" style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h2
+        <div className="carousel-container" style={{ textAlign: "center", marginBottom: "2rem" }}>
+          <h3
             style={{
-              fontSize: "1.3rem",
-              fontWeight: "600",
-              color: "var(--colorTextBase)",
+              fontSize: "1.5rem",
+              fontWeight: "700",
+              color: "var(--color-text-primary)",
               marginBottom: "1.5rem",
             }}
           >
             Explora más sobre esta línea
-          </h2>
+          </h3>
 
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1rem" }}>
-            <button onClick={handleToggleProjects} className="futuristic-btn">
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "1rem",
+            }}
+          >
+            <button onClick={handleToggleProjects} className="news-btn-primary">
               <FolderOutlined />
-              Ver proyectos
+              <span>Ver proyectos</span>
             </button>
 
-            <Link to="/post" state={{ linea: linea.nombre }} className="futuristic-btn">
+            <Link to="/post" state={{ linea: linea.nombre }} className="news-btn-primary">
               <BookOutlined />
-              Ver publicaciones
+              <span>Ver publicaciones</span>
             </Link>
 
-            <div className="futuristic-btn" style={{ cursor: "default" }}>
+            <div className="news-btn-primary" style={{ cursor: "default" }}>
               <TeamOutlined />
-              Contactar equipo
+              <span>Contactar equipo</span>
             </div>
           </div>
         </div>
 
         {/* Projects List */}
         {showProjects && linea.proyectos?.length > 0 && (
-          <div ref={projectListRef} className="futuristic-card">
-            <h2
-              style={{
-                fontSize: "1.3rem",
-                fontWeight: "600",
-                color: "var(--colorTextBase)",
-                marginBottom: "1.5rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-              }}
-            >
-              <FolderOutlined />
-              Proyectos Activos
-            </h2>
+          <div ref={projectListRef} className="multi-card-carousel">
+            <div className="carousel-container">
+              <h3
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "700",
+                  color: "var(--color-text-primary)",
+                  marginBottom: "1.5rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  textAlign: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <FolderOutlined />
+                Proyectos Activos
+              </h3>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {linea.proyectos.map((proyecto) => (
-                <div key={proyecto.id} className="futuristic-list-item">
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <div style={{ flex: 1 }}>
-                      <h3
-                        style={{
-                          fontSize: "1.1rem",
-                          fontWeight: "600",
-                          color: "var(--colorTextBase)",
-                          marginBottom: "0.5rem",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                        }}
-                      >
-                        <CheckCircleOutlined style={{ color: "var(--colorTextSecondary)" }} />
-                        {proyecto.nombre}
-                      </h3>
-
-                      <p style={{ color: "var(--colorTextSecondary)", margin: 0, lineHeight: "1.5" }}>
-                        {proyecto.descripcion}
-                      </p>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+                  gap: "2rem",
+                }}
+              >
+                {linea.proyectos.map((proyecto) => (
+                  <div key={proyecto.id} className="news-card">
+                    <div className="news-image-container">
+                      <img src="/placeholder.svg?height=200&width=350" alt={proyecto.nombre} className="news-image" />
+                      <div className="news-image-overlay">
+                        <CheckCircleOutlined />
+                      </div>
                     </div>
 
-                    <Link to={`/proyecto/${proyecto.id}`} className="futuristic-btn" style={{ marginLeft: "1rem" }}>
-                      Ver detalles
-                      <ArrowRightOutlined />
-                    </Link>
+                    <div className="news-content">
+                      <div className="news-meta">
+                        <span className="news-category">Proyecto</span>
+                        <div className="news-views">
+                          <StarOutlined />
+                          <span>Activo</span>
+                        </div>
+                      </div>
+
+                      <h3 className="news-title">{proyecto.nombre}</h3>
+
+                      <p className="news-description">{proyecto.descripcion}</p>
+
+                      <div className="news-actions">
+                        <Link to={`/proyecto/${proyecto.id}`} className="news-btn-primary">
+                          <span>Ver detalles</span>
+                          <ArrowRightOutlined />
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         )}
       </div>
-    </div>
+    </section>
   )
 }
 

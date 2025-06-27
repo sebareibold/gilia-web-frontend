@@ -252,38 +252,6 @@ export default function AboutUs() {
           <p className="about-description">{aboutData.about.mision}</p>
         </div>
 
-        {/* Estadísticas del equipo */}
-        <div className="team-stats">
-          <div className="team-stat">
-            <div className="team-stat-icon">
-              <TeamOutlined />
-            </div>
-            <span className="team-stat-number">{stats.members}</span>
-            <span className="team-stat-label">Miembros del Equipo</span>
-          </div>
-          <div className="team-stat">
-            <div className="team-stat-icon">
-              <BookOutlined />
-            </div>
-            <span className="team-stat-number">{stats.publications}+</span>
-            <span className="team-stat-label">Publicaciones</span>
-          </div>
-          <div className="team-stat">
-            <div className="team-stat-icon">
-              <ExperimentOutlined />
-            </div>
-            <span className="team-stat-number">{stats.projects}+</span>
-            <span className="team-stat-label">Proyectos Activos</span>
-          </div>
-          <div className="team-stat">
-            <div className="team-stat-icon">
-              <TrophyOutlined />
-            </div>
-            <span className="team-stat-number">{stats.awards}</span>
-            <span className="team-stat-label">Reconocimientos</span>
-          </div>
-        </div>
-
         {/* Grid de miembros del equipo */}
         <div className="team-grid">
           {aboutData.people.map((member) => (

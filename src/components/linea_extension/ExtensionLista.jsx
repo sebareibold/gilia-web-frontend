@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "../../context/ThemeContext"
-import { BranchesOutlined, ArrowRightOutlined } from "@ant-design/icons"
-import { API_BASE_URL } from "../../config/apiConfig"
-import Loader from "../Loader/Loader"
-import "../shared/FuturisticStyles.css"
+import { BranchesOutlined, ArrowRightOutlined, BankOutlined } from "@ant-design/icons"
+import asyncMock from "../../../asyncMock"
 
 const LineaExtensionList = () => {
   const [lineas, setLineas] = useState([])
@@ -17,42 +15,10 @@ const LineaExtensionList = () => {
   useEffect(() => {
     const fetchLineasExtension = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/linea-extensions/`)
-        if (!response.ok) throw new Error("Error al cargar los datos")
-        const data = await response.json()
-        setLineas(data.data || [])
+        const response = await asyncMock.getLineasExtension()
+        setLineas(response.data || [])
       } catch (error) {
         console.error(error)
-        // Mock data para demostración
-        setLineas([
-          {
-            id: 1,
-            nombre: "Tecnología Educativa",
-            descripcion:
-              "Desarrollo de herramientas tecnológicas para mejorar los procesos de enseñanza-aprendizaje en instituciones educativas.",
-            imagen: { url: "/placeholder.svg?height=200&width=300" },
-          },
-          {
-            id: 2,
-            nombre: "Sistemas de Información Comunitarios",
-            descripcion: "Implementación de sistemas de información para organizaciones comunitarias y ONGs locales.",
-            imagen: { url: "/placeholder.svg?height=200&width=300" },
-          },
-          {
-            id: 3,
-            nombre: "Inclusión Digital",
-            descripcion:
-              "Programas de capacitación en tecnologías digitales para adultos mayores y sectores vulnerables.",
-            imagen: { url: "/placeholder.svg?height=200&width=300" },
-          },
-          {
-            id: 4,
-            nombre: "Desarrollo de Software Libre",
-            descripcion:
-              "Creación y mantenimiento de software libre para instituciones públicas y organizaciones sin fines de lucro.",
-            imagen: { url: "/placeholder.svg?height=200&width=300" },
-          },
-        ])
       } finally {
         setLoading(false)
       }
@@ -62,127 +28,148 @@ const LineaExtensionList = () => {
 
   if (loading) {
     return (
-      <div className="futuristic-container" data-theme={isDarkTheme ? "dark" : "light"}>
-        <div className="futuristic-loading">
-          <Loader />
+      <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+        <div className="exploration-container">
+          <div className="carousel-loading">
+            <div className="loading-spinner" />
+            <span className="loading-text">Cargando líneas de extensión...</span>
+          </div>
         </div>
-      </div>
+      </section>
     )
   }
 
   return (
-    <div className="futuristic-container" data-theme={isDarkTheme ? "dark" : "light"}>
-      <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
+    <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <div className="exploration-container">
         {/* Header */}
-        <div className="futuristic-card" style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div className="futuristic-badge" style={{ marginBottom: "1rem" }}>
-            <BranchesOutlined style={{ marginRight: "0.5rem" }} />
-            Extensión Universitaria
-          </div>
+        <div className="section-header">
 
-          <h1 className="futuristic-title">Líneas de Extensión</h1>
-
-          <p className="futuristic-subtitle">
+          <h2 className="section-title">Líneas de Extensión</h2>
+          <p className="section-description">
             Proyectos que conectan la universidad con la comunidad, aplicando conocimientos de ciencias de la
             computación para resolver problemas sociales y promover el desarrollo tecnológico inclusivo.
           </p>
         </div>
 
         {/* Grid de líneas */}
-        <div className="futuristic-grid futuristic-grid-3">
-          {lineas.map((linea) => (
-            <div key={linea.id} className="futuristic-card" style={{ height: "100%" }}>
-              {linea.imagen?.url && (
-                <div style={{ marginBottom: "1rem" }}>
-                  <img
-                    src={`${API_BASE_URL}${linea.imagen.url}`}
-                    alt={linea.nombre}
-                    style={{
-                      width: "100%",
-                      height: "180px",
-                      objectFit: "cover",
-                      borderRadius: "4px",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                    }}
-                  />
+        <div className="multi-card-carousel">
+          <div className="carousel-container">
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
+                gap: "2rem",
+              }}
+            >
+              {lineas.map((linea) => (
+                <div key={linea.id} className="news-card">
+                  <div className="news-image-container">
+                    <img
+                      src={linea.imagen?.url || "/placeholder.svg?height=200&width=350"}
+                      alt={linea.nombre}
+                      className="news-image"
+                    />
+                    <div className="news-image-overlay">
+                      <BranchesOutlined />
+                    </div>
+                  </div>
+
+                  <div className="news-content">
+                    <div className="news-meta">
+                      <span className="news-category">Extensión</span>
+                      <div className="news-views">
+                        <BankOutlined />
+                        <span>Activa</span>
+                      </div>
+                    </div>
+
+                    <h3 className="news-title">{linea.nombre}</h3>
+
+                    <p className="news-description">
+                      {linea.descripcion.length > 150 ? `${linea.descripcion.slice(0, 150)}...` : linea.descripcion}
+                    </p>
+
+                    <div className="news-actions">
+                      <Link to={`/linea-extension/${linea.id}`} className="news-btn-primary">
+                        <span>Ver más</span>
+                        <ArrowRightOutlined />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              )}
-
-              <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-                <h3
-                  style={{
-                    fontSize: "1.2rem",
-                    fontWeight: "600",
-                    color: "var(--colorTextBase)",
-                    marginBottom: "0.5rem",
-                    lineHeight: "1.3",
-                  }}
-                >
-                  {linea.nombre}
-                </h3>
-
-                <p
-                  style={{
-                    color: "var(--colorTextSecondary)",
-                    fontSize: "0.9rem",
-                    lineHeight: "1.5",
-                    marginBottom: "1.5rem",
-                    flex: 1,
-                  }}
-                >
-                  {linea.descripcion.length > 150 ? `${linea.descripcion.slice(0, 150)}...` : linea.descripcion}
-                </p>
-
-                <Link
-                  to={`/linea-extension/${linea.id}`}
-                  className="futuristic-btn"
-                  style={{ alignSelf: "flex-start" }}
-                >
-                  Ver más
-                  <ArrowRightOutlined />
-                </Link>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Stats Section */}
-        <div className="futuristic-card" style={{ marginTop: "2rem", textAlign: "center" }}>
-          <h2
+        <div className="carousel-container" style={{ marginTop: "2rem", textAlign: "center" }}>
+          <h3
             style={{
-              fontSize: "1.3rem",
-              fontWeight: "600",
-              color: "var(--colorTextBase)",
+              fontSize: "1.5rem",
+              fontWeight: "700",
+              color: "var(--color-text-primary)",
               marginBottom: "1.5rem",
             }}
           >
             Impacto de Nuestras Líneas de Extensión
-          </h2>
+          </h3>
 
-          <div className="futuristic-grid futuristic-grid-4">
-            <div className="futuristic-list-item" style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "2rem", fontWeight: "600", color: "var(--colorTextBase)" }}>25+</div>
-              <div style={{ color: "var(--colorTextSecondary)", fontSize: "0.9rem" }}>Proyectos Activos</div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "2rem",
+            }}
+          >
+            <div className="news-card" style={{ textAlign: "center", padding: "2rem" }}>
+              <div
+                style={{ fontSize: "2.5rem", fontWeight: "700", color: "var(--color-primary)", marginBottom: "0.5rem" }}
+              >
+                25+
+              </div>
+              <div style={{ color: "var(--color-text-secondary)", fontSize: "1rem", fontWeight: "500" }}>
+                Proyectos Activos
+              </div>
             </div>
 
-            <div className="futuristic-list-item" style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "2rem", fontWeight: "600", color: "var(--colorTextBase)" }}>500+</div>
-              <div style={{ color: "var(--colorTextSecondary)", fontSize: "0.9rem" }}>Beneficiarios</div>
+            <div className="news-card" style={{ textAlign: "center", padding: "2rem" }}>
+              <div
+                style={{ fontSize: "2.5rem", fontWeight: "700", color: "var(--color-primary)", marginBottom: "0.5rem" }}
+              >
+                500+
+              </div>
+              <div style={{ color: "var(--color-text-secondary)", fontSize: "1rem", fontWeight: "500" }}>
+                Beneficiarios
+              </div>
             </div>
 
-            <div className="futuristic-list-item" style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "2rem", fontWeight: "600", color: "var(--colorTextBase)" }}>15</div>
-              <div style={{ color: "var(--colorTextSecondary)", fontSize: "0.9rem" }}>Instituciones</div>
+            <div className="news-card" style={{ textAlign: "center", padding: "2rem" }}>
+              <div
+                style={{ fontSize: "2.5rem", fontWeight: "700", color: "var(--color-primary)", marginBottom: "0.5rem" }}
+              >
+                15
+              </div>
+              <div style={{ color: "var(--color-text-secondary)", fontSize: "1rem", fontWeight: "500" }}>
+                Instituciones
+              </div>
             </div>
 
-            <div className="futuristic-list-item" style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "2rem", fontWeight: "600", color: "var(--colorTextBase)" }}>8</div>
-              <div style={{ color: "var(--colorTextSecondary)", fontSize: "0.9rem" }}>Años de Experiencia</div>
+            <div className="news-card" style={{ textAlign: "center", padding: "2rem" }}>
+              <div
+                style={{ fontSize: "2.5rem", fontWeight: "700", color: "var(--color-primary)", marginBottom: "0.5rem" }}
+              >
+                8
+              </div>
+              <div style={{ color: "var(--color-text-secondary)", fontSize: "1rem", fontWeight: "500" }}>
+                Años de Experiencia
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 
