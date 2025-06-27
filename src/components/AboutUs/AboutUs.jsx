@@ -15,7 +15,7 @@ import {
   ExperimentOutlined,
   StarOutlined,
 } from "@ant-design/icons"
-import { useTheme } from "../../context/ThemeContext"
+import { useTheme } from "../../contexts/ThemeContext"
 import Loader from "../Loader/Loader"
 import "./AboutUs.css"
 

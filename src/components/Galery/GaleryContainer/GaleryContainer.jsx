@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useTheme } from "../../../context/ThemeContext"
+import { useTheme } from "../../../contexts/ThemeContext"
 import { PictureOutlined, EyeOutlined, CameraOutlined, ExpandOutlined, CloseOutlined } from "@ant-design/icons"
 import { API_BASE_URL } from "../../../config/apiConfig"
 import Loader from "../../Loader/Loader"

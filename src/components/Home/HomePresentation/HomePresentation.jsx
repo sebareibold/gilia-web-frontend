@@ -1,6 +1,6 @@
 "use client"
 import { BulbOutlined, ArrowRightOutlined, PlayCircleOutlined } from "@ant-design/icons"
-import { useTheme } from "../../../context/ThemeContext"
+import { useTheme } from "../../../contexts/ThemeContext"
 import "./HomePresentation.css"
 
 export default function HomePresentation() {

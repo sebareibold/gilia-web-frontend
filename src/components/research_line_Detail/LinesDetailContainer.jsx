@@ -2,7 +2,7 @@
 
 import { useParams, Link } from "react-router-dom"
 import { useState, useEffect, useRef } from "react"
-import { useTheme } from "../../context/ThemeContext"
+import { useTheme } from "../../contexts/ThemeContext"
 import {
   BookOutlined,
   FolderOutlined,

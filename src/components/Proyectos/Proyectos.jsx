@@ -2,7 +2,7 @@
 
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
-import { useTheme } from "../../context/ThemeContext"
+import { useTheme } from "../../contexts/ThemeContext"
 import { ProjectOutlined, CalendarOutlined, TeamOutlined, TagOutlined } from "@ant-design/icons"
 import { API_BASE_URL } from "../../config/apiConfig"
 import { marked } from "marked"

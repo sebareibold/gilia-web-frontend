@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { useParams, Link } from "react-router-dom"
-import { useTheme } from "../../context/ThemeContext"
+import { useTheme } from "../../contexts/ThemeContext"
 import { marked } from "marked"
 import asyncMock from "../../../asyncMock"
 import {

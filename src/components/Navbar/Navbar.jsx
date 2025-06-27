@@ -15,7 +15,7 @@ import {
   PictureOutlined,
   HomeOutlined,
 } from "@ant-design/icons"
-import { useTheme } from "../../context/ThemeContext"
+import { useTheme } from "../../contexts/ThemeContext"
 import { Link, useLocation } from "react-router-dom"
 import { API_BASE_URL } from "../../config/apiConfig"
 import "./Navbar.css"
@@ -88,7 +88,7 @@ const Navbar = ({ activeSection, setActiveSection }) => {
   }
 
   const handleBackofficeAccess = () => {
-    alert("Acceso al backoffice - Funcionalidad simulada")
+    window.location.href = "/admin/dashboard"
   }
 
   const isActive = (path) => {

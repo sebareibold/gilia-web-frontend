@@ -17,7 +17,7 @@ import {
   TrophyOutlined,
   TeamOutlined,
 } from "@ant-design/icons"
-import { useTheme } from "../../../context/ThemeContext"
+import { useTheme } from "../../../contexts/ThemeContext"
 import "./HomeExploration.css"
 
 // Mock data para novedades mejorado sin fechas
