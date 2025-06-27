@@ -244,10 +244,7 @@ export default function AboutUs() {
       <div className="about-container">
         {/* Header */}
         <div className="about-header">
-          <div className="about-badge">
-            <TeamOutlined />
-            <span>Nuestro Equipo</span>
-          </div>
+          
           <h2 className="about-title">Conoce a GILIA</h2>
           <p className="about-description">{aboutData.about.mision}</p>
         </div>
