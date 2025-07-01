@@ -14,133 +14,7 @@ import {
 import { useTheme } from "../../../contexts/ThemeContext"
 import Loader from "../Loader/Loader"
 import "./Nosotros.css"
-
-// Mock data mejorado para el equipo
-const mockTeamData = {
-  about: {
-    mision:
-      "Desarrollar soluciones innovadoras en inteligencia artificial y procesamiento de lenguaje natural que contribuyan al avance científico y tecnológico, con un enfoque especial en lenguas con recursos limitados y aplicaciones socialmente relevantes.",
-    vision:
-      "Ser un grupo de investigación de referencia internacional en IA y lenguajes, reconocido por la excelencia académica, la innovación tecnológica y el impacto social de nuestras contribuciones.",
-    valores: [
-      "Excelencia académica",
-      "Innovación tecnológica",
-      "Colaboración internacional",
-      "Impacto social",
-      "Ética en IA",
-    ],
-  },
-  people: [
-    {
-      id: 1,
-      nombre: "Dr. María Elena Rodríguez",
-      cargo: "Directora del Grupo",
-      email: "maria.rodriguez@gilia.edu.ar",
-      imagen: "/placeholder.svg?height=120&width=120",
-      descripcion:
-        "Especialista en procesamiento de lenguaje natural con más de 15 años de experiencia. Lidera proyectos de investigación en traducción automática y análisis de sentimientos.",
-      especialidades: ["NLP", "Machine Learning", "Traducción Automática", "Análisis de Sentimientos"],
-      linkedin: "https://linkedin.com/in/maria-rodriguez",
-      github: "https://github.com/mrodriguez",
-      activo: true,
-    },
-    {
-      id: 2,
-      nombre: "Dr. Carlos Mendoza",
-      cargo: "Investigador Senior",
-      email: "carlos.mendoza@gilia.edu.ar",
-      imagen: "/placeholder.svg?height=120&width=120",
-      descripcion:
-        "Experto en sistemas inteligentes y robótica educativa. Ha publicado más de 50 artículos en revistas internacionales de primer nivel.",
-      especialidades: ["Robótica", "Sistemas Inteligentes", "IA Educativa", "Computer Vision"],
-      linkedin: "https://linkedin.com/in/carlos-mendoza",
-      github: "https://github.com/cmendoza",
-      activo: true,
-    },
-    {
-      id: 3,
-      nombre: "Dra. Ana Sofía López",
-      cargo: "Investigadora Postdoctoral",
-      email: "ana.lopez@gilia.edu.ar",
-      imagen: "/placeholder.svg?height=120&width=120",
-      descripcion:
-        "Especializada en ética de la inteligencia artificial y sistemas de recomendación. Coordina proyectos de colaboración internacional.",
-      especialidades: ["Ética en IA", "Sistemas de Recomendación", "Fairness", "Explainable AI"],
-      linkedin: "https://linkedin.com/in/ana-lopez",
-      twitter: "https://twitter.com/ana_lopez_ai",
-      activo: true,
-    },
-    {
-      id: 4,
-      nombre: "Mg. Roberto Silva",
-      cargo: "Investigador Junior",
-      email: "roberto.silva@gilia.edu.ar",
-      imagen: "/placeholder.svg?height=120&width=120",
-      descripcion:
-        "Doctorando en ciencias de la computación, enfocado en deep learning y redes neuronales para procesamiento de texto.",
-      especialidades: ["Deep Learning", "Neural Networks", "Text Mining", "Python"],
-      github: "https://github.com/rsilva",
-      twitter: "https://twitter.com/roberto_silva",
-      activo: true,
-    },
-    {
-      id: 5,
-      nombre: "Lic. Valentina Torres",
-      cargo: "Desarrolladora de Software",
-      email: "valentina.torres@gilia.edu.ar",
-      imagen: "/placeholder.svg?height=120&width=120",
-      descripcion:
-        "Especialista en desarrollo de aplicaciones web y móviles para proyectos de investigación. Experta en tecnologías modernas de frontend y backend.",
-      especialidades: ["React", "Node.js", "Python", "UI/UX Design"],
-      github: "https://github.com/vtorres",
-      linkedin: "https://linkedin.com/in/valentina-torres",
-      activo: true,
-    },
-    {
-      id: 6,
-      nombre: "Ing. Diego Ramírez",
-      cargo: "Administrador de Sistemas",
-      email: "diego.ramirez@gilia.edu.ar",
-      imagen: "/placeholder.svg?height=120&width=120",
-      descripcion:
-        "Responsable de la infraestructura tecnológica del grupo. Especialista en cloud computing y administración de clusters de cómputo de alto rendimiento.",
-      especialidades: ["DevOps", "Cloud Computing", "Docker", "Kubernetes"],
-      linkedin: "https://linkedin.com/in/diego-ramirez",
-      github: "https://github.com/dramirez",
-      activo: true,
-    },
-  ],
-  objectives: [
-    {
-      id: 1,
-      titulo: "Investigación de Vanguardia",
-      descripcion:
-        "Desarrollar investigación de alta calidad en inteligencia artificial, con especial énfasis en procesamiento de lenguaje natural y sistemas inteligentes adaptativos.",
-      icono: "BulbOutlined",
-    },
-    {
-      id: 2,
-      titulo: "Formación de Recursos Humanos",
-      descripcion:
-        "Formar investigadores y profesionales altamente capacitados en IA, contribuyendo al desarrollo del capital humano en ciencia y tecnología.",
-      icono: "TeamOutlined",
-    },
-    {
-      id: 3,
-      titulo: "Transferencia Tecnológica",
-      descripcion:
-        "Transferir conocimiento y tecnología al sector productivo y social, generando impacto real en la sociedad a través de nuestras innovaciones.",
-      icono: "RocketOutlined",
-    },
-    {
-      id: 4,
-      titulo: "Colaboración Internacional",
-      descripcion:
-        "Establecer y mantener colaboraciones estratégicas con instituciones de investigación de prestigio internacional para potenciar nuestro impacto.",
-      icono: "GlobalOutlined",
-    },
-  ],
-}
+import asyncMock from '../../../../asyncMock'
 
 const iconMap = {
   BulbOutlined: BulbOutlined,
@@ -153,6 +27,7 @@ const iconMap = {
 
 export default function AboutUs() {
   const [aboutData, setAboutData] = useState(null)
+  const [objectives, setObjectives] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const { theme } = useTheme()
@@ -163,23 +38,21 @@ export default function AboutUs() {
       setLoading(true)
       setError(null)
       try {
-        // Simular llamada a API
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        setAboutData(mockTeamData)
-
-        // Animar estadísticas
+        // Obtener datos desde asyncMock
+        const aboutRes = await asyncMock.getAbout()
+        const objRes = await asyncMock.getObjetivos()
+        setAboutData(aboutRes.data)
+        setObjectives(objRes.data)
         setTimeout(() => {
           animateStats()
         }, 500)
       } catch (err) {
         console.error("Error al obtener datos del equipo:", err)
         setError(err.message || "Error al cargar la información del equipo")
-        setAboutData(mockTeamData) // Fallback
       } finally {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [])
 
@@ -312,7 +185,7 @@ export default function AboutUs() {
           </div>
 
           <div className="objectives-grid">
-            {aboutData.objectives.map((objective) => {
+            {objectives.map((objective) => {
               const IconComponent = iconMap[objective.icono] || BulbOutlined
               return (
                 <div key={objective.id} className="objective-card">

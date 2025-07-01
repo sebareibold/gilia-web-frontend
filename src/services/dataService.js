@@ -6,6 +6,7 @@ import { ENV_CONFIG, logger } from "../config/environment"
  * Servicio de datos que abstrae la fuente de datos (Mock vs API)
  * Usa variables de entorno para determinar qué fuente usar
  */
+
 class DataService {
   constructor() {
     this.useMockData = ENV_CONFIG.USE_MOCK_DATA

@@ -19,98 +19,7 @@ import {
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
 import "./HomeExploration.css"
-
-// Mock data para novedades mejorado sin fechas
-const mockNovedades = [
-  {
-    id: 1,
-    Titulo: "Revolucionario Modelo de IA para Procesamiento de Lenguaje Natural",
-    Descripcion:
-      "Desarrollo de un modelo de inteligencia artificial que supera a los enfoques existentes en un 15% en tareas de comprensión de texto y análisis de sentimientos para el español.",
-    Enlace: "https://www.ieee.org/publications/",
-    imagen: "/imagenRandom.png",
-    categoria: "Investigación",
-    vistas: 1250,
-    destacado: true,
-  },
-  {
-    id: 2,
-    Titulo: "Participación Destacada en ICAI 2024",
-    Descripcion:
-      "Tres ponencias magistrales sobre ética en IA, sistemas adaptativos y robótica educativa. Nuestros investigadores fueron keynote speakers principales.",
-    Enlace: "https://www.icai-conference.org/",
-    imagen: "/imagenRandom.png",
-    categoria: "Conferencia",
-    vistas: 890,
-    destacado: false,
-  },
-  {
-    id: 3,
-    Titulo: "Proyecto Horizon Europe Multinacional",
-    Descripcion:
-      "Colaboración internacional con universidades de Brasil y Chile, financiado con 2.5 millones de euros para desarrollar sistemas inteligentes adaptativos.",
-    Enlace: "https://ec.europa.eu/programmes/horizon2020/",
-    imagen: "/imagenRandom.png",
-    categoria: "Proyecto",
-    vistas: 2100,
-    destacado: true,
-  },
-  {
-    id: 4,
-    Titulo: "Premio Nacional: Traductor Español-Guaraní",
-    Descripcion:
-      "Reconocimiento del Ministerio de Ciencia por desarrollar el primer sistema de traducción automática que preserva lenguas originarias digitalmente.",
-    Enlace: "https://www.conicet.gov.ar/",
-    imagen: "/imagenRandom.png",
-    categoria: "Premio",
-    vistas: 1750,
-    destacado: false,
-  },
-  {
-    id: 5,
-    Titulo: "Plataforma Educativa con IA Personalizada",
-    Descripcion:
-      "Lanzamiento exitoso de nuestra plataforma de e-learning que adapta contenido y metodología según el perfil de cada estudiante. Más de 1000 usuarios activos.",
-    Enlace: "https://www.edx.org/",
-    imagen: "/imagenRandom.png",
-    categoria: "Lanzamiento",
-    vistas: 3200,
-    destacado: true,
-  },
-  {
-    id: 6,
-    Titulo: "Colaboración Internacional en Robótica",
-    Descripcion:
-      "Nuevo proyecto de investigación en robótica educativa con universidades europeas, enfocado en el desarrollo de asistentes pedagógicos inteligentes.",
-    Enlace: "https://www.robotics-education.org/",
-    imagen: "/imagenRandom.png",
-    categoria: "Colaboración",
-    vistas: 980,
-    destacado: false,
-  },
-  {
-    id: 7,
-    Titulo: "Avances en Procesamiento de Voz",
-    Descripcion:
-      "Desarrollo de tecnologías de reconocimiento y síntesis de voz para dialectos regionales, mejorando la accesibilidad tecnológica en comunidades locales.",
-    Enlace: "https://www.speech-tech.org/",
-    imagen: "/imagenRandom.png",
-    categoria: "Tecnología",
-    vistas: 1420,
-    destacado: true,
-  },
-  {
-    id: 8,
-    Titulo: "Publicación en Nature AI",
-    Descripcion:
-      "Artículo científico sobre redes neuronales explicables publicado en una de las revistas más prestigiosas del campo de la inteligencia artificial.",
-    Enlace: "https://www.nature.com/",
-    imagen: "/imagenRandom.png",
-    categoria: "Publicación",
-    vistas: 2850,
-    destacado: true,
-  },
-]
+import asyncMock from '../../../../../asyncMock'
 
 // Array de iconos para rotar con más variedad
 const newsIcons = [
@@ -159,18 +68,16 @@ export default function HomeExploration() {
       setLoading(true)
       setError(null)
       try {
-        // Simular llamada a API
-        await new Promise((resolve) => setTimeout(resolve, 1200))
-        setNovedades(mockNovedades)
+        // Obtener datos desde asyncMock
+        const response = await asyncMock.getNovedades()
+        setNovedades(response.data)
       } catch (err) {
         console.error("Error detallado al obtener datos:", err)
         setError(err.message || "Ocurrió un error al cargar las novedades.")
-        setNovedades(mockNovedades) // Fallback a mock data
       } finally {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [])
 

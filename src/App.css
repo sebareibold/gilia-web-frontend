@@ -158,7 +158,6 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-top: clamp(64px, 8vw, 80px);
   transition:
     background-color var(--transition-normal),
     color var(--transition-normal);
@@ -719,7 +718,7 @@ body {
 
 @media (min-width: 1024px) {
   body {
-    padding-top: 80px;
+    /* padding-top: 80px; */
   }
 
   .lg\:grid-cols-3 {

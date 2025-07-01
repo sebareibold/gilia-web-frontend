@@ -484,64 +484,56 @@ const mockData = {
       pdfUrl: "/documents/sentiment-analysis-spanish.pdf",
     },
     {
-      id: 4,
-      title: "Plataformas de e-learning inclusivas para zonas rurales",
-      authors: ["Dra. Laura Martínez", "Dr. Ana María González"],
-      authorIds: [3, 1],
-      journal: "Revista Latinoamericana de Tecnología Educativa",
-      type: "Artículo de Revista",
-      year: 2022,
-      month: "Julio",
-      volume: "18",
-      issue: "2",
-      pages: "101-120",
-      doi: "10.1234/rlte.2022.101",
-      url: "https://rlte.org/articulo/2022/101",
-      abstract:
-        "Se presenta el desarrollo y evaluación de plataformas de e-learning adaptadas a contextos rurales, con énfasis en accesibilidad y bajo consumo de datos.",
-      keywords: ["e-learning", "accesibilidad", "zonas rurales", "tecnología educativa"],
-      status: "Publicado",
-      impact: "Medio",
-      quartile: "Q2",
-      citations: 8,
-      downloads: 320,
-      category: "Tecnología Educativa",
-      fundingSource: "MinEducación",
-      researchLineId: 4,
-      projectIds: [4],
-      collaborations: ["Ministerio de Educación"],
-      awards: [],
-      pdfUrl: "/documents/elearning-rural.pdf",
+      id: 12,
+      titulo: "Redes Generativas Antagónicas para Síntesis de Imágenes Médicas",
+      autores: "Dr. Ana María González, Dra. Sofia Herrera",
+      anio: 2024,
+      tipo: "Artículo",
+      enlace: "https://ejemplo.com/gan-medicas",
+      editor: "Nature Medicine",
+      pagina_libro: "pp. 101-120",
+      resumen: "Se exploran las aplicaciones de GANs para la generación de imágenes médicas sintéticas y su impacto en el entrenamiento de modelos de IA.",
+      linea_investigacions: "Inteligencia Artificial y Machine Learning",
+      linea_extensions: "Salud Digital Comunitaria"
     },
     {
-      id: 5,
-      title: "Aplicaciones de la inteligencia artificial en la gestión comunitaria",
-      authors: ["Ing. Miguel Torres", "Dr. Carlos Rodríguez"],
-      authorIds: [4, 2],
-      journal: "Community Informatics Journal",
-      type: "Artículo de Revista",
-      year: 2023,
-      month: "Septiembre",
-      volume: "12",
-      issue: "3",
-      pages: "200-215",
-      doi: "10.5678/ci.2023.200",
-      url: "https://ci-journal.net/2023/200",
-      abstract:
-        "Exploración de casos de uso de IA para optimizar la gestión de recursos y la comunicación en organizaciones comunitarias.",
-      keywords: ["inteligencia artificial", "gestión comunitaria", "comunicación", "recursos"],
-      status: "Publicado",
-      impact: "Bajo",
-      quartile: "Q3",
-      citations: 3,
-      downloads: 110,
-      category: "Sistemas de Información Comunitarios",
-      fundingSource: "Cooperación Internacional",
-      researchLineId: 5,
-      projectIds: [5],
-      collaborations: ["ONG Manos Solidarias"],
-      awards: [],
-      pdfUrl: "/documents/ia-gestion-comunitaria.pdf",
+      id: 13,
+      titulo: "Procesamiento de Lenguaje Natural en Español: Retos y Avances",
+      autores: "Dra. Laura Martínez, Ing. Miguel Torres",
+      anio: 2023,
+      tipo: "Paper",
+      enlace: "https://ejemplo.com/nlp-espanol",
+      editor: "ACL Anthology",
+      pagina_libro: "pp. 55-70",
+      resumen: "Revisión de los principales desafíos y avances en NLP para el idioma español, incluyendo datasets y modelos recientes.",
+      linea_investigacions: "Procesamiento de Lenguaje Natural",
+      linea_extensions: "Tecnología Educativa"
+    },
+    {
+      id: 14,
+      titulo: "Robótica Colaborativa en la Industria 4.0",
+      autores: "Dr. Carlos Rodríguez, Ing. Miguel Torres",
+      anio: 2022,
+      tipo: "Capítulo de Libro",
+      enlace: "https://ejemplo.com/robotica-industria",
+      editor: "Springer",
+      pagina_libro: "Cap. 8, pp. 201-220",
+      resumen: "Capítulo dedicado a la integración de robots colaborativos en procesos industriales inteligentes.",
+      linea_investigacions: "Robótica y Sistemas Autónomos",
+      linea_extensions: "Sistemas de Información Comunitarios"
+    },
+    {
+      id: 15,
+      titulo: "Gamificación y Aprendizaje Adaptativo en Plataformas Online",
+      autores: "Dra. Laura Martínez, Dr. Pablo Suárez",
+      anio: 2021,
+      tipo: "Libro",
+      enlace: "https://ejemplo.com/gamificacion-aprendizaje",
+      editor: "Editorial Educativa",
+      pagina_libro: "ISBN 978-3-16-148410-0",
+      resumen: "Libro sobre técnicas de gamificación y sistemas adaptativos para mejorar la motivación y el aprendizaje en línea.",
+      linea_investigacions: "Tecnología Educativa",
+      linea_extensions: "Innovación Social y Tecnología"
     },
   ],
 
@@ -623,10 +615,9 @@ const mockData = {
   extensionLines: [
     {
       id: 1,
-      nombre: "Tecnología Educativa",
-      descripcion:
-        "Desarrollo e implementación de herramientas tecnológicas para mejorar los procesos de enseñanza-aprendizaje en instituciones educativas de la región. Incluye talleres, plataformas digitales y capacitación docente en nuevas tecnologías.",
-      imagen: { url: "/public/imagenRandom.png" },
+      title: "Tecnología Educativa",
+      description:
+        "Desarrollo e implementación de herramientas tecnológicas para mejorar los procesos de enseñanza-aprendizaje en instituciones educativas de la región.",
       status: "Activa",
       startDate: "2021-01-15",
       leader: "Dra. Laura Martínez",
@@ -659,10 +650,9 @@ const mockData = {
     },
     {
       id: 2,
-      nombre: "Sistemas de Información Comunitarios",
-      descripcion:
-        "Implementación de sistemas de información para organizaciones comunitarias, ONGs locales y cooperativas. Se desarrollan soluciones digitales a medida y se brinda soporte técnico y capacitación.",
-      imagen: { url: "/public/humano.png" },
+      title: "Sistemas de Información Comunitarios",
+      description:
+        "Implementación de sistemas de información para organizaciones comunitarias, ONGs locales y cooperativas.",
       status: "Activa",
       startDate: "2022-03-01",
       leader: "Ing. Miguel Torres",
@@ -692,70 +682,6 @@ const mockData = {
       impact: "Medio",
       budget: 60000,
       fundingSources: ["Regalías", "Cooperación Internacional"],
-    },
-    {
-      id: 3,
-      nombre: "Salud Digital Comunitaria",
-      descripcion:
-        "Proyectos de telemedicina y monitoreo remoto de pacientes en comunidades rurales, integrando dispositivos IoT y plataformas de salud digital.",
-      imagen: { url: "/public/icono_gilia.png" },
-      status: "Activa",
-      startDate: "2023-05-10",
-      leader: "Dra. Sofia Herrera",
-      leaderId: 5,
-      team: ["Dra. Sofia Herrera", "Dr. Ana María González"],
-      teamIds: [5, 1],
-      projects: 2,
-      beneficiaries: 400,
-      institutions: [
-        "Hospital Rural Central",
-        "Centro de Salud Comunitario",
-      ],
-      objectives: [
-        "Mejorar el acceso a servicios de salud",
-        "Implementar telemedicina en zonas apartadas",
-        "Capacitar personal de salud en herramientas digitales",
-      ],
-      activities: [
-        "Instalación de dispositivos IoT",
-        "Desarrollo de plataforma de monitoreo",
-        "Capacitación en telemedicina",
-      ],
-      impact: "Alto",
-      budget: 50000,
-      fundingSources: ["Ministerio de Salud", "Universidad"],
-    },
-    {
-      id: 4,
-      nombre: "Innovación Social y Tecnología",
-      descripcion:
-        "Fomento de la innovación social a través de hackatones, laboratorios ciudadanos y proyectos colaborativos con enfoque tecnológico.",
-      imagen: { url: "/public/imagenRandom.png" },
-      status: "Activa",
-      startDate: "2021-11-20",
-      leader: "Dr. Carlos Rodríguez",
-      leaderId: 2,
-      team: ["Dr. Carlos Rodríguez", "Dra. Laura Martínez"],
-      teamIds: [2, 3],
-      projects: 4,
-      beneficiaries: 950,
-      institutions: [
-        "Laboratorio Ciudadano",
-        "Universidad Nacional Regional",
-      ],
-      objectives: [
-        "Promover la innovación social",
-        "Desarrollar soluciones tecnológicas colaborativas",
-        "Impulsar la participación ciudadana",
-      ],
-      activities: [
-        "Organización de hackatones",
-        "Talleres de innovación",
-        "Desarrollo de prototipos tecnológicos",
-      ],
-      impact: "Medio",
-      budget: 70000,
-      fundingSources: ["Universidad", "Alcaldía Local"],
     },
   ],
 
@@ -913,47 +839,95 @@ const mockData = {
     },
   ],
 
+  // ===== NOVEDADES (NEWS) MOCK =====
   news: [
     {
       id: 1,
-      title: "Nueva Publicación en Revista Internacional de IA",
-      description:
-        "Nuestro equipo ha publicado un artículo sobre procesamiento de lenguaje natural en la revista IEEE Transactions on AI.",
-      content:
-        "El artículo presenta una nueva arquitectura neuronal que mejora significativamente la precisión en tareas de análisis de sentimientos para textos en español, superando a modelos existentes en un 15%.",
-      link: "https://ieeexplore.ieee.org/document/2024-nlp-spanish",
-      date: "2024-03-15",
-      author: "Equipo GILIA",
-      category: "Publicación",
-      featured: true,
-      image: "/placeholder.svg?height=300&width=500",
+      Titulo: "Revolucionario Modelo de IA para Procesamiento de Lenguaje Natural",
+      Descripcion:
+        "Desarrollo de un modelo de inteligencia artificial que supera a los enfoques existentes en un 15% en tareas de comprensión de texto y análisis de sentimientos para el español.",
+      Enlace: "https://www.ieee.org/publications/",
+      imagen: "/imagenRandom.png",
+      categoria: "Investigación",
+      vistas: 1250,
+      destacado: true,
     },
     {
       id: 2,
-      title: "Participación en Conferencia Mundial de Inteligencia Artificial",
-      description: "Presentación de tres ponencias magistrales en la conferencia ICAI 2024.",
-      content:
-        "Nuestros investigadores fueron invitados como keynote speakers, compartiendo los resultados de nuestras investigaciones con más de 2000 participantes de 45 países.",
-      link: "https://icai2024.org/keynotes/gilia-presentations",
-      date: "2024-02-28",
-      author: "Dr. Carlos Rodríguez",
-      category: "Evento",
-      featured: true,
-      image: "/placeholder.svg?height=300&width=500",
+      Titulo: "Participación Destacada en ICAI 2024",
+      Descripcion:
+        "Tres ponencias magistrales sobre ética en IA, sistemas adaptativos y robótica educativa. Nuestros investigadores fueron keynote speakers principales.",
+      Enlace: "https://www.icai-conference.org/",
+      imagen: "/imagenRandom.png",
+      categoria: "Conferencia",
+      vistas: 890,
+      destacado: false,
     },
     {
       id: 3,
-      title: "Nuevo Proyecto Internacional de Investigación",
-      description:
-        "Inicio de proyecto colaborativo con universidades de Brasil y Chile sobre sistemas inteligentes adaptativos.",
-      content:
-        "El proyecto, con un presupuesto de 2.5 millones de euros, se extenderá por cuatro años y tiene como objetivo desarrollar sistemas de IA que puedan adaptarse automáticamente a diferentes contextos culturales y lingüísticos.",
-      link: "https://cordis.europa.eu/project/id/101234567",
-      date: "2024-01-20",
-      author: "Dr. Ana González",
-      category: "Proyecto",
-      featured: false,
-      image: "/placeholder.svg?height=300&width=500",
+      Titulo: "Proyecto Horizon Europe Multinacional",
+      Descripcion:
+        "Colaboración internacional con universidades de Brasil y Chile, financiado con 2.5 millones de euros para desarrollar sistemas inteligentes adaptativos.",
+      Enlace: "https://ec.europa.eu/programmes/horizon2020/",
+      imagen: "/imagenRandom.png",
+      categoria: "Proyecto",
+      vistas: 2100,
+      destacado: true,
+    },
+    {
+      id: 4,
+      Titulo: "Premio Nacional: Traductor Español-Guaraní",
+      Descripcion:
+        "Reconocimiento del Ministerio de Ciencia por desarrollar el primer sistema de traducción automática que preserva lenguas originarias digitalmente.",
+      Enlace: "https://www.conicet.gov.ar/",
+      imagen: "/imagenRandom.png",
+      categoria: "Premio",
+      vistas: 1750,
+      destacado: false,
+    },
+    {
+      id: 5,
+      Titulo: "Plataforma Educativa con IA Personalizada",
+      Descripcion:
+        "Lanzamiento exitoso de nuestra plataforma de e-learning que adapta contenido y metodología según el perfil de cada estudiante. Más de 1000 usuarios activos.",
+      Enlace: "https://www.edx.org/",
+      imagen: "/imagenRandom.png",
+      categoria: "Lanzamiento",
+      vistas: 3200,
+      destacado: true,
+    },
+    {
+      id: 6,
+      Titulo: "Colaboración Internacional en Robótica",
+      Descripcion:
+        "Nuevo proyecto de investigación en robótica educativa con universidades europeas, enfocado en el desarrollo de asistentes pedagógicos inteligentes.",
+      Enlace: "https://www.robotics-education.org/",
+      imagen: "/imagenRandom.png",
+      categoria: "Colaboración",
+      vistas: 980,
+      destacado: false,
+    },
+    {
+      id: 7,
+      Titulo: "Avances en Procesamiento de Voz",
+      Descripcion:
+        "Desarrollo de tecnologías de reconocimiento y síntesis de voz para dialectos regionales, mejorando la accesibilidad tecnológica en comunidades locales.",
+      Enlace: "https://www.speech-tech.org/",
+      imagen: "/imagenRandom.png",
+      categoria: "Tecnología",
+      vistas: 1420,
+      destacado: true,
+    },
+    {
+      id: 8,
+      Titulo: "Publicación en Nature AI",
+      Descripcion:
+        "Artículo científico sobre redes neuronales explicables publicado en una de las revistas más prestigiosas del campo de la inteligencia artificial.",
+      Enlace: "https://www.nature.com/",
+      imagen: "/imagenRandom.png",
+      categoria: "Publicación",
+      vistas: 2850,
+      destacado: true,
     },
   ],
 }
@@ -1106,6 +1080,25 @@ export const asyncMock = {
     // Ordenar por año descendente
     filteredPublications.sort((a, b) => b.year - a.year)
 
+    // Adaptar automáticamente los campos de publicaciones al formato esperado por el frontend
+    filteredPublications = filteredPublications.map((pub, idx) => ({
+      ...pub,
+      // Título
+      titulo: pub.titulo || pub.title || `Publicación ${idx + 1}`,
+      // Autores
+      autores: pub.autores || (Array.isArray(pub.authors) ? pub.authors.join(", ") : pub.authors) || "Autores no disponibles",
+      // Año
+      anio: pub.anio || pub.year || "Año no disponible",
+      // Tipo
+      tipo: pub.tipo || pub.type || "Tipo no disponible",
+      // Resumen
+      resumen: pub.resumen || pub.abstract || "Sin resumen disponible",
+      // Enlace
+      enlace: pub.enlace || pub.url || pub.pdfUrl || "",
+      // Publicación (revista/libro)
+      publicacion: pub.publicacion || pub.journal || pub.editor || "",
+    }))
+
     return {
       data: filteredPublications,
       meta: {
@@ -1226,14 +1219,14 @@ export const asyncMock = {
     let filteredNews = [...mockData.news]
 
     if (filters.category) {
-      filteredNews = filteredNews.filter((news) => news.category === filters.category)
+      filteredNews = filteredNews.filter((news) => news.categoria === filters.category)
     }
     if (filters.featured !== undefined) {
-      filteredNews = filteredNews.filter((news) => news.featured === filters.featured)
+      filteredNews = filteredNews.filter((news) => news.destacado === filters.featured)
     }
 
     // Ordenar por fecha descendente
-    filteredNews.sort((a, b) => new Date(b.date) - new Date(a.date))
+    filteredNews.sort((a, b) => new Date(b.Enlace) - new Date(a.Enlace))
 
     return {
       data: filteredNews,
@@ -1316,9 +1309,8 @@ export const asyncMock = {
     // Buscar en noticias
     results.news = mockData.news.filter(
       (news) =>
-        news.title.toLowerCase().includes(searchTerm) ||
-        news.description.toLowerCase().includes(searchTerm) ||
-        news.content.toLowerCase().includes(searchTerm),
+        news.Titulo.toLowerCase().includes(searchTerm) ||
+        news.Descripcion.toLowerCase().includes(searchTerm),
     )
 
     return {
