@@ -23,12 +23,21 @@ const AdminLayout = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const originalPadding = document.body.style.paddingTop;
-    document.body.style.paddingTop = "0px";
+    const originalPadding = document.body.style.paddingTop
+    const originalBackground = document.body.style.background
+    const originalColor = document.body.style.color
+
+    // Forzar tema claro para el área administrativa
+    document.body.style.paddingTop = "0px"
+    document.body.style.background = "transparent"
+    document.body.style.color = "#000000"
+
     return () => {
-      document.body.style.paddingTop = originalPadding;
-    };
-  }, []);
+      document.body.style.paddingTop = originalPadding
+      document.body.style.background = originalBackground
+      document.body.style.color = originalColor
+    }
+  }, [])
 
   const handleLogout = () => {
     logout()
@@ -36,6 +45,11 @@ const AdminLayout = () => {
   }
 
   const menuItems = [
+    {
+      key: "/admin",
+      icon: <AppstoreOutlined />,
+      label: "Dashboard",
+    },
     {
       key: "/admin/lineas",
       icon: <ExperimentOutlined />,
@@ -71,90 +85,71 @@ const AdminLayout = () => {
   return (
     <div className="admin-layout-gradient">
       {/* Sidebar */}
-      {sidebarOpen && (
-        <aside className="admin-sidebar-transparent">
-          <div className="admin-sidebar-content">
-            {/* Botón de plegar */}
-            <button
-              className="admin-sidebar-toggle"
-              onClick={() => setSidebarOpen(false)}
-              title="Plegar sidebar"
-              aria-label="Plegar sidebar"
-            >
-              <LeftOutlined />
-            </button>
-            {/* Logo */}
-            <div className="admin-logo-section">
-              <div className="admin-logo-icon">
-                G
-              </div>
-              <span className="admin-logo-text">GILIA Admin</span>
+      <aside className={`admin-sidebar-transparent ${sidebarOpen ? "" : "collapsed"}`}>
+        <div className="admin-sidebar-content">
+          {/* Botón de plegar */}
+          <button
+            className="admin-sidebar-toggle"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            title={sidebarOpen ? "Plegar sidebar" : "Expandir sidebar"}
+            aria-label={sidebarOpen ? "Plegar sidebar" : "Expandir sidebar"}
+          >
+            {sidebarOpen ? <LeftOutlined /> : <RightOutlined />}
+          </button>
+
+          {/* Logo */}
+          <div className="admin-logo-section">
+            <div className="admin-logo-icon">G</div>
+            <span className="admin-logo-text">GILIA Admin</span>
+          </div>
+
+          {/* User Info */}
+          <div className="admin-user-info">
+            <div className="admin-user-avatar">
+              <span>{user?.name?.charAt(0) || "A"}</span>
             </div>
-            {/* User Info */}
-            <div className="admin-user-info">
-              <div className="admin-user-avatar">
-                <span>{user?.name?.charAt(0) || "A"}</span>
-              </div>
-              <div className="admin-user-details">
-                <p className="admin-user-name">{user?.name || "Admin"}</p>
-                <p className="admin-user-email">{user?.email}</p>
-              </div>
-            </div>
-            {/* Navigation */}
-            <nav className="admin-navigation">
-              {menuItems.map((item) => (
-                <Link
-                  key={item.key}
-                  to={item.key}
-                  className={`admin-nav-item ${location.pathname === item.key ? "active" : ""}`}
-                  title={item.label}
-                >
-                  <span className="admin-nav-icon">{item.icon}</span>
-                  <span className="admin-nav-label">{item.label}</span>
-                </Link>
-              ))}
-            </nav>
-            {/* Logout */}
-            <div className="admin-logout-section">
-              <button
-                onClick={handleLogout}
-                className="admin-logout-button"
-                title="Cerrar Sesión"
-                aria-label="Cerrar Sesión"
-              >
-                <LogoutOutlined className="admin-nav-icon" />
-                <span className="admin-nav-label">Cerrar Sesión</span>
-              </button>
+            <div className="admin-user-details">
+              <p className="admin-user-name">{user?.name || "Admin"}</p>
+              <p className="admin-user-email">{user?.email || "admin@gilia.com"}</p>
             </div>
           </div>
-        </aside>
-      )}
-      {/* Botón flotante para desplegar */}
-      {!sidebarOpen && (
-        <button
-          className="admin-sidebar-float-toggle"
-          onClick={() => setSidebarOpen(true)}
-          title="Desplegar sidebar"
-          aria-label="Desplegar sidebar"
-        >
-          <RightOutlined />
-        </button>
-      )}
-      {/* Main Content */}
-      <div className="admin-main-wrapper" style={{ marginLeft: sidebarOpen ? '280px' : '0' }}>
-        {/* Header */}
-        <header className="admin-header-transparent">
-          <div className="admin-header-content">
-            <div className="admin-header-actions">
+
+          {/* Navigation */}
+          <nav className="admin-navigation">
+            {menuItems.map((item) => (
               <Link
-                to="/"
-                className="admin-public-link"
+                key={item.key}
+                to={item.key}
+                className={`admin-nav-item ${
+                  location.pathname === item.key || (item.key === "/admin" && location.pathname === "/admin")
+                    ? "active"
+                    : ""
+                }`}
+                title={item.label}
               >
-                Ver Sitio Público
+                <span className="admin-nav-icon">{item.icon}</span>
+                <span className="admin-nav-label">{item.label}</span>
               </Link>
-            </div>
+            ))}
+          </nav>
+
+          {/* Logout */}
+          <div className="admin-logout-section">
+            <button
+              onClick={handleLogout}
+              className="admin-logout-button"
+              title="Cerrar Sesión"
+              aria-label="Cerrar Sesión"
+            >
+              <LogoutOutlined className="admin-nav-icon" />
+              <span className="admin-nav-label">Cerrar Sesión</span>
+            </button>
           </div>
-        </header>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="admin-main-wrapper" style={{ marginLeft: sidebarOpen ? "280px" : "80px" }}>
         {/* Page Content */}
         <main className="admin-page-content">
           <div className="admin-content-wrapper">

@@ -1,0 +1,1 @@
+// Este archivo será renombrado a aboutUsApi.js para evitar conflicto de importación con Nosotros.jsx 
