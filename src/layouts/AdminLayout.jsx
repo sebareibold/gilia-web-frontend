@@ -13,11 +13,13 @@ import {
   AppstoreOutlined,
   LeftOutlined,
   RightOutlined,
+  MenuOutlined,
 } from "@ant-design/icons"
 import "../styles/admin-theme.css"
 
 const AdminLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { user, logout } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
@@ -27,10 +29,10 @@ const AdminLayout = () => {
     const originalBackground = document.body.style.background
     const originalColor = document.body.style.color
 
-    // Forzar tema claro para el área administrativa
+    // Aplicar estilos para el área administrativa
     document.body.style.paddingTop = "0px"
     document.body.style.background = "transparent"
-    document.body.style.color = "#000000"
+    document.body.style.color = "#1e293b"
 
     return () => {
       document.body.style.paddingTop = originalPadding
@@ -38,6 +40,11 @@ const AdminLayout = () => {
       document.body.style.color = originalColor
     }
   }, [])
+
+  // Cerrar menú móvil al cambiar de ruta
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname])
 
   const handleLogout = () => {
     logout()
@@ -84,35 +91,73 @@ const AdminLayout = () => {
 
   return (
     <div className="admin-layout-gradient">
+      {/* Mobile Menu Button */}
+      <button
+        className="mobile-menu-button"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        style={{
+          display: "none",
+          position: "fixed",
+          top: "1rem",
+          left: "1rem",
+          zIndex: 1001,
+          background: "rgba(255, 255, 255, 0.9)",
+          border: "1px solid rgba(102, 126, 234, 0.2)",
+          borderRadius: "8px",
+          padding: "0.5rem",
+          color: "#667eea",
+          cursor: "pointer",
+          backdropFilter: "blur(10px)",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <MenuOutlined />
+      </button>
+
       {/* Sidebar */}
-      <aside className={`admin-sidebar-transparent ${sidebarOpen ? "" : "collapsed"}`}>
+      <aside
+        className={`admin-sidebar-transparent ${sidebarOpen ? "" : "collapsed"} ${mobileMenuOpen ? "mobile-open" : ""}`}
+      >
         <div className="admin-sidebar-content">
-          {/* Botón de plegar */}
+          {/* Botón de plegar - centrado cuando está plegado */}
           <button
             className="admin-sidebar-toggle"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             title={sidebarOpen ? "Plegar sidebar" : "Expandir sidebar"}
             aria-label={sidebarOpen ? "Plegar sidebar" : "Expandir sidebar"}
+            style={{ 
+              display: window.innerWidth <= 768 ? "none" : "flex",
+              position: sidebarOpen ? "absolute" : "relative",
+              top: sidebarOpen ? "1.5rem" : "auto",
+              right: sidebarOpen ? "1rem" : "auto",
+              left: sidebarOpen ? "auto" : "50%",
+              transform: sidebarOpen ? "none" : "translateX(-50%)",
+              marginTop: sidebarOpen ? "0" : "1rem"
+            }}
           >
             {sidebarOpen ? <LeftOutlined /> : <RightOutlined />}
           </button>
 
-          {/* Logo */}
-          <div className="admin-logo-section">
-            <div className="admin-logo-icon">G</div>
-            <span className="admin-logo-text">GILIA Admin</span>
-          </div>
+          {/* Logo - oculto cuando está plegado */}
+          {sidebarOpen && (
+            <div className="admin-logo-section">
+              <div className="admin-logo-icon">G</div>
+              <span className="admin-logo-text">GILIA Admin</span>
+            </div>
+          )}
 
-          {/* User Info */}
-          <div className="admin-user-info">
-            <div className="admin-user-avatar">
-              <span>{user?.name?.charAt(0) || "A"}</span>
+          {/* User Info - oculto cuando está plegado */}
+          {sidebarOpen && (
+            <div className="admin-user-info">
+              <div className="admin-user-avatar">
+                <span>{user?.name?.charAt(0) || "A"}</span>
+              </div>
+              <div className="admin-user-details">
+                <p className="admin-user-name">{user?.name || "Admin"}</p>
+                <p className="admin-user-email">{user?.email || "admin@gilia.com"}</p>
+              </div>
             </div>
-            <div className="admin-user-details">
-              <p className="admin-user-name">{user?.name || "Admin"}</p>
-              <p className="admin-user-email">{user?.email || "admin@gilia.com"}</p>
-            </div>
-          </div>
+          )}
 
           {/* Navigation */}
           <nav className="admin-navigation">
@@ -147,6 +192,24 @@ const AdminLayout = () => {
           </div>
         </div>
       </aside>
+
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="mobile-overlay"
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 999,
+            display: window.innerWidth <= 768 ? "block" : "none",
+          }}
+        />
+      )}
 
       {/* Main Content */}
       <div className="admin-main-wrapper" style={{ marginLeft: sidebarOpen ? "280px" : "80px" }}>

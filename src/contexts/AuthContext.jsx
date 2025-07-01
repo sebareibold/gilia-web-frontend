@@ -1,99 +1,119 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react"
-import { apiService } from "../services/api"
+import { createContext, useContext, useState, useEffect } from "react"
+import { dataService } from "../services/dataService"
+import { logger } from "../config/environment"
 
-const AuthContext = createContext(undefined)
+const AuthContext = createContext()
 
-// Hook personalizado para usar el contexto
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
-    throw new Error("useAuth debe ser usado dentro de un AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider")
   }
   return context
 }
 
-// Componente proveedor
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [token, setToken] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  // Cargar usuario desde localStorage al iniciar
+  // Verificar si hay una sesión guardada al cargar la aplicación
   useEffect(() => {
-    const storedUser = localStorage.getItem("adminUser")
-    const storedToken = localStorage.getItem("adminToken")
-
-    if (storedUser && storedToken) {
+    const checkAuthStatus = () => {
       try {
-        const parsedUser = JSON.parse(storedUser)
-        setUser(parsedUser)
-        setToken(storedToken)
-        console.log("AuthContext - Usuario establecido:", parsedUser)
-        console.log("token", storedToken)
+        const savedUser = localStorage.getItem("gilia_user")
+        const savedToken = localStorage.getItem("gilia_token")
+
+        if (savedUser && savedToken) {
+          const userData = JSON.parse(savedUser)
+          setUser(userData)
+          setIsAuthenticated(true)
+          logger.log("AuthContext - Session restored:", userData.email)
+        }
       } catch (error) {
-        console.error("Error al parsear el usuario almacenado:", error)
-        localStorage.removeItem("adminUser")
-        localStorage.removeItem("adminToken")
+        logger.error("AuthContext - Error restoring session:", error)
+        // Limpiar datos corruptos
+        localStorage.removeItem("gilia_user")
+        localStorage.removeItem("gilia_token")
+      } finally {
+        setLoading(false)
       }
     }
 
-    setLoading(false)
+    checkAuthStatus()
   }, [])
 
-  const login = useCallback(async (email, password) => {
+  const login = async (email, password) => {
     try {
-      console.log("API Service - Intentando iniciar sesión con email:", email)
+      setLoading(true)
+      logger.log("AuthContext - Login attempt:", email)
 
-      const response = await apiService.login({ email, password })
-      if (response && response.success && response.token) {
-        // Guardar token y datos del usuario
-        localStorage.setItem("adminToken", response.token)
+      const response = await dataService.login(email, password)
 
-        const userData = {
-          id: response.user.id || response.user._id,
-          email: response.user.email,
-          role: response.user.role,
-          name: response.user.name || response.user.firstName || "Admin",
+      if (response.success) {
+        const userData = response.user
+        setUser(userData)
+        setIsAuthenticated(true)
+
+        // Guardar en localStorage
+        localStorage.setItem("gilia_user", JSON.stringify(userData))
+        if (response.token) {
+          localStorage.setItem("gilia_token", response.token)
         }
 
-        localStorage.setItem("adminUser", JSON.stringify(userData))
-
-        setUser(userData)
-        setToken(response.token)
-
-        console.log("AuthContext - Login exitoso:", userData)
+        logger.log("AuthContext - Login successful:", userData.email)
         return true
       } else {
-        console.error("AuthContext - Respuesta de login inválida:", response)
-        return false
+        throw new Error("Login failed")
       }
     } catch (error) {
-      console.error("AuthContext - Error en login:", error)
+      logger.error("AuthContext - Login error:", error)
+      setUser(null)
+      setIsAuthenticated(false)
       throw error
+    } finally {
+      setLoading(false)
     }
-  }, [])
+  }
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("adminToken")
-    localStorage.removeItem("adminUser")
-    setUser(null)
-    setToken(null)
-    console.log("AuthContext - Usuario desconectado")
-  }, [])
+  const logout = async () => {
+    try {
+      logger.log("AuthContext - Logout initiated")
 
-  const value = useMemo(
-    () => ({
-      user,
-      token,
-      loading,
-      login,
-      logout,
-      isAuthenticated: !!user && !!token,
-    }),
-    [user, token, loading, login, logout],
-  )
+      // Limpiar estado local
+      setUser(null)
+      setIsAuthenticated(false)
+
+      // Limpiar localStorage
+      localStorage.removeItem("gilia_user")
+      localStorage.removeItem("gilia_token")
+
+      logger.log("AuthContext - Logout completed")
+    } catch (error) {
+      logger.error("AuthContext - Logout error:", error)
+    }
+  }
+
+  const updateUser = (userData) => {
+    try {
+      setUser(userData)
+      localStorage.setItem("gilia_user", JSON.stringify(userData))
+      logger.log("AuthContext - User updated")
+    } catch (error) {
+      logger.error("AuthContext - Error updating user:", error)
+    }
+  }
+
+  const value = {
+    user,
+    loading,
+    isAuthenticated,
+    login,
+    logout,
+    updateUser,
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

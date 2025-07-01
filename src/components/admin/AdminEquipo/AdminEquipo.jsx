@@ -1,440 +1,325 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
 import {
-  UserOutlined,
-  PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  SearchOutlined,
-  FilterOutlined,
   MailOutlined,
   PhoneOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  SearchOutlined,
+  TeamOutlined,
+  ReadOutlined,
+  SolutionOutlined,
+  StarOutlined,
+  FilterOutlined,
 } from "@ant-design/icons"
 
-const Equipo = () => {
-  const [miembros, setMiembros] = useState([])
+const AdminEquipo = () => {
+  const [teamMembers, setTeamMembers] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterRole, setFilterRole] = useState("all")
+  const [showAddModal, setShowAddModal] = useState(false)
+  const [editingMember, setEditingMember] = useState(null)
 
+  // Mock data
   useEffect(() => {
+    const mockMembers = [
+      {
+        id: 1,
+        name: "Dr. Ana María González",
+        email: "ana.gonzalez@gilia.com",
+        phone: "+57 300 123 4567",
+        role: "Director",
+        department: "Inteligencia Artificial",
+        specialization: "Machine Learning, Deep Learning",
+        education: "PhD en Ciencias de la Computación",
+        experience: "15 años",
+        projects: 8,
+        publications: 25,
+        image: "/placeholder.svg?height=80&width=80",
+        status: "active",
+        joinDate: "2020-01-15",
+      },
+      {
+        id: 2,
+        name: "Dr. Carlos Rodríguez",
+        email: "carlos.rodriguez@gilia.com",
+        phone: "+57 301 234 5678",
+        role: "Investigador Senior",
+        department: "Robótica",
+        specialization: "Robótica Autónoma, Visión Computacional",
+        education: "PhD en Ingeniería Mecatrónica",
+        experience: "12 años",
+        projects: 6,
+        publications: 18,
+        image: "/placeholder.svg?height=80&width=80",
+        status: "active",
+        joinDate: "2020-03-20",
+      },
+      {
+        id: 3,
+        name: "Dra. Laura Martínez",
+        email: "laura.martinez@gilia.com",
+        phone: "+57 302 345 6789",
+        role: "Investigador",
+        department: "Procesamiento de Lenguaje Natural",
+        specialization: "NLP, Análisis de Sentimientos",
+        education: "PhD en Lingüística Computacional",
+        experience: "8 años",
+        projects: 4,
+        publications: 12,
+        image: "/placeholder.svg?height=80&width=80",
+        status: "active",
+        joinDate: "2021-06-10",
+      },
+      {
+        id: 4,
+        name: "Ing. Miguel Torres",
+        email: "miguel.torres@gilia.com",
+        phone: "+57 303 456 7890",
+        role: "Desarrollador",
+        department: "Desarrollo de Software",
+        specialization: "Full Stack Development, DevOps",
+        education: "Maestría en Ingeniería de Software",
+        experience: "5 años",
+        projects: 10,
+        publications: 3,
+        image: "/placeholder.svg?height=80&width=80",
+        status: "active",
+        joinDate: "2022-01-15",
+      },
+      {
+        id: 5,
+        name: "Dra. Sofia Herrera",
+        email: "sofia.herrera@gilia.com",
+        phone: "+57 304 567 8901",
+        role: "Investigador Junior",
+        department: "Bioinformática",
+        specialization: "Análisis de Datos Genómicos",
+        education: "PhD en Bioinformática",
+        experience: "3 años",
+        projects: 2,
+        publications: 8,
+        image: "/placeholder.svg?height=80&width=80",
+        status: "active",
+        joinDate: "2023-02-01",
+      },
+    ]
+
     setTimeout(() => {
-      setMiembros([
-        {
-          id: 1,
-          nombre: "Dr. María García",
-          email: "maria.garcia@gilia.com",
-          telefono: "+34 123 456 789",
-          rol: "Director",
-          especialidad: "Inteligencia Artificial",
-          fechaIngreso: "2020-01-15",
-          estado: "Activo",
-          proyectos: 5,
-          publicaciones: 23,
-          avatar: "/placeholder.svg?height=80&width=80",
-          biografia:
-            "Doctora en Ciencias de la Computación con especialización en Machine Learning y redes neuronales.",
-        },
-        {
-          id: 2,
-          nombre: "Dr. Juan Pérez",
-          email: "juan.perez@gilia.com",
-          telefono: "+34 123 456 790",
-          rol: "Investigador Senior",
-          especialidad: "Computación Cuántica",
-          fechaIngreso: "2020-03-20",
-          estado: "Activo",
-          proyectos: 3,
-          publicaciones: 18,
-          avatar: "/placeholder.svg?height=80&width=80",
-          biografia: "Especialista en algoritmos cuánticos y criptografía post-cuántica.",
-        },
-        {
-          id: 3,
-          nombre: "Dra. Laura Martínez",
-          email: "laura.martinez@gilia.com",
-          telefono: "+34 123 456 791",
-          rol: "Investigador Senior",
-          especialidad: "Ciberseguridad",
-          fechaIngreso: "2021-06-10",
-          estado: "Activo",
-          proyectos: 4,
-          publicaciones: 15,
-          avatar: "/placeholder.svg?height=80&width=80",
-          biografia: "Experta en seguridad de redes y tecnologías blockchain.",
-        },
-        {
-          id: 4,
-          nombre: "Ing. Ana López",
-          email: "ana.lopez@gilia.com",
-          telefono: "+34 123 456 792",
-          rol: "Investigador Junior",
-          especialidad: "Internet de las Cosas",
-          fechaIngreso: "2022-01-15",
-          estado: "Activo",
-          proyectos: 2,
-          publicaciones: 8,
-          avatar: "/placeholder.svg?height=80&width=80",
-          biografia: "Ingeniera especializada en sistemas IoT y redes de sensores.",
-        },
-        {
-          id: 5,
-          nombre: "Dr. Carlos Rodríguez",
-          email: "carlos.rodriguez@gilia.com",
-          telefono: "+34 123 456 793",
-          rol: "Investigador Senior",
-          especialidad: "Blockchain",
-          fechaIngreso: "2020-09-01",
-          estado: "Activo",
-          proyectos: 3,
-          publicaciones: 20,
-          avatar: "/placeholder.svg?height=80&width=80",
-          biografia: "Doctor en Informática con experiencia en tecnologías distribuidas.",
-        },
-        {
-          id: 6,
-          nombre: "Dra. Sofia Hernández",
-          email: "sofia.hernandez@gilia.com",
-          telefono: "+34 123 456 794",
-          rol: "Investigador Senior",
-          especialidad: "Realidad Virtual",
-          fechaIngreso: "2021-02-28",
-          estado: "Licencia",
-          proyectos: 2,
-          publicaciones: 12,
-          avatar: "/placeholder.svg?height=80&width=80",
-          biografia: "Especialista en aplicaciones de VR/AR en medicina y educación.",
-        },
-      ])
+      setTeamMembers(mockMembers)
       setLoading(false)
     }, 1000)
   }, [])
 
-  const handleDelete = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este miembro del equipo?")) {
-      setMiembros(miembros.filter((miembro) => miembro.id !== id))
-    }
-  }
-
-  const filteredMiembros = miembros.filter((miembro) => {
+  const filteredMembers = teamMembers.filter((member) => {
     const matchesSearch =
-      miembro.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      miembro.especialidad.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      miembro.email.toLowerCase().includes(searchTerm.toLowerCase())
-
-    const matchesFilter = filterRole === "all" || miembro.rol === filterRole
-
-    return matchesSearch && matchesFilter
+      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      member.department.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesRole = filterRole === "all" || member.role === filterRole
+    return matchesSearch && matchesRole
   })
 
-  const getRolColor = (rol) => {
-    switch (rol) {
-      case "Director":
-        return "#f5576c"
-      case "Investigador Senior":
-        return "#667eea"
-      case "Investigador Junior":
-        return "#43e97b"
-      case "Estudiante PhD":
-        return "#ffa726"
-      case "Colaborador":
-        return "#f093fb"
-      default:
-        return "#764ba2"
+  const roles = ["all", "Director", "Investigador Senior", "Investigador", "Investigador Junior", "Desarrollador"]
+
+  const getRoleColor = (role) => {
+    const colors = {
+      Director: "director",
+      "Investigador Senior": "senior",
+      Investigador: "researcher",
+      "Investigador Junior": "junior",
+      Desarrollador: "developer",
     }
+    return colors[role] || "default"
   }
 
-  const getEstadoColor = (estado) => {
-    switch (estado) {
-      case "Activo":
-        return "#43e97b"
-      case "Licencia":
-        return "#ffa726"
-      case "Inactivo":
-        return "#f5576c"
-      default:
-        return "#764ba2"
-    }
+  const stats = {
+    total: teamMembers.length,
+    directors: teamMembers.filter((m) => m.role === "Director").length,
+    researchers: teamMembers.filter((m) => m.role.includes("Investigador")).length,
+    developers: teamMembers.filter((m) => m.role === "Desarrollador").length,
+    totalProjects: teamMembers.reduce((sum, m) => sum + m.projects, 0),
+    totalPublications: teamMembers.reduce((sum, m) => sum + m.publications, 0),
   }
 
   if (loading) {
     return (
-      <div className="admin-page">
-        <div className="admin-loading">
-          <UserOutlined style={{ fontSize: "2rem", marginRight: "1rem" }} />
-          Cargando equipo...
-        </div>
+      <div className="admin-loading">
+        <div className="admin-spinner"></div>
+        <p>Cargando equipo...</p>
       </div>
     )
   }
 
   return (
-    <div className="admin-page">
+    <div className="admin-equipo">
       {/* Header */}
-      <div className="admin-page-header">
-        <h1 className="admin-page-title">
-          <UserOutlined style={{ marginRight: "0.5rem" }} />
-          Equipo de Investigación
-        </h1>
-        <p className="admin-page-subtitle">
-          Gestiona los miembros del equipo GILIA. Administra perfiles, roles y asignaciones de cada investigador.
-        </p>
-        <div className="admin-page-actions">
-          <Link to="/admin/equipo/crear" className="admin-btn admin-btn-primary">
-            <PlusOutlined />
-            Agregar Miembro
-          </Link>
+      <div className="admin-equipo-header">
+        <div className="admin-header-content">
+          <h1 className="admin-page-title">
+            <TeamOutlined className="admin-title-icon" />
+            Gestión del Equipo
+          </h1>
+          <p className="admin-page-subtitle">Administra los miembros del equipo de investigación GILIA</p>
+        </div>
+        <button className="admin-btn admin-btn-primary" onClick={() => setShowAddModal(true)}>
+          <PlusOutlined /> Agregar Miembro
+        </button>
+      </div>
+
+      {/* Stats Overview */}
+      <div className="admin-stats-overview">
+        <div className="admin-stat-card total">
+          <div className="admin-stat-icon">
+            <TeamOutlined />
+          </div>
+          <div className="admin-stat-content">
+            <h3>{stats.total}</h3>
+            <p>Total Miembros</p>
+          </div>
+        </div>
+
+        <div className="admin-stat-card directors">
+          <div className="admin-stat-icon">
+            <StarOutlined />
+          </div>
+          <div className="admin-stat-content">
+            <h3>{stats.directors}</h3>
+            <p>Directores</p>
+          </div>
+        </div>
+
+        <div className="admin-stat-card researchers">
+          <div className="admin-stat-icon">
+            <ReadOutlined />
+          </div>
+          <div className="admin-stat-content">
+            <h3>{stats.researchers}</h3>
+            <p>Investigadores</p>
+          </div>
+        </div>
+
+        <div className="admin-stat-card projects">
+          <div className="admin-stat-icon">
+            <SolutionOutlined />
+          </div>
+          <div className="admin-stat-content">
+            <h3>{stats.totalProjects}</h3>
+            <p>Proyectos Activos</p>
+          </div>
         </div>
       </div>
 
-      {/* Search and Filters */}
-      <div className="admin-content-card">
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap" }}>
-          <div style={{ position: "relative", flex: 1, minWidth: "300px" }}>
-            <SearchOutlined
-              style={{
-                position: "absolute",
-                left: "1rem",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "rgba(255, 255, 255, 0.5)",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Buscar por nombre, especialidad o email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="admin-form-input"
-              style={{ paddingLeft: "3rem" }}
-            />
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <FilterOutlined style={{ color: "rgba(255, 255, 255, 0.8)" }} />
-            <select
-              value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
-              className="admin-form-select"
-              style={{ minWidth: "200px" }}
-            >
-              <option value="all">Todos los roles</option>
-              <option value="Director">Director</option>
-              <option value="Investigador Senior">Investigador Senior</option>
-              <option value="Investigador Junior">Investigador Junior</option>
-              <option value="Estudiante PhD">Estudiante PhD</option>
-              <option value="Colaborador">Colaborador</option>
-            </select>
-          </div>
+      {/* Filters and Search */}
+      <div className="admin-filters-section">
+        <div className="admin-search-container">
+          <SearchOutlined className="admin-search-icon" />
+          <input
+            type="text"
+            placeholder="Buscar por nombre, email o departamento..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="admin-search-input"
+          />
+        </div>
+
+        <div className="admin-filter-container">
+          <FilterOutlined className="admin-filter-icon" />
+          <select value={filterRole} onChange={(e) => setFilterRole(e.target.value)} className="admin-filter-select">
+            {roles.map((role) => (
+              <option key={role} value={role}>
+                {role === "all" ? "Todos los roles" : role}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Content */}
-      {filteredMiembros.length === 0 ? (
-        <div className="admin-content-card">
-          <div className="admin-empty">
-            <div className="admin-empty-icon">
-              <UserOutlined />
+      {/* Team Members Grid */}
+      <div className="admin-team-grid">
+        {filteredMembers.map((member) => (
+          <div key={member.id} className="admin-team-card">
+            <div className="admin-team-card-header">
+              <div className="admin-member-avatar">
+                <img src={member.image || "/placeholder.svg"} alt={member.name} />
+              </div>
+              <div className="admin-member-basic">
+                <h3 className="admin-member-name">{member.name}</h3>
+                <span className={`admin-member-role ${getRoleColor(member.role)}`}>{member.role}</span>
+              </div>
+              <div className="admin-member-actions">
+                <button className="admin-action-btn edit" onClick={() => setEditingMember(member)} title="Editar">
+                  <EditOutlined />
+                </button>
+                <button className="admin-action-btn delete" title="Eliminar">
+                  <DeleteOutlined />
+                </button>
+              </div>
             </div>
-            <h3 className="admin-empty-title">No hay miembros del equipo</h3>
-            <p className="admin-empty-description">
-              {searchTerm || filterRole !== "all"
-                ? "No se encontraron resultados para los filtros aplicados."
-                : "Comienza agregando el primer miembro del equipo."}
-            </p>
-            {!searchTerm && filterRole === "all" && (
-              <Link to="/admin/equipo/crear" className="admin-btn admin-btn-primary">
-                <PlusOutlined />
-                Agregar Primer Miembro
-              </Link>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "1.5rem" }}>
-          {filteredMiembros.map((miembro) => (
-            <div key={miembro.id} className="admin-content-card">
-              <div style={{ display: "flex", gap: "1rem", alignItems: "flex-start" }}>
-                <div style={{ flexShrink: 0 }}>
-                  <img
-                    src={miembro.avatar || "/placeholder.svg"}
-                    alt={miembro.nombre}
-                    style={{
-                      width: "80px",
-                      height: "80px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      border: "3px solid rgba(255, 255, 255, 0.2)",
-                    }}
-                  />
+
+            <div className="admin-team-card-body">
+              <div className="admin-member-info">
+                <div className="admin-info-section">
+                  <h4>Información de Contacto</h4>
+                  <div className="admin-info-item">
+                    <MailOutlined />
+                    <span>{member.email}</span>
+                  </div>
+                  <div className="admin-info-item">
+                    <PhoneOutlined />
+                    <span>{member.phone}</span>
+                  </div>
                 </div>
 
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "0.5rem",
-                      alignItems: "center",
-                      marginBottom: "0.5rem",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        padding: "0.2rem 0.6rem",
-                        borderRadius: "12px",
-                        fontSize: "0.7rem",
-                        fontWeight: "500",
-                        backgroundColor: `${getRolColor(miembro.rol)}20`,
-                        color: getRolColor(miembro.rol),
-                        border: `1px solid ${getRolColor(miembro.rol)}40`,
-                      }}
-                    >
-                      {miembro.rol}
-                    </span>
-                    <span
-                      style={{
-                        padding: "0.2rem 0.6rem",
-                        borderRadius: "12px",
-                        fontSize: "0.7rem",
-                        fontWeight: "500",
-                        backgroundColor: `${getEstadoColor(miembro.estado)}20`,
-                        color: getEstadoColor(miembro.estado),
-                        border: `1px solid ${getEstadoColor(miembro.estado)}40`,
-                      }}
-                    >
-                      {miembro.estado}
-                    </span>
+                <div className="admin-info-section">
+                  <h4>Detalles Académicos</h4>
+                  <div className="admin-info-item">
+                    <SolutionOutlined />
+                    <span>{member.department}</span>
                   </div>
-
-                  <h3 style={{ fontSize: "1.1rem", fontWeight: "600", color: "#ffffff", margin: "0 0 0.25rem 0" }}>
-                    {miembro.nombre}
-                  </h3>
-
-                  <p style={{ color: "rgba(255, 255, 255, 0.8)", margin: "0 0 0.75rem 0", fontSize: "0.85rem" }}>
-                    <strong>Especialidad:</strong> {miembro.especialidad}
-                  </p>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "0.25rem",
-                      marginBottom: "0.75rem",
-                      fontSize: "0.8rem",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        color: "rgba(255, 255, 255, 0.7)",
-                      }}
-                    >
-                      <MailOutlined style={{ color: "#667eea" }} />
-                      <span>{miembro.email}</span>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        color: "rgba(255, 255, 255, 0.7)",
-                      }}
-                    >
-                      <PhoneOutlined style={{ color: "#f093fb" }} />
-                      <span>{miembro.telefono}</span>
-                    </div>
+                  <div className="admin-info-item">
+                    <ReadOutlined />
+                    <span>{member.education}</span>
                   </div>
+                </div>
 
-                  <p
-                    style={{
-                      color: "rgba(255, 255, 255, 0.7)",
-                      margin: "0 0 0.75rem 0",
-                      fontSize: "0.8rem",
-                      lineHeight: "1.4",
-                    }}
-                  >
-                    {miembro.biografia}
-                  </p>
+                <div className="admin-info-section">
+                  <h4>Especialización</h4>
+                  <p className="admin-specialization">{member.specialization}</p>
+                </div>
 
-                  <div style={{ display: "flex", gap: "1rem", marginBottom: "0.75rem", fontSize: "0.8rem" }}>
-                    <span style={{ color: "rgba(255, 255, 255, 0.8)" }}>
-                      <strong>Proyectos:</strong> {miembro.proyectos}
-                    </span>
-                    <span style={{ color: "rgba(255, 255, 255, 0.8)" }}>
-                      <strong>Publicaciones:</strong> {miembro.publicaciones}
-                    </span>
-                    <span style={{ color: "rgba(255, 255, 255, 0.8)" }}>
-                      <strong>Desde:</strong> {new Date(miembro.fechaIngreso).getFullYear()}
-                    </span>
+                <div className="admin-member-stats">
+                  <div className="admin-member-stat">
+                    <span className="admin-stat-number">{member.projects}</span>
+                    <span className="admin-stat-label">Proyectos</span>
                   </div>
-
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    <button
-                      className="admin-btn admin-btn-primary"
-                      style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}
-                      title="Ver perfil"
-                    >
-                      <EyeOutlined />
-                    </button>
-                    <button
-                      className="admin-btn admin-btn-warning"
-                      style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}
-                      title="Editar"
-                    >
-                      <EditOutlined />
-                    </button>
-                    <button
-                      className="admin-btn admin-btn-danger"
-                      style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}
-                      title="Eliminar"
-                      onClick={() => handleDelete(miembro.id)}
-                    >
-                      <DeleteOutlined />
-                    </button>
+                  <div className="admin-member-stat">
+                    <span className="admin-stat-number">{member.publications}</span>
+                    <span className="admin-stat-label">Publicaciones</span>
+                  </div>
+                  <div className="admin-member-stat">
+                    <span className="admin-stat-number">{member.experience}</span>
+                    <span className="admin-stat-label">Experiencia</span>
                   </div>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
+      </div>
+
+      {filteredMembers.length === 0 && (
+        <div className="admin-empty-state">
+          <TeamOutlined className="admin-empty-icon" />
+          <h3>No se encontraron miembros</h3>
+          <p>No hay miembros que coincidan con los criterios de búsqueda.</p>
         </div>
       )}
-
-      {/* Stats Footer */}
-      <div className="admin-content-card">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem" }}>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#43e97b", marginBottom: "0.5rem" }}>
-              {miembros.filter((m) => m.estado === "Activo").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Miembros Activos</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#667eea", marginBottom: "0.5rem" }}>
-              {miembros.filter((m) => m.rol === "Investigador Senior").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Investigadores Senior</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#f093fb", marginBottom: "0.5rem" }}>
-              {miembros.reduce((acc, m) => acc + m.proyectos, 0)}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Total Proyectos</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#ffa726", marginBottom: "0.5rem" }}>
-              {miembros.reduce((acc, m) => acc + m.publicaciones, 0)}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Total Publicaciones</div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
 
-export default Equipo
+export default AdminEquipo

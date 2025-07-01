@@ -11,6 +11,10 @@ import {
   FilterOutlined,
   UploadOutlined,
   DownloadOutlined,
+  UnorderedListOutlined,
+  CalendarOutlined,
+  FileImageOutlined,
+  UserOutlined,
 } from "@ant-design/icons"
 
 const Galeria = () => {
@@ -128,15 +132,15 @@ const Galeria = () => {
       case "Laboratorio":
         return "#667eea"
       case "Eventos":
-        return "#f093fb"
+        return "#06b6d4"
       case "Equipo":
-        return "#43e97b"
+        return "#10b981"
       case "Proyectos":
-        return "#ffa726"
+        return "#f59e0b"
       case "Publicaciones":
-        return "#f5576c"
+        return "#ef4444"
       default:
-        return "#764ba2"
+        return "#64748b"
     }
   }
 
@@ -155,19 +159,96 @@ const Galeria = () => {
     <div className="admin-page">
       {/* Header */}
       <div className="admin-page-header">
-        <h1 className="admin-page-title">
-          <AppstoreOutlined style={{ marginRight: "0.5rem" }} />
-          Galería de Imágenes
-        </h1>
-        <p className="admin-page-subtitle">
-          Gestiona las imágenes y recursos multimedia del sitio web GILIA. Organiza fotos de eventos, proyectos y
-          equipo.
-        </p>
-        <div className="admin-page-actions">
-          <Link to="/admin/galeria/subir" className="admin-btn admin-btn-primary">
-            <UploadOutlined />
-            Subir Imágenes
-          </Link>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <div>
+            <h1 className="admin-page-title">
+              <AppstoreOutlined style={{ marginRight: "0.5rem" }} />
+              Galería de Imágenes
+            </h1>
+            <p className="admin-page-subtitle">
+              Gestiona las imágenes y recursos multimedia del sitio web GILIA. Organiza fotos de eventos, proyectos y
+              equipo.
+            </p>
+          </div>
+          <div className="admin-page-actions">
+            <Link to="/admin/galeria/subir" className="admin-btn admin-btn-primary">
+              <UploadOutlined />
+              Subir Imágenes
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Overview */}
+      <div className="admin-content-card">
+        <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#1e293b", marginBottom: "1.5rem" }}>
+          Resumen de la Galería
+        </h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem" }}>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "1rem",
+              background: "rgba(102, 126, 234, 0.1)",
+              borderRadius: "12px",
+              border: "1px solid rgba(102, 126, 234, 0.2)",
+            }}
+          >
+            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#667eea", marginBottom: "0.5rem" }}>
+              {imagenes.filter((i) => i.categoria === "Laboratorio").length}
+            </div>
+            <div style={{ color: "#64748b", fontWeight: "500" }}>Laboratorio</div>
+          </div>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "1rem",
+              background: "rgba(6, 182, 212, 0.1)",
+              borderRadius: "12px",
+              border: "1px solid rgba(6, 182, 212, 0.2)",
+            }}
+          >
+            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#06b6d4", marginBottom: "0.5rem" }}>
+              {imagenes.filter((i) => i.categoria === "Eventos").length}
+            </div>
+            <div style={{ color: "#64748b", fontWeight: "500" }}>Eventos</div>
+          </div>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "1rem",
+              background: "rgba(16, 185, 129, 0.1)",
+              borderRadius: "12px",
+              border: "1px solid rgba(16, 185, 129, 0.2)",
+            }}
+          >
+            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#10b981", marginBottom: "0.5rem" }}>
+              {imagenes.filter((i) => i.categoria === "Equipo").length}
+            </div>
+            <div style={{ color: "#64748b", fontWeight: "500" }}>Equipo</div>
+          </div>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "1rem",
+              background: "rgba(245, 158, 11, 0.1)",
+              borderRadius: "12px",
+              border: "1px solid rgba(245, 158, 11, 0.2)",
+            }}
+          >
+            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#f59e0b", marginBottom: "0.5rem" }}>
+              {imagenes.filter((i) => i.categoria === "Proyectos").length}
+            </div>
+            <div style={{ color: "#64748b", fontWeight: "500" }}>Proyectos</div>
+          </div>
         </div>
       </div>
 
@@ -181,7 +262,7 @@ const Galeria = () => {
                 left: "1rem",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "rgba(255, 255, 255, 0.5)",
+                color: "#94a3b8",
               }}
             />
             <input
@@ -194,7 +275,7 @@ const Galeria = () => {
             />
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <FilterOutlined style={{ color: "rgba(255, 255, 255, 0.8)" }} />
+            <FilterOutlined style={{ color: "#64748b" }} />
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
@@ -224,7 +305,7 @@ const Galeria = () => {
               onClick={() => setViewMode("list")}
               title="Vista en lista"
             >
-              <AppstoreOutlined />
+              <UnorderedListOutlined />
             </button>
           </div>
         </div>
@@ -252,10 +333,11 @@ const Galeria = () => {
           </div>
         </div>
       ) : viewMode === "grid" ? (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "1.5rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(380px, 1fr))", gap: "1.5rem" }}>
           {filteredImagenes.map((imagen) => (
             <div key={imagen.id} className="admin-content-card">
-              <div style={{ position: "relative", marginBottom: "1rem" }}>
+              {/* Imagen */}
+              <div style={{ position: "relative", marginBottom: "1.5rem" }}>
                 <img
                   src={imagen.url || "/placeholder.svg"}
                   alt={imagen.titulo}
@@ -264,110 +346,111 @@ const Galeria = () => {
                     height: "200px",
                     objectFit: "cover",
                     borderRadius: "12px",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(102, 126, 234, 0.1)",
                   }}
                 />
                 <div
                   style={{
                     position: "absolute",
-                    top: "0.5rem",
-                    right: "0.5rem",
+                    top: "0.75rem",
+                    right: "0.75rem",
                     display: "flex",
-                    gap: "0.25rem",
+                    gap: "0.5rem",
                   }}
                 >
                   <button
                     className="admin-btn admin-btn-primary"
-                    style={{ padding: "0.25rem", minWidth: "auto", fontSize: "0.8rem" }}
+                    style={{ padding: "0.5rem", minWidth: "auto", fontSize: "0.8rem" }}
                     title="Ver imagen completa"
                   >
                     <EyeOutlined />
                   </button>
                   <button
                     className="admin-btn admin-btn-success"
-                    style={{ padding: "0.25rem", minWidth: "auto", fontSize: "0.8rem" }}
+                    style={{ padding: "0.5rem", minWidth: "auto", fontSize: "0.8rem" }}
                     title="Descargar"
                   >
                     <DownloadOutlined />
                   </button>
                 </div>
-              </div>
-
-              <div style={{ marginBottom: "0.75rem" }}>
-                <span
+                <div
                   style={{
-                    padding: "0.25rem 0.75rem",
-                    borderRadius: "20px",
-                    fontSize: "0.75rem",
-                    fontWeight: "500",
-                    backgroundColor: `${getCategoriaColor(imagen.categoria)}20`,
-                    color: getCategoriaColor(imagen.categoria),
-                    border: `1px solid ${getCategoriaColor(imagen.categoria)}40`,
+                    position: "absolute",
+                    top: "0.75rem",
+                    left: "0.75rem",
                   }}
                 >
-                  {imagen.categoria}
-                </span>
+                  <span
+                    style={{
+                      padding: "0.25rem 0.75rem",
+                      borderRadius: "20px",
+                      fontSize: "0.75rem",
+                      fontWeight: "500",
+                      backgroundColor: `${getCategoriaColor(imagen.categoria)}`,
+                      color: "#ffffff",
+                      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+                    }}
+                  >
+                    {imagen.categoria}
+                  </span>
+                </div>
               </div>
 
-              <h3 style={{ fontSize: "1.1rem", fontWeight: "600", color: "#ffffff", margin: "0 0 0.5rem 0" }}>
-                {imagen.titulo}
-              </h3>
-
-              <p
-                style={{
-                  color: "rgba(255, 255, 255, 0.8)",
-                  margin: "0 0 0.75rem 0",
-                  fontSize: "0.85rem",
-                  lineHeight: "1.4",
-                }}
-              >
-                {imagen.descripcion}
-              </p>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "0.5rem",
-                  marginBottom: "0.75rem",
-                  fontSize: "0.75rem",
-                }}
-              >
-                <span style={{ color: "rgba(255, 255, 255, 0.7)" }}>
-                  <strong>Formato:</strong> {imagen.formato}
-                </span>
-                <span style={{ color: "rgba(255, 255, 255, 0.7)" }}>
-                  <strong>Tamaño:</strong> {imagen.tamaño}
-                </span>
-                <span style={{ color: "rgba(255, 255, 255, 0.7)" }}>
-                  <strong>Dimensiones:</strong> {imagen.dimensiones}
-                </span>
-                <span style={{ color: "rgba(255, 255, 255, 0.7)" }}>
-                  <strong>Fecha:</strong> {new Date(imagen.fechaSubida).toLocaleDateString()}
-                </span>
+              {/* Información principal */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: "600", color: "#1e293b", margin: "0 0 0.5rem 0" }}>
+                  {imagen.titulo}
+                </h3>
+                <p style={{ color: "#64748b", margin: "0 0 1rem 0", fontSize: "0.9rem", lineHeight: "1.4" }}>
+                  {imagen.descripcion}
+                </p>
               </div>
 
-              <div style={{ marginBottom: "0.75rem" }}>
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "rgba(255, 255, 255, 0.7)",
-                    marginBottom: "0.25rem",
-                    display: "block",
-                  }}
-                >
-                  <strong>Tags:</strong>
-                </span>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.25rem" }}>
+              {/* Metadatos */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                <h4 style={{ fontSize: "0.9rem", fontWeight: "600", color: "#64748b", marginBottom: "0.75rem" }}>
+                  Información Técnica
+                </h4>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", fontSize: "0.85rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <FileImageOutlined style={{ color: "#667eea", width: "14px" }} />
+                    <span style={{ color: "#64748b" }}>
+                      <strong>Formato:</strong> {imagen.formato}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span style={{ color: "#64748b" }}>
+                      <strong>Tamaño:</strong> {imagen.tamaño}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span style={{ color: "#64748b" }}>
+                      <strong>Dimensiones:</strong> {imagen.dimensiones}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <CalendarOutlined style={{ color: "#f59e0b", width: "14px" }} />
+                    <span style={{ color: "#64748b" }}>{new Date(imagen.fechaSubida).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                <h4 style={{ fontSize: "0.9rem", fontWeight: "600", color: "#64748b", marginBottom: "0.5rem" }}>
+                  Etiquetas
+                </h4>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                   {imagen.tags.map((tag, index) => (
                     <span
                       key={index}
                       style={{
-                        padding: "0.15rem 0.5rem",
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                        borderRadius: "10px",
-                        fontSize: "0.7rem",
-                        color: "rgba(255, 255, 255, 0.8)",
+                        padding: "0.25rem 0.75rem",
+                        backgroundColor: "rgba(102, 126, 234, 0.1)",
+                        borderRadius: "20px",
+                        fontSize: "0.75rem",
+                        color: "#667eea",
+                        border: "1px solid rgba(102, 126, 234, 0.2)",
                       }}
                     >
                       #{tag}
@@ -376,19 +459,31 @@ const Galeria = () => {
                 </div>
               </div>
 
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: "0.75rem", color: "rgba(255, 255, 255, 0.6)" }}>Por: {imagen.autor}</span>
+              {/* Footer */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingTop: "1rem",
+                  borderTop: "1px solid rgba(102, 126, 234, 0.1)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.85rem" }}>
+                  <UserOutlined style={{ color: "#64748b", width: "14px" }} />
+                  <span style={{ color: "#64748b" }}>Por: {imagen.autor}</span>
+                </div>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <button
                     className="admin-btn admin-btn-warning"
-                    style={{ padding: "0.4rem", minWidth: "auto", fontSize: "0.8rem" }}
+                    style={{ padding: "0.5rem", minWidth: "auto", fontSize: "0.8rem" }}
                     title="Editar"
                   >
                     <EditOutlined />
                   </button>
                   <button
                     className="admin-btn admin-btn-danger"
-                    style={{ padding: "0.4rem", minWidth: "auto", fontSize: "0.8rem" }}
+                    style={{ padding: "0.5rem", minWidth: "auto", fontSize: "0.8rem" }}
                     title="Eliminar"
                     onClick={() => handleDelete(imagen.id)}
                   >
@@ -406,10 +501,9 @@ const Galeria = () => {
               <thead>
                 <tr>
                   <th>Imagen</th>
-                  <th>Título</th>
+                  <th>Información</th>
                   <th>Categoría</th>
-                  <th>Formato</th>
-                  <th>Tamaño</th>
+                  <th>Detalles Técnicos</th>
                   <th>Fecha</th>
                   <th>Acciones</th>
                 </tr>
@@ -422,21 +516,26 @@ const Galeria = () => {
                         src={imagen.url || "/placeholder.svg"}
                         alt={imagen.titulo}
                         style={{
-                          width: "60px",
-                          height: "40px",
+                          width: "80px",
+                          height: "60px",
                           objectFit: "cover",
-                          borderRadius: "6px",
-                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderRadius: "8px",
+                          border: "1px solid rgba(102, 126, 234, 0.1)",
                         }}
                       />
                     </td>
                     <td>
                       <div>
-                        <div style={{ fontWeight: "600", marginBottom: "0.25rem" }}>{imagen.titulo}</div>
-                        <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>
-                          {imagen.descripcion.length > 50
-                            ? `${imagen.descripcion.substring(0, 50)}...`
+                        <div style={{ fontWeight: "600", marginBottom: "0.25rem", color: "#1e293b" }}>
+                          {imagen.titulo}
+                        </div>
+                        <div style={{ fontSize: "0.85rem", color: "#64748b" }}>
+                          {imagen.descripcion.length > 60
+                            ? `${imagen.descripcion.substring(0, 60)}...`
                             : imagen.descripcion}
+                        </div>
+                        <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "0.25rem" }}>
+                          Por: {imagen.autor}
                         </div>
                       </div>
                     </td>
@@ -447,17 +546,25 @@ const Galeria = () => {
                           borderRadius: "20px",
                           fontSize: "0.75rem",
                           fontWeight: "500",
-                          backgroundColor: `${getCategoriaColor(imagen.categoria)}20`,
+                          backgroundColor: `${getCategoriaColor(imagen.categoria)}15`,
                           color: getCategoriaColor(imagen.categoria),
-                          border: `1px solid ${getCategoriaColor(imagen.categoria)}40`,
+                          border: `1px solid ${getCategoriaColor(imagen.categoria)}30`,
                         }}
                       >
                         {imagen.categoria}
                       </span>
                     </td>
-                    <td>{imagen.formato}</td>
-                    <td>{imagen.tamaño}</td>
-                    <td>{new Date(imagen.fechaSubida).toLocaleDateString()}</td>
+                    <td>
+                      <div style={{ fontSize: "0.85rem", color: "#64748b" }}>
+                        <div>
+                          {imagen.formato} • {imagen.tamaño}
+                        </div>
+                        <div style={{ fontSize: "0.75rem", color: "#94a3b8" }}>{imagen.dimensiones}</div>
+                      </div>
+                    </td>
+                    <td style={{ fontSize: "0.85rem", color: "#64748b" }}>
+                      {new Date(imagen.fechaSubida).toLocaleDateString()}
+                    </td>
                     <td>
                       <div style={{ display: "flex", gap: "0.5rem" }}>
                         <button
@@ -498,36 +605,6 @@ const Galeria = () => {
           </div>
         </div>
       )}
-
-      {/* Stats Footer */}
-      <div className="admin-content-card">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem" }}>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#667eea", marginBottom: "0.5rem" }}>
-              {imagenes.filter((i) => i.categoria === "Laboratorio").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Laboratorio</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#f093fb", marginBottom: "0.5rem" }}>
-              {imagenes.filter((i) => i.categoria === "Eventos").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Eventos</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#43e97b", marginBottom: "0.5rem" }}>
-              {imagenes.filter((i) => i.categoria === "Equipo").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Equipo</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#ffa726", marginBottom: "0.5rem" }}>
-              {imagenes.filter((i) => i.categoria === "Proyectos").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Proyectos</div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

@@ -1,45 +1,169 @@
+import { ENV_CONFIG, logger } from "../config/environment"
 import { asyncMock } from "../../asyncMock"
 
-// Simulamos un servicio de API que usa asyncMock
+// Servicio de API que puede usar asyncMock o una API real
 class ApiService {
   constructor() {
-    // En Vite, las variables de entorno se acceden con import.meta.env
-    // y deben tener el prefijo VITE_
-    this.baseURL = import.meta.env.VITE_API_URL || "http://localhost:3001"
+    this.baseURL = ENV_CONFIG.API_BASE_URL || "http://localhost:3001"
     this.token = null
+    logger.log("ApiService initialized with base URL:", this.baseURL)
   }
 
   setToken(token) {
     this.token = token
+    logger.log("ApiService - Token set")
   }
 
-  // Método de login usando asyncMock
-  async login(credentials) {
+  getHeaders() {
+    const headers = {
+      "Content-Type": "application/json",
+    }
+
+    if (this.token) {
+      headers.Authorization = `Bearer ${this.token}`
+    }
+
+    return headers
+  }
+
+  async request(endpoint, options = {}) {
+    const url = `${this.baseURL}${endpoint}`
+    const config = {
+      headers: this.getHeaders(),
+      ...options,
+    }
+
     try {
-      console.log("ApiService - Intentando login con:", credentials)
+      logger.log("ApiService - Request:", { method: config.method || "GET", url })
 
-      // Simulamos validación de credenciales
-      if (credentials.email === "admin" && credentials.password === "admin123") {
-        const mockResponse = {
-          success: true,
-          token: "mock-jwt-token-" + Date.now(),
-          user: {
-            id: "1",
-            email: credentials.email,
-            role: "admin",
-            name: "Administrador",
-          },
-        }
+      const response = await fetch(url, config)
 
-        console.log("ApiService - Login exitoso:", mockResponse)
-        return mockResponse
-      } else {
-        throw new Error("Credenciales inválidas")
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
       }
+
+      const data = await response.json()
+      logger.log("ApiService - Response received:", { status: response.status })
+
+      return data
     } catch (error) {
-      console.error("ApiService - Error en login:", error)
+      logger.error("ApiService - Request failed:", error)
       throw error
     }
+  }
+
+  // Métodos HTTP básicos
+  async get(endpoint, options = {}) {
+    const { params, ...restOptions } = options
+    let url = endpoint
+
+    if (params) {
+      const searchParams = new URLSearchParams(params)
+      url += `?${searchParams.toString()}`
+    }
+
+    return this.request(url, {
+      method: "GET",
+      ...restOptions,
+    })
+  }
+
+  async post(endpoint, data, options = {}) {
+    return this.request(endpoint, {
+      method: "POST",
+      body: JSON.stringify(data),
+      ...options,
+    })
+  }
+
+  async put(endpoint, data, options = {}) {
+    return this.request(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      ...options,
+    })
+  }
+
+  async patch(endpoint, data, options = {}) {
+    return this.request(endpoint, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      ...options,
+    })
+  }
+
+  async delete(endpoint, options = {}) {
+    return this.request(endpoint, {
+      method: "DELETE",
+      ...options,
+    })
+  }
+
+  // Método de login específico
+  async login(credentials) {
+    try {
+      logger.log("ApiService - Login attempt:", { email: credentials.email })
+
+      const response = await this.post(`${ENV_CONFIG.AUTH_ENDPOINT}/login`, credentials)
+
+      if (response.success && response.token) {
+        this.setToken(response.token)
+        logger.log("ApiService - Login successful")
+        return response
+      } else {
+        throw new Error("Invalid response format")
+      }
+    } catch (error) {
+      logger.error("ApiService - Login error:", error)
+      throw error
+    }
+  }
+
+  // Método de logout
+  async logout() {
+    try {
+      await this.post(`${ENV_CONFIG.AUTH_ENDPOINT}/logout`)
+      this.token = null
+      logger.log("ApiService - Logout successful")
+    } catch (error) {
+      logger.error("ApiService - Logout error:", error)
+      // No lanzar error en logout, solo limpiar token local
+      this.token = null
+    }
+  }
+
+  // Método para refrescar token
+  async refreshToken() {
+    try {
+      const response = await this.post(`${ENV_CONFIG.AUTH_ENDPOINT}/refresh`)
+      if (response.token) {
+        this.setToken(response.token)
+        return response.token
+      }
+    } catch (error) {
+      logger.error("ApiService - Token refresh failed:", error)
+      throw error
+    }
+  }
+
+  // Método para upload de archivos
+  async uploadFile(endpoint, file, metadata = {}) {
+    const formData = new FormData()
+    formData.append("file", file)
+
+    // Agregar metadata como campos del formulario
+    Object.keys(metadata).forEach((key) => {
+      formData.append(key, metadata[key])
+    })
+
+    return this.request(endpoint, {
+      method: "POST",
+      body: formData,
+      headers: {
+        // No establecer Content-Type para FormData, el browser lo hace automáticamente
+        ...(this.token && { Authorization: `Bearer ${this.token}` }),
+      },
+    })
   }
 
   // Métodos para usar con asyncMock

@@ -4,6 +4,8 @@ import { ThemeProvider } from "./contexts/ThemeContext"
 import PublicLayout from "./layouts/PublicLayout"
 import AdminLayout from "./layouts/AdminLayout"
 import ProtectedRoute from "./components/ProtectedRoute"
+import { useEffect } from "react"
+import { useLocation } from "react-router-dom"
 
 // Public Components
 import HomeContainer from "./components/public/Home/ContenedorHome/HomeContainer"
@@ -27,11 +29,21 @@ import Configuracion from "./components/admin/AdminConfiguracion/AdminConfigurac
 
 import "./App.css"
 
+// ScrollToTop component
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
+
 function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
         <Router>
+          <ScrollToTop />
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<PublicLayout />}>

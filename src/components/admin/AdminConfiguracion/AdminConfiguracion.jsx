@@ -106,7 +106,7 @@ const Configuracion = () => {
             style={{
               fontSize: "1.5rem",
               fontWeight: "600",
-              color: "#ffffff",
+              color: "#1e293b",
               marginBottom: "1.5rem",
               display: "flex",
               alignItems: "center",
@@ -190,14 +190,14 @@ const Configuracion = () => {
             style={{
               fontSize: "1.5rem",
               fontWeight: "600",
-              color: "#ffffff",
+              color: "#1e293b",
               marginBottom: "1.5rem",
               display: "flex",
               alignItems: "center",
               gap: "0.5rem",
             }}
           >
-            <DatabaseOutlined style={{ color: "#43e97b" }} />
+            <DatabaseOutlined style={{ color: "#10b981" }} />
             Sistema
           </h2>
 
@@ -207,7 +207,7 @@ const Configuracion = () => {
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: "500",
-                  color: "rgba(255, 255, 255, 0.9)",
+                  color: "#64748b",
                   marginBottom: "1rem",
                 }}
               >
@@ -219,9 +219,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.sistema.mantenimiento}
                     onChange={(e) => handleInputChange("sistema", "mantenimiento", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Modo mantenimiento</span>
+                  <span style={{ color: "#1e293b" }}>Modo mantenimiento</span>
                 </label>
 
                 <label style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
@@ -229,9 +229,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.sistema.registroPublico}
                     onChange={(e) => handleInputChange("sistema", "registroPublico", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Permitir registro público</span>
+                  <span style={{ color: "#1e293b" }}>Permitir registro público</span>
                 </label>
               </div>
             </div>
@@ -241,7 +241,7 @@ const Configuracion = () => {
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: "500",
-                  color: "rgba(255, 255, 255, 0.9)",
+                  color: "#64748b",
                   marginBottom: "1rem",
                 }}
               >
@@ -253,9 +253,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.sistema.moderacionComentarios}
                     onChange={(e) => handleInputChange("sistema", "moderacionComentarios", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Moderación de comentarios</span>
+                  <span style={{ color: "#1e293b" }}>Moderación de comentarios</span>
                 </label>
 
                 <label style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
@@ -263,9 +263,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.sistema.backupAutomatico}
                     onChange={(e) => handleInputChange("sistema", "backupAutomatico", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Backup automático</span>
+                  <span style={{ color: "#1e293b" }}>Backup automático</span>
                 </label>
 
                 <label style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
@@ -273,9 +273,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.sistema.notificacionesEmail}
                     onChange={(e) => handleInputChange("sistema", "notificacionesEmail", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Notificaciones por email</span>
+                  <span style={{ color: "#1e293b" }}>Notificaciones por email</span>
                 </label>
               </div>
             </div>
@@ -288,14 +288,14 @@ const Configuracion = () => {
             style={{
               fontSize: "1.5rem",
               fontWeight: "600",
-              color: "#ffffff",
+              color: "#1e293b",
               marginBottom: "1.5rem",
               display: "flex",
               alignItems: "center",
               gap: "0.5rem",
             }}
           >
-            <SecurityScanOutlined style={{ color: "#f5576c" }} />
+            <SecurityScanOutlined style={{ color: "#ef4444" }} />
             Seguridad
           </h2>
 
@@ -305,7 +305,7 @@ const Configuracion = () => {
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: "500",
-                  color: "rgba(255, 255, 255, 0.9)",
+                  color: "#64748b",
                   marginBottom: "1rem",
                 }}
               >
@@ -345,7 +345,7 @@ const Configuracion = () => {
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: "500",
-                  color: "rgba(255, 255, 255, 0.9)",
+                  color: "#64748b",
                   marginBottom: "1rem",
                 }}
               >
@@ -357,9 +357,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.seguridad.dobleFactorAuth}
                     onChange={(e) => handleInputChange("seguridad", "dobleFactorAuth", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Autenticación de doble factor</span>
+                  <span style={{ color: "#1e293b" }}>Autenticación de doble factor</span>
                 </label>
 
                 <label style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
@@ -367,9 +367,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.seguridad.logActividad}
                     onChange={(e) => handleInputChange("seguridad", "logActividad", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Registro de actividad</span>
+                  <span style={{ color: "#1e293b" }}>Registro de actividad</span>
                 </label>
               </div>
             </div>
@@ -382,14 +382,14 @@ const Configuracion = () => {
             style={{
               fontSize: "1.5rem",
               fontWeight: "600",
-              color: "#ffffff",
+              color: "#1e293b",
               marginBottom: "1.5rem",
               display: "flex",
               alignItems: "center",
               gap: "0.5rem",
             }}
           >
-            <BellOutlined style={{ color: "#ffa726" }} />
+            <BellOutlined style={{ color: "#f59e0b" }} />
             Notificaciones
           </h2>
 
@@ -399,7 +399,7 @@ const Configuracion = () => {
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: "500",
-                  color: "rgba(255, 255, 255, 0.9)",
+                  color: "#64748b",
                   marginBottom: "1rem",
                 }}
               >
@@ -411,9 +411,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.notificaciones.nuevasPublicaciones}
                     onChange={(e) => handleInputChange("notificaciones", "nuevasPublicaciones", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Nuevas publicaciones</span>
+                  <span style={{ color: "#1e293b" }}>Nuevas publicaciones</span>
                 </label>
 
                 <label style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
@@ -421,9 +421,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.notificaciones.nuevosProyectos}
                     onChange={(e) => handleInputChange("notificaciones", "nuevosProyectos", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Nuevos proyectos</span>
+                  <span style={{ color: "#1e293b" }}>Nuevos proyectos</span>
                 </label>
               </div>
             </div>
@@ -433,7 +433,7 @@ const Configuracion = () => {
                 style={{
                   fontSize: "1.1rem",
                   fontWeight: "500",
-                  color: "rgba(255, 255, 255, 0.9)",
+                  color: "#64748b",
                   marginBottom: "1rem",
                 }}
               >
@@ -445,9 +445,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.notificaciones.cambiosEquipo}
                     onChange={(e) => handleInputChange("notificaciones", "cambiosEquipo", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Cambios en el equipo</span>
+                  <span style={{ color: "#1e293b" }}>Cambios en el equipo</span>
                 </label>
 
                 <label style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }}>
@@ -455,9 +455,9 @@ const Configuracion = () => {
                     type="checkbox"
                     checked={config.notificaciones.mantenimiento}
                     onChange={(e) => handleInputChange("notificaciones", "mantenimiento", e.target.checked)}
-                    style={{ width: "18px", height: "18px" }}
+                    style={{ width: "18px", height: "18px", accentColor: "#667eea" }}
                   />
-                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>Mantenimiento programado</span>
+                  <span style={{ color: "#1e293b" }}>Mantenimiento programado</span>
                 </label>
               </div>
             </div>
@@ -466,7 +466,7 @@ const Configuracion = () => {
 
         {/* Información del Sistema */}
         <div className="admin-content-card">
-          <h2 style={{ fontSize: "1.5rem", fontWeight: "600", color: "#ffffff", marginBottom: "1.5rem" }}>
+          <h2 style={{ fontSize: "1.5rem", fontWeight: "600", color: "#1e293b", marginBottom: "1.5rem" }}>
             Información del Sistema
           </h2>
 
@@ -474,53 +474,49 @@ const Configuracion = () => {
             <div
               style={{
                 padding: "1rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                borderRadius: "8px",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "rgba(102, 126, 234, 0.1)",
+                borderRadius: "12px",
+                border: "1px solid rgba(102, 126, 234, 0.2)",
               }}
             >
-              <h4 style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "0.9rem", marginBottom: "0.5rem" }}>Versión</h4>
-              <p style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: "500" }}>v2.1.0</p>
+              <h4 style={{ color: "#64748b", fontSize: "0.9rem", marginBottom: "0.5rem" }}>Versión</h4>
+              <p style={{ color: "#1e293b", fontSize: "1.1rem", fontWeight: "500", margin: 0 }}>v2.1.0</p>
             </div>
 
             <div
               style={{
                 padding: "1rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                borderRadius: "8px",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "rgba(16, 185, 129, 0.1)",
+                borderRadius: "12px",
+                border: "1px solid rgba(16, 185, 129, 0.2)",
               }}
             >
-              <h4 style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "0.9rem", marginBottom: "0.5rem" }}>
-                Último Backup
-              </h4>
-              <p style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: "500" }}>Hace 2 horas</p>
+              <h4 style={{ color: "#64748b", fontSize: "0.9rem", marginBottom: "0.5rem" }}>Último Backup</h4>
+              <p style={{ color: "#1e293b", fontSize: "1.1rem", fontWeight: "500", margin: 0 }}>Hace 2 horas</p>
             </div>
 
             <div
               style={{
                 padding: "1rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                borderRadius: "8px",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "rgba(245, 158, 11, 0.1)",
+                borderRadius: "12px",
+                border: "1px solid rgba(245, 158, 11, 0.2)",
               }}
             >
-              <h4 style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "0.9rem", marginBottom: "0.5rem" }}>
-                Espacio Usado
-              </h4>
-              <p style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: "500" }}>2.3 GB / 10 GB</p>
+              <h4 style={{ color: "#64748b", fontSize: "0.9rem", marginBottom: "0.5rem" }}>Espacio Usado</h4>
+              <p style={{ color: "#1e293b", fontSize: "1.1rem", fontWeight: "500", margin: 0 }}>2.3 GB / 10 GB</p>
             </div>
 
             <div
               style={{
                 padding: "1rem",
-                background: "rgba(255, 255, 255, 0.05)",
-                borderRadius: "8px",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "rgba(16, 185, 129, 0.1)",
+                borderRadius: "12px",
+                border: "1px solid rgba(16, 185, 129, 0.2)",
               }}
             >
-              <h4 style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "0.9rem", marginBottom: "0.5rem" }}>Estado</h4>
-              <p style={{ color: "#43e97b", fontSize: "1.1rem", fontWeight: "500" }}>Operativo</p>
+              <h4 style={{ color: "#64748b", fontSize: "0.9rem", marginBottom: "0.5rem" }}>Estado</h4>
+              <p style={{ color: "#10b981", fontSize: "1.1rem", fontWeight: "500", margin: 0 }}>Operativo</p>
             </div>
           </div>
         </div>

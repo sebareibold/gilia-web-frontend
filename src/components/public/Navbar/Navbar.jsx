@@ -94,10 +94,6 @@ const Navbar = () => {
     return location.pathname === path
   }
 
-  const isResearchLineActive = () => {
-    return location.pathname.includes("/lineas-de-investigacion/")
-  }
-
   const navigationItems = [
     {
       label: "Inicio",
@@ -108,35 +104,35 @@ const Navbar = () => {
     {
       label: "Investigación",
       icon: <ExperimentOutlined />,
-      active: isResearchLineActive(),
+      active: location.pathname.startsWith("/research-lines"),
       dropdown: lineas.map((linea) => ({
         label: linea.nombre,
-        path: `/lineas-de-investigacion/${linea.id}`,
+        path: `/research-lines/${linea.id}`,
       })),
     },
     {
       label: "Publicaciones",
-      path: "/post",
+      path: "/posts",
       icon: <BookOutlined />,
-      active: isActive("/post"),
+      active: isActive("/posts"),
     },
     {
       label: "Extensión",
-      path: "/linea-extension",
+      path: "/research-lines",
       icon: <BranchesOutlined />,
-      active: isActive("/linea-extension"),
+      active: isActive("/research-lines"),
     },
     {
       label: "Equipo",
-      path: "/about-us",
+      path: "/about",
       icon: <TeamOutlined />,
-      active: isActive("/about-us"),
+      active: isActive("/about"),
     },
     {
       label: "Galería",
-      path: "/galery",
+      path: "/gallery",
       icon: <PictureOutlined />,
-      active: isActive("/galery"),
+      active: isActive("/gallery"),
     },
   ]
 
