@@ -8,7 +8,7 @@
 
 ## Descripción General
 
-GILIA Web Frontend es la interfaz de usuario del sistema GILIA, diseñada para la gestión, visualización y administración de información sobre proyectos, publicaciones, equipo, líneas de investigación, extensión y más. El sistema está dividido en dos grandes áreas: una sección pública accesible para todos los usuarios y una sección administrativa protegida para la gestión interna.
+GILIA Web Frontend es la interfaz de usuario de la sitio web de GILIA, diseñada para la gestión, visualización y administración de información sobre proyectos, publicaciones, equipo, líneas de investigación, extensión y más. El sistema está dividido en dos grandes áreas: una sección pública accesible para todos los usuarios y una sección administrativa protegida para la gestión interna.
 
 ## Secciones y Componentes Principales
 
