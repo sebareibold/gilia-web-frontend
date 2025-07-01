@@ -47,7 +47,7 @@ GILIA Web Frontend es la interfaz de usuario de la sitio web de GILIA, diseñada
 
 Este proyecto implementa una sistema para poder alternar entre  de Mock y la API Real con el fin de poder simular la carga dinamica de los datos sin necesidad de realizar peticiones a la API. Todos los datos de prueba (mock data) se encuentran en el archivo `asyncMock.js` en la raíz del frontend. 
 
-## Estructura relevante
+### Estructura relevante
 - `asyncMock.js`: Contiene todos los datos y funciones mock.
 - `src/config/environment.js`: Define la lógica para leer la variable de entorno y exponer la configuración.
 - `src/services/dataService.js`: Abstrae el acceso a datos y decide si usar mock o API real según la configuración.
