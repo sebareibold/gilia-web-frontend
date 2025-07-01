@@ -43,8 +43,6 @@ GILIA Web Frontend es la interfaz de usuario de la sitio web de GILIA, diseñada
 ### Otros
 - **ProtectedRoute.jsx**: Componente para proteger rutas privadas.
 
----
-
 ## Alternar entre Mock y API Real
 
 Este proyecto implementa una sistema para poder alternar entre  de Mock y la API Real con el fin de poder simular la carga dinamica de los datos sin necesidad de realizar peticiones a la API. Todos los datos de prueba (mock data) se encuentran en el archivo `asyncMock.js` en la raíz del frontend. 
