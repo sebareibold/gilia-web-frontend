@@ -13,11 +13,10 @@ GILIA Web Frontend es la interfaz de usuario del sistema GILIA, diseñada para l
 ## Secciones y Componentes Principales
 
 ### Sección Pública (`src/components/public`)
-- **Nosotros**: Información sobre el grupo, misión, visión, valores y miembros (`Nosotros.jsx`, `PeopleCard.jsx`).
+- **Nosotros**: Información sobre el grupo, miembros y objetivos.
 - **Home**: Página principal con animaciones, novedades, presentación y tarjetas destacadas.
-  - Animacion: Efectos visuales (`AINetworkEffect.jsx`, `CodeMatrixEffect.jsx`, `FuturisticResearchNetwork.jsx`, `ParticleEffect.jsx`)
-  - Novedades: Noticias y logros recientes (`HomeExploration.jsx`)
   - Presentacion: Introducción y bienvenida (`HomePresentation.jsx`)
+  - Novedades: Noticias y logros recientes (`HomeExploration.jsx`)
   - TarjetaNovedad: Tarjetas de novedades (`Card.jsx`)
 - **Galeria**: Visualización de imágenes y recursos multimedia.
   - ContenedorGaleria, SeccionContenedorGaleria, SeccionGaleria, SeccionGalerie
