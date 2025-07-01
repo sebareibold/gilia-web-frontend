@@ -27,39 +27,157 @@
 
 /* Filter section */
 .filter-section {
-  background: var(--cardBackground);
-  border: 1px solid var(--cardBorder);
-  border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadowSecondary);
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(37,99,235,0.13);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  margin-bottom: 2.5rem;
+  backdrop-filter: blur(16px) saturate(1.3);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  box-shadow: 0 8px 32px 0 rgba(37,99,235,0.10), 0 2px 8px 0 rgba(0,0,0,0.04), 0 0.5px 0.5px 0 rgba(255,255,255,0.13) inset;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  perspective: 1000px;
+}
+
+.filter-section:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent 80%);
+  border-radius: 24px;
+  pointer-events: none;
+}
+
+[data-theme="light"] .filter-section {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 4px 16px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .filter-section::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
 }
 
 .filter-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.input-field {
-  background: var(--inputBackground);
-  border: 1px solid var(--borderColor);
-  border-radius: 10px;
-  padding: 1rem;
-  color: var(--colorTextBase);
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  font-family: "Inter", sans-serif;
+.filter-input-group {
+  position: relative;
 }
 
-.input-field:focus {
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: #0f172a;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 1;
+}
+
+.filter-input-card {
+  background: rgba(30,41,59,0.32);
+  border: 2.5px solid #2563eb;
+  border-radius: 22px;
+  box-shadow: 0 20px 60px 0 rgba(30,41,59,0.22), 0 8px 32px 0 rgba(37,99,235,0.18), 0 1px 2px 0 rgba(255,255,255,0.18) inset;
+  backdrop-filter: blur(24px) saturate(1.7);
+  -webkit-backdrop-filter: blur(24px) saturate(1.7);
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.7rem;
+  transition: box-shadow 0.3s, border 0.3s, background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-input-card:focus-within {
+  border: 3px solid #1d4ed8;
+  box-shadow: 0 32px 80px 0 rgba(30,41,59,0.32), 0 12px 40px 0 rgba(37,99,235,0.22);
+  background: rgba(30,41,59,0.42);
+}
+
+.filter-input-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(120deg,rgba(255,255,255,0.18),transparent 80%);
+  border-radius: 22px 22px 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.filter-input-card input,
+.filter-input-card select,
+.filter-input-card .input {
+  color: #111827 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 1.08rem !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  width: 100% !important;
+  outline: none !important;
+  padding: 0.7rem 0.5rem !important;
+}
+
+.filter-input-card input::placeholder,
+.filter-input-card .input::placeholder {
+  color: #222c3a !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Estilos específicos para select */
+.filter-input select {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  width: 100%;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.filter-input select:focus {
   outline: none;
-  border-color: var(--colorTextBase);
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
 }
 
-.input-field::placeholder {
-  color: var(--colorTextMuted);
+.filter-input select option {
+  background: var(--backgroundColor);
+  color: var(--colorTextBase);
+  padding: 0.5rem;
+}
+
+/* Estilos específicos para input number */
+.filter-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.filter-input[type="number"]::-webkit-outer-spin-button,
+.filter-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Publications list */

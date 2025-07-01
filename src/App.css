@@ -31,7 +31,8 @@
   --color-info: #06b6d4;
 
   /* Tipografía */
-  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Tamaños de fuente responsive - REDUCIDOS */
@@ -71,8 +72,10 @@
   /* Sombras modernas */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
   /* Transiciones */
@@ -111,7 +114,7 @@
 
 /* Tema claro */
 [data-theme="light"] {
-  --color-bg-primary: #ffffff;
+  --color-bg-primary: transparent;
   --color-bg-secondary: var(--color-gray-50);
   --color-bg-tertiary: var(--color-gray-100);
   --color-text-primary: var(--color-gray-900);
@@ -141,20 +144,30 @@ body {
   line-height: 1.6;
   color: var(--color-text-primary);
   /* FONDO DEGRADADO APLICADO GLOBALMENTE */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(7, 75, 223, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(43, 91, 252, 0.363) 0%,
+      transparent 50%
+    );
   background-attachment: fixed;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-top: clamp(64px, 8vw, 80px);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
   overflow-x: hidden;
 }
 
 /* Layout público con fondo degradado */
 .public-layout {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
 }
 
@@ -776,7 +789,12 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
   animation: shimmer 1.5s infinite;
 }
 

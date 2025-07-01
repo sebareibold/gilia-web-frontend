@@ -121,45 +121,6 @@ class ApiService {
     // Por ahora solo simulamos
     return { success: true }
   }
-
-  // Método para obtener estadísticas del dashboard
-  async getDashboardStats() {
-    try {
-      const [lineas, publicaciones, proyectos, personas, extensiones, galeria] = await Promise.all([
-        this.getLineasInvestigacion(),
-        this.getPublicaciones(),
-        this.getProyectos(),
-        this.getPersonas(),
-        this.getExtensiones(),
-        this.getGaleria(),
-      ])
-
-      return {
-        success: true,
-        data: {
-          lineasInvestigacion: lineas.data?.length || 0,
-          publicaciones: publicaciones.data?.length || 0,
-          proyectos: proyectos.data?.length || 0,
-          miembros: personas.data?.length || 0,
-          extensiones: extensiones.data?.length || 0,
-          imagenes: galeria.data?.length || 0,
-        },
-      }
-    } catch (error) {
-      console.error("Error al obtener estadísticas:", error)
-      return {
-        success: false,
-        data: {
-          lineasInvestigacion: 0,
-          publicaciones: 0,
-          proyectos: 0,
-          miembros: 0,
-          extensiones: 0,
-          imagenes: 0,
-        },
-      }
-    }
-  }
 }
 
 export const apiService = new ApiService()

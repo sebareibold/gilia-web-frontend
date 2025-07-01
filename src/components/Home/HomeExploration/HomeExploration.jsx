@@ -132,6 +132,7 @@ export default function HomeExploration() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [cardsPerView, setCardsPerView] = useState(3)
+  const [isAnimating, setIsAnimating] = useState(false)
   const autoPlayRef = useRef(null)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
@@ -179,9 +180,17 @@ export default function HomeExploration() {
       autoPlayRef.current = setInterval(() => {
         setCurrentIndex((prevIndex) => {
           const maxIndex = Math.max(0, novedades.length - cardsPerView)
-          return prevIndex >= maxIndex ? 0 : prevIndex + 1
+          const newIndex = prevIndex >= maxIndex ? 0 : prevIndex + 1
+          
+          // Ejecutar animaciones escalonadas en auto-play
+          setIsAnimating(true)
+          setTimeout(() => {
+            setIsAnimating(false)
+          }, 1000) // Tiempo para que terminen las animaciones escalonadas
+          
+          return newIndex
         })
-      }, 6000)
+      }, 8000) // Aumentado de 6000ms a 8000ms (8 segundos)
 
       return () => {
         if (autoPlayRef.current) {
@@ -201,12 +210,16 @@ export default function HomeExploration() {
     }
 
     setIsTransitioning(true)
+    setIsAnimating(true)
     setCurrentIndex(newIndex)
 
-    // Resetear el estado de transición
+    // Resetear el estado de transición y animación
     setTimeout(() => {
       setIsTransitioning(false)
-    }, 800)
+      setTimeout(() => {
+        setIsAnimating(false)
+      }, 1000) // Aumentado de 600ms a 1000ms para animaciones más lentas
+    }, 600) // Aumentado de 400ms a 600ms para transición más lenta
   }
 
   const handlePrevious = () => {
@@ -292,35 +305,39 @@ export default function HomeExploration() {
 
         {/* Carrusel multi-card */}
         <div className="multi-card-carousel">
-          <div className="carousel-container">
-            {/* Controles de navegación */}
-  
-              <div className="carousel-navigation">
-                <button
-                  className="carousel-nav-btn carousel-nav-prev"
-                  onClick={handlePrevious}
-                  disabled={isTransitioning}
-                  aria-label="Noticias anteriores"
-                >
-                  <LeftOutlined />
-                </button>
-                <button
-                  className="carousel-nav-btn carousel-nav-next"
-                  onClick={handleNext}
-                  disabled={isTransitioning}
-                  aria-label="Siguientes noticias"
-                >
-                  <RightOutlined />
-                </button>
-              </div>
-            
+          {/* Controles de navegación */}
+          <div className="carousel-navigation">
+            <button
+              className="carousel-nav-btn carousel-nav-prev"
+              onClick={handlePrevious}
+              disabled={isTransitioning}
+              aria-label="Noticias anteriores"
+            >
+              <LeftOutlined />
+            </button>
+            <button
+              className="carousel-nav-btn carousel-nav-next"
+              onClick={handleNext}
+              disabled={isTransitioning}
+              aria-label="Siguientes noticias"
+            >
+              <RightOutlined />
+            </button>
+          </div>
 
+          <div className="carousel-container">
             {/* Track del carrusel */}
             <div className="carousel-track">
               {visibleCards.map((novedad, index) => {
                 const NewsIcon = newsIcons[(currentIndex + index) % newsIcons.length]
                 return (
-                  <div key={`${novedad.id}-${currentIndex}`} className="carousel-slide">
+                  <div 
+                    key={`${novedad.id}-${currentIndex}`} 
+                    className={`carousel-slide ${isAnimating ? 'carousel-slide-animating' : ''}`}
+                    style={{
+                      animationDelay: isAnimating ? `${index * 0.15}s` : '0s'
+                    }}
+                  >
                     <div className="news-card">
                       {/* Imagen */}
                       <div className="news-image-container">

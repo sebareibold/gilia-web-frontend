@@ -7,6 +7,7 @@ import { API_BASE_URL } from "../../../config/apiConfig"
 import Loader from "../../Loader/Loader"
 import "../../shared/FuturisticStyles.css"
 import "../../Home/HomeExploration/HomeExploration.css"
+import "./GaleryContainer.css"
 
 const Galery = () => {
   const [gallerySections, setGallerySections] = useState([])
@@ -167,178 +168,81 @@ const Galery = () => {
     )
   }
 
-  const totalImages = gallerySections.reduce((total, section) => total + (section.imagenes?.length || 0), 0)
-
   return (
     <div className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="exploration-container">
-
-
-         {/* Header */}
+        {/* Header Principal */}
         <div className="section-header">
+          <div className="section-badge">
+            <PictureOutlined />
+            Galería Visual
+          </div>
           
           <h2 className="section-title">Galería</h2>
           <p className="section-description">
-  Explora nuestros espacios de trabajo, eventos, conferencias y proyectos a través de esta colección visual
+            Explora nuestros espacios de trabajo, eventos, conferencias y proyectos a través de esta colección visual
             que documenta la actividad y el crecimiento de nuestro grupo de investigación.
           </p>
         </div>
 
-  
-
         {/* Secciones de Galería */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
+        <div className="gallery-sections-container">
           {gallerySections.map((section) => (
-            <div key={section.id}>
-              {/* Subtítulo de Sección */}
-              <div style={{ marginBottom: "2rem", textAlign: "center" }}>
-                <div
-                  style={{
-                    display: "inline-block",
-                    padding: "0.25rem 0.75rem",
-                    borderRadius: "1rem",
-                    fontSize: "0.75rem",
-                    fontWeight: "600",
-                    backgroundColor: "#3b82f6",
-                    color: "white",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  <CameraOutlined style={{ marginRight: "0.5rem" }} />
+            <div key={section.id} className="gallery-section">
+              {/* Header de Sección */}
+              <div className="gallery-section-header">
+                {/* Badge de cantidad de imágenes con estilo del botón explorar */}
+                <div className="gallery-count-badge">
+                  <CameraOutlined />
                   {section.imagenes?.length || 0} imágenes
                 </div>
 
-                <h2
-                  style={{
-                    fontSize: "1.8rem",
-                    fontWeight: "600",
-                    color: "var(--colorTextBase)",
-                    marginBottom: "0.5rem",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "0.5rem",
-                  }}
-                >
+                {/* Título con gradiente de colores */}
+                <h3 className="gallery-section-title">
                   <EyeOutlined />
                   {section.titulo}
-                </h2>
+                </h3>
 
+                {/* Descripción */}
                 {section.descripcion && (
-                  <p
-                    style={{
-                      color: "var(--colorTextSecondary)",
-                      fontSize: "1rem",
-                      maxWidth: "700px",
-                      margin: "0 auto",
-                      lineHeight: "1.6",
-                    }}
-                  >
+                  <p className="gallery-section-description">
                     {section.descripcion}
                   </p>
                 )}
               </div>
 
               {/* Grid de Imágenes */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                  gap: "1.5rem",
-                  marginBottom: "2rem",
-                }}
-              >
-                {section.imagenes?.map((img) => (
+              <div className="gallery-grid">
+                {section.imagenes?.map((img, imgIndex) => (
                   <div
                     key={img.id}
-                    className="news-card"
-                    style={{
-                      position: "relative",
-                      cursor: "pointer",
-                      overflow: "hidden",
-                      padding: "0",
-                      transition: "all 0.3s ease",
-                    }}
+                    className="gallery-card"
                     onClick={() => openModal(img, section)}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-8px)"
-                      e.currentTarget.style.boxShadow = "0 20px 40px rgba(0, 0, 0, 0.15)"
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)"
-                      e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"
-                    }}
+                    style={{ animationDelay: `${imgIndex * 0.1}s` }}
                   >
-                    {/* Imagen */}
-                    <div style={{ position: "relative", height: "250px", overflow: "hidden" }}>
+                    {/* Línea vertical azul */}
+                    <div className="gallery-card-line"></div>
+
+                    {/* Contenedor de imagen */}
+                    <div className="gallery-image-container">
                       <img
                         src={img.url.startsWith("http") ? img.url : `${API_BASE_URL}${img.url}`}
                         alt={img.descripcion || `Imagen ${img.id}`}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          transition: "transform 0.3s ease",
-                        }}
+                        className="gallery-image"
                         loading="lazy"
-                        onMouseEnter={(e) => {
-                          e.target.style.transform = "scale(1.05)"
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.transform = "scale(1)"
-                        }}
                       />
 
-                      {/* Overlay con ícono */}
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: "1rem",
-                          right: "1rem",
-                          backgroundColor: "rgba(0, 0, 0, 0.6)",
-                          borderRadius: "50%",
-                          padding: "0.5rem",
-                          backdropFilter: "blur(10px)",
-                          opacity: 0,
-                          transition: "opacity 0.3s ease",
-                        }}
-                        className="expand-icon"
-                      >
-                        <ExpandOutlined style={{ color: "white", fontSize: "1rem" }} />
+                      {/* Ícono de expansión */}
+                      <div className="gallery-expand-icon">
+                        <ExpandOutlined />
                       </div>
                     </div>
 
-                    {/* Información */}
-                    <div style={{ padding: "1.5rem" }}>
-                      <h3
-                        style={{
-                          color: "var(--colorTextBase)",
-                          fontSize: "1rem",
-                          fontWeight: "600",
-                          marginBottom: "0.5rem",
-                          lineHeight: "1.4",
-                        }}
-                      >
-                        {img.descripcion}
-                      </h3>
-                      {img.fecha && (
-                        <div
-                          style={{
-                            fontSize: "0.85rem",
-                            color: "var(--colorTextSecondary)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.25rem",
-                          }}
-                        >
-                          <CameraOutlined />
-                          {new Date(img.fecha).toLocaleDateString("es-ES", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
-                        </div>
-                      )}
+                    {/* Información de la imagen - Solo descripción */}
+                    <div className="gallery-card-info">
+                      <h4 className="gallery-card-title">
+                        {img.descripcion || "Sin descripción"}
+                      </h4>
                     </div>
                   </div>
                 ))}
@@ -349,120 +253,39 @@ const Galery = () => {
 
         {/* Empty State */}
         {gallerySections.length === 0 && (
-          <div className="news-card" style={{ textAlign: "center", padding: "3rem" }}>
-            <PictureOutlined style={{ fontSize: "3rem", color: "var(--colorTextSecondary)", marginBottom: "1rem" }} />
-            <h3 style={{ color: "var(--colorTextBase)", marginBottom: "0.5rem" }}>No hay imágenes disponibles</h3>
-            <p style={{ color: "var(--colorTextSecondary)" }}>Próximamente estaremos agregando más contenido visual</p>
+          <div className="gallery-empty-state">
+            <PictureOutlined />
+            <h3>No hay imágenes disponibles</h3>
+            <p>Próximamente estaremos agregando más contenido visual</p>
           </div>
         )}
 
-        {/* Modal Simple */}
+        {/* Modal */}
         {selectedImage && (
-          <div
-            style={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.9)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 1000,
-              padding: "2rem",
-            }}
-            onClick={closeModal}
-          >
-            <div
-              style={{
-                position: "relative",
-                maxWidth: "90vw",
-                maxHeight: "90vh",
-                backgroundColor: "var(--colorBgContainer)",
-                borderRadius: "12px",
-                overflow: "hidden",
-                boxShadow: "0 25px 50px rgba(0, 0, 0, 0.5)",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
+          <div className="gallery-modal" onClick={closeModal}>
+            <div className="gallery-modal-content" onClick={(e) => e.stopPropagation()}>
               {/* Botón Cerrar */}
-              <button
-                onClick={closeModal}
-                style={{
-                  position: "absolute",
-                  top: "1rem",
-                  right: "1rem",
-                  backgroundColor: "rgba(0, 0, 0, 0.7)",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: "40px",
-                  height: "40px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                  zIndex: 1001,
-                  backdropFilter: "blur(10px)",
-                  transition: "background-color 0.2s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = "rgba(0, 0, 0, 0.9)"
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = "rgba(0, 0, 0, 0.7)"
-                }}
-              >
-                <CloseOutlined style={{ color: "white", fontSize: "1.2rem" }} />
+              <button className="gallery-modal-close" onClick={closeModal}>
+                <CloseOutlined />
               </button>
 
               {/* Imagen Grande */}
               <img
                 src={selectedImage.url.startsWith("http") ? selectedImage.url : `${API_BASE_URL}${selectedImage.url}`}
                 alt={selectedImage.descripcion}
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  maxHeight: "70vh",
-                  objectFit: "contain",
-                }}
+                className="gallery-modal-image"
               />
 
               {/* Información de la Imagen */}
-              <div style={{ padding: "1.5rem" }}>
-                <div
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "#3b82f6",
-                    marginBottom: "0.5rem",
-                    fontWeight: "600",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                  }}
-                >
+              <div className="gallery-modal-info">
+                <div className="gallery-modal-section">
                   {selectedImage.sectionTitle}
                 </div>
-                <h3
-                  style={{
-                    color: "var(--colorTextBase)",
-                    marginBottom: "0.5rem",
-                    fontSize: "1.2rem",
-                    fontWeight: "600",
-                    lineHeight: "1.4",
-                  }}
-                >
+                <h3 className="gallery-modal-title">
                   {selectedImage.descripcion}
                 </h3>
                 {selectedImage.fecha && (
-                  <div
-                    style={{
-                      fontSize: "0.9rem",
-                      color: "var(--colorTextSecondary)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "0.5rem",
-                    }}
-                  >
+                  <div className="gallery-modal-date">
                     <CameraOutlined />
                     {new Date(selectedImage.fecha).toLocaleDateString("es-ES", {
                       year: "numeric",
@@ -476,18 +299,6 @@ const Galery = () => {
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        .news-card:hover .expand-icon {
-          opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-          .exploration-container {
-            padding: 1rem;
-          }
-        }
-      `}</style>
     </div>
   )
 }

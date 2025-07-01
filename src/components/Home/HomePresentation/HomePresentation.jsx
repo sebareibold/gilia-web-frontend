@@ -1,11 +1,30 @@
 "use client"
-import { BulbOutlined, ArrowRightOutlined, PlayCircleOutlined } from "@ant-design/icons"
+import { 
+  ArrowRightOutlined, 
+  BookOutlined,
+  RobotOutlined,
+  ApiOutlined,
+  ThunderboltOutlined,
+  EyeOutlined,
+  BarChartOutlined,
+  BulbOutlined,
+  SettingOutlined,
+  WifiOutlined
+} from "@ant-design/icons"
 import { useTheme } from "../../../contexts/ThemeContext"
 import "./HomePresentation.css"
+import { useState, useEffect } from "react"
 
 export default function HomePresentation() {
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+
+  const [showFloating, setShowFloating] = useState(false)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setShowFloating(true), 1200)
+    return () => clearTimeout(timeout)
+  }, [])
 
   const handleExploreClick = () => {
     const explorationSection = document.querySelector(".exploration-section")
@@ -15,7 +34,7 @@ export default function HomePresentation() {
   }
 
   const handleWatchDemo = () => {
-    alert("Demo de video - Funcionalidad por implementar")
+    window.location.href = "/post"
   }
 
   return (
@@ -40,118 +59,120 @@ export default function HomePresentation() {
               <ArrowRightOutlined />
             </button>
             <button className="hero-btn-secondary" onClick={handleWatchDemo}>
-              <PlayCircleOutlined />
-              <span>Ver Demo</span>
+              <BookOutlined />
+              <span>Ver Publicaciones</span>
             </button>
           </div>
         </div>
 
         {/* Cards flotantes con líneas de investigación */}
-        <div className="floating-cards-container">
-          {/* Card 1 - Machine Learning */}
-          <div className="floating-element floating-element-1">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">ML</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">IA Avanzada</div>
-                <div className="floating-subtitle">Machine Learning</div>
+        {showFloating && (
+          <div className="floating-cards-container">
+            {/* Card 1 - Machine Learning */}
+            <div className="floating-element floating-element-1" style={{ animationDelay: "0.2s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <ThunderboltOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">IA Avanzada</div>
+                  <div className="floating-subtitle">Machine Learning</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 2 - NLP */}
-          <div className="floating-element floating-element-2">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">NLP</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">Procesamiento NLP</div>
-                <div className="floating-subtitle">Natural Language Processing</div>
+            {/* Card 2 - NLP */}
+            <div className="floating-element floating-element-2" style={{ animationDelay: "0.4s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <ApiOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">Procesamiento NLP</div>
+                  <div className="floating-subtitle">Natural Language Processing</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 3 - Deep Learning */}
-          <div className="floating-element floating-element-3">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">DL</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">Deep Learning</div>
-                <div className="floating-subtitle">Redes Neuronales Profundas</div>
+            {/* Card 3 - Deep Learning */}
+            <div className="floating-element floating-element-3" style={{ animationDelay: "0.6s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <BulbOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">Deep Learning</div>
+                  <div className="floating-subtitle">Redes Neuronales Profundas</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 4 - Computer Vision */}
-          <div className="floating-element floating-element-4">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">CV</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">Computer Vision</div>
-                <div className="floating-subtitle">Visión por Computadora</div>
+            {/* Card 4 - Computer Vision */}
+            <div className="floating-element floating-element-4" style={{ animationDelay: "0.8s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <EyeOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">Computer Vision</div>
+                  <div className="floating-subtitle">Visión por Computadora</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 5 - Data Science */}
-          <div className="floating-element floating-element-5">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">DS</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">Data Science</div>
-                <div className="floating-subtitle">Ciencia de Datos</div>
+            {/* Card 5 - Data Science */}
+            <div className="floating-element floating-element-5" style={{ animationDelay: "1.0s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <BarChartOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">Data Science</div>
+                  <div className="floating-subtitle">Ciencia de Datos</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 6 - Sistemas Inteligentes */}
-          <div className="floating-element floating-element-6">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">IA</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">Sistemas IA</div>
-                <div className="floating-subtitle">Inteligencia Artificial</div>
+            {/* Card 6 - Sistemas Inteligentes */}
+            <div className="floating-element floating-element-6" style={{ animationDelay: "1.2s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <SettingOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">Sistemas IA</div>
+                  <div className="floating-subtitle">Inteligencia Artificial</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 7 - Robótica */}
-          <div className="floating-element floating-element-7">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">RB</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">Robótica</div>
-                <div className="floating-subtitle">Automatización Inteligente</div>
+            {/* Card 7 - Robótica */}
+            <div className="floating-element floating-element-7" style={{ animationDelay: "1.4s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <RobotOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">Robótica</div>
+                  <div className="floating-subtitle">Automatización Inteligente</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 8 - IoT - Movida más arriba */}
-          <div className="floating-element floating-element-8">
-            <div className="floating-card">
-              <div className="floating-icon">
-                <span className="icon-letter">IoT</span>
-              </div>
-              <div className="floating-content">
-                <div className="floating-title">Internet de las Cosas</div>
-                <div className="floating-subtitle">Conectividad Inteligente</div>
+            {/* Card 8 - IoT */}
+            <div className="floating-element floating-element-8" style={{ animationDelay: "1.6s" }}>
+              <div className="floating-card">
+                <div className="floating-icon">
+                  <WifiOutlined className="floating-icon-svg" />
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">Internet de las Cosas</div>
+                  <div className="floating-subtitle">Conectividad Inteligente</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   )

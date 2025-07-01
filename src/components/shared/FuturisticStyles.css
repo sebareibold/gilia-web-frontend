@@ -264,37 +264,93 @@
 
 /* Inputs futuristas */
 .futuristic-input {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  padding: 0.875rem 1.125rem;
   color: var(--colorTextBase);
   font-size: 0.9rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
   width: 100%;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  perspective: 1000px;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.futuristic-input::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), transparent);
+  border-radius: 7px;
+  pointer-events: none;
 }
 
 [data-theme="light"] .futuristic-input {
-  background: rgba(100, 116, 139, 0.03);
-  border: 1px solid rgba(71, 85, 105, 0.2);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="light"] .futuristic-input::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
 }
 
 .futuristic-input:focus {
   outline: none;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px) translateZ(5px) scale(1.01);
+  box-shadow: 
+    0 8px 25px rgba(6, 182, 212, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="light"] .futuristic-input:focus {
-  border: 1px solid rgba(71, 85, 105, 0.35);
-  background: rgba(100, 116, 139, 0.04);
-  box-shadow: 0 0 10px rgba(71, 85, 105, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.5);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 8px 25px rgba(6, 182, 212, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.futuristic-input:hover {
+  transform: translateY(-1px) translateZ(2px);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.12),
+    0 3px 10px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="light"] .futuristic-input:hover {
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.1),
+    0 3px 10px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 .futuristic-input::placeholder {
   color: var(--colorTextMuted);
+  opacity: 0.7;
 }
 
 /* Separadores */

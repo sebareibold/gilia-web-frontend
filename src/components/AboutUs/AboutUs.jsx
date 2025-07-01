@@ -253,62 +253,60 @@ export default function AboutUs() {
         <div className="team-grid">
           {aboutData.people.map((member) => (
             <div key={member.id} className="team-member-card">
-              <div className="member-avatar-container">
-                <img src={member.imagen || "/placeholder.svg"} alt={member.nombre} className="member-avatar" />
-                {member.activo && <div className="member-status" />}
+              {/* Header de la card con avatar y estado */}
+              <div className="card-header-section">
+                <div className="member-avatar-container">
+                  <div className="avatar-background">
+                    <img src={member.imagen || "/placeholder.svg"} alt={member.nombre} className="member-avatar" />
+                  </div>
+                  {member.activo && <div className="member-status" />}
+                </div>
+                
+                <div className="member-basic-info">
+                  <h3 className="member-name">{member.nombre}</h3>
+                  <div className="member-role">{member.cargo}</div>
+                </div>
               </div>
 
-              <div className="member-info">
-                <h3 className="member-name">{member.nombre}</h3>
-                <div className="member-role">{member.cargo}</div>
-                <p className="member-description">{member.descripcion}</p>
-
-                <div className="member-specialties">
-                  {member.especialidades.map((specialty, index) => (
-                    <span key={index} className="specialty-tag">
-                      {specialty}
-                    </span>
-                  ))}
+              {/* Contenido principal */}
+              <div className="card-content-section">
+                <div className="member-description-container">
+                  <p className="member-description">{member.descripcion}</p>
                 </div>
 
+                <div className="member-specialties-container">
+                  <h4 className="specialties-title">Especialidades</h4>
+                  <div className="member-specialties">
+                    {member.especialidades.map((specialty, index) => (
+                      <span key={index} className="specialty-tag">
+                        {specialty}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer con contactos */}
+              <div className="card-footer-section">
                 <div className="member-contact">
-                  <a href={`mailto:${member.email}`} className="contact-btn" title="Email">
+                  <a href={`mailto:${member.email}`} className="contact-btn primary-contact" title="Email">
                     <MailOutlined />
+                    <span>Email</span>
                   </a>
                   {member.linkedin && (
                     <a
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="contact-btn"
+                      className="contact-btn primary-contact"
                       title="LinkedIn"
                     >
                       <LinkedinOutlined />
-                    </a>
-                  )}
-                  {member.github && (
-                    <a
-                      href={member.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="contact-btn"
-                      title="GitHub"
-                    >
-                      <GithubOutlined />
-                    </a>
-                  )}
-                  {member.twitter && (
-                    <a
-                      href={member.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="contact-btn"
-                      title="Twitter"
-                    >
-                      <TwitterOutlined />
+                      <span>LinkedIn</span>
                     </a>
                   )}
                 </div>
+
               </div>
             </div>
           ))}
