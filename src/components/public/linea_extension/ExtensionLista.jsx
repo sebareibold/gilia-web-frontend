@@ -87,7 +87,9 @@ const LineaExtensionList = () => {
                     <h3 className="news-title">{linea.nombre}</h3>
 
                     <p className="news-description">
-                      {linea.descripcion.length > 150 ? `${linea.descripcion.slice(0, 150)}...` : linea.descripcion}
+                      {typeof linea.descripcion === "string" && linea.descripcion.length > 150
+                        ? `${linea.descripcion.slice(0, 150)}...`
+                        : linea.descripcion || "Sin descripción disponible"}
                     </p>
 
                     <div className="news-actions">
