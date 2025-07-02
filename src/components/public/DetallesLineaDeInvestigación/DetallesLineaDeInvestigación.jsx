@@ -14,6 +14,7 @@ import {
 } from "@ant-design/icons"
 import asyncMock from "../../../../asyncMock"
 import { marked } from "marked"
+import ProyectosPorLineaInvestigacion from "../Proyectos/ProyectosPorLineaInvestigacion"
 
 const ListLineasContainer = () => {
   const [linea, setLinea] = useState(null)
@@ -120,6 +121,9 @@ const ListLineasContainer = () => {
             dangerouslySetInnerHTML={{ __html: descripcionHTML }}
           />
         </div>
+        {showProjects && (
+          <ProyectosPorLineaInvestigacion researchLineId={linea.id} />
+        )}
 
         {/* Actions */}
         <div className="carousel-container" style={{ textAlign: "center", marginBottom: "2rem" }}>
@@ -142,10 +146,10 @@ const ListLineasContainer = () => {
               gap: "1rem",
             }}
           >
-            <button onClick={handleToggleProjects} className="news-btn-primary">
+            <Link to={`/lineas-investigacion/${linea.id}/proyectos`} className="news-btn-primary">
               <FolderOutlined />
               <span>Ver proyectos</span>
-            </button>
+            </Link>
 
             <Link to="/post" state={{ linea: linea.nombre }} className="news-btn-primary">
               <BookOutlined />

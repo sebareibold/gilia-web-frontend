@@ -14,7 +14,7 @@ import {
 import { useTheme } from "../../../contexts/ThemeContext"
 import Loader from "../Loader/Loader"
 import "./Nosotros.css"
-import asyncMock from '../../../../asyncMock'
+import { dataService } from "../../../services/dataService"
 
 const iconMap = {
   BulbOutlined: BulbOutlined,
@@ -28,6 +28,7 @@ const iconMap = {
 export default function AboutUs() {
   const [aboutData, setAboutData] = useState(null)
   const [objectives, setObjectives] = useState([])
+  const [team, setTeam] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const { theme } = useTheme()
@@ -38,11 +39,14 @@ export default function AboutUs() {
       setLoading(true)
       setError(null)
       try {
-        // Obtener datos desde asyncMock
-        const aboutRes = await asyncMock.getAbout()
-        const objRes = await asyncMock.getObjetivos()
-        setAboutData(aboutRes.data)
+        const aboutRes = await dataService.getAboutInfo();
+        const objRes = await dataService.getObjectives();
+        const teamRes = await dataService.getTeamMembers();
+
+        setAboutData(aboutRes.about)
         setObjectives(objRes.data)
+        setTeam(teamRes.data)
+
         setTimeout(() => {
           animateStats()
         }, 500)
@@ -107,14 +111,13 @@ export default function AboutUs() {
       <div className="about-container">
         {/* Header */}
         <div className="about-header">
-          
           <h2 className="about-title">Conoce a GILIA</h2>
-          <p className="about-description">{aboutData.about.mision}</p>
+          <p className="about-description">{aboutData?.mision}</p>
         </div>
 
         {/* Grid de miembros del equipo */}
         <div className="team-grid">
-          {aboutData.people.map((member) => (
+          {team.map((member) => (
             <div key={member.id} className="team-member-card">
               {/* Header de la card con avatar y estado */}
               <div className="card-header-section">
@@ -140,7 +143,7 @@ export default function AboutUs() {
                 <div className="member-specialties-container">
                   <h4 className="specialties-title">Especialidades</h4>
                   <div className="member-specialties">
-                    {member.especialidades.map((specialty, index) => (
+                    {(member.especialidades || []).map((specialty, index) => (
                       <span key={index} className="specialty-tag">
                         {specialty}
                       </span>
