@@ -1,27 +1,17 @@
- "use client"
+"use client"
 
-import { useParams, Link } from "react-router-dom"
-import { useState, useEffect, useRef } from "react"
+import { useParams } from "react-router-dom"
+import { useState, useEffect } from "react"
 import { useTheme } from "../../../contexts/ThemeContext"
-import {
-  BookOutlined,
-  FolderOutlined,
-  TeamOutlined,
-  ArrowRightOutlined,
-  UserOutlined,
-  CheckCircleOutlined,
-  StarOutlined,
-} from "@ant-design/icons"
 import asyncMock from "../../../../asyncMock"
 import { marked } from "marked"
-import ProyectosPorLineaInvestigacion from "../Proyectos/ProyectosPorLineaInvestigacion"
+import SimpleCarousel from "./SimpleCarousel"
+import { UserOutlined, ArrowRightOutlined, ShareAltOutlined, CalendarOutlined } from "@ant-design/icons"
 
-const ListLineasContainer = () => {
+const DetallesLineaDeInvestigacion = () => {
   const [linea, setLinea] = useState(null)
-  const [showProjects, setShowProjects] = useState(false)
-  const [showIntegrants, setShowIntegrants] = useState(false)
-  const projectListRef = useRef(null)
-  const integrantsListRef = useRef(null)
+  const [proyectos, setProyectos] = useState([])
+  const [publicaciones, setPublicaciones] = useState([])
   const { id } = useParams()
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
@@ -31,35 +21,17 @@ const ListLineasContainer = () => {
       try {
         const response = await asyncMock.getLineaInvestigacion(id)
         setLinea(response.data)
-      } catch (error) {
-        console.error("Error al obtener la línea de investigación:", error)
+        // Proyectos y publicaciones pueden venir en la línea o se pueden pedir aparte
+        setProyectos(response.data.proyectos || [])
+        // Simulación: publicaciones asociadas a la línea
+        const pubs = await asyncMock.getPublicaciones({ linea: response.data.nombre })
+        setPublicaciones(pubs.data || [])
+      } catch {
+        setLinea(null)
       }
     }
-
     fetchData()
   }, [id])
-
-  useEffect(() => {
-    if (showProjects && projectListRef.current) {
-      setTimeout(() => {
-        projectListRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        })
-      }, 100)
-    }
-  }, [showProjects])
-
-  useEffect(() => {
-    if (showIntegrants && integrantsListRef.current) {
-      setTimeout(() => {
-        integrantsListRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        })
-      }, 100)
-    }
-  }, [showIntegrants])
 
   if (!linea) {
     return (
@@ -76,235 +48,123 @@ const ListLineasContainer = () => {
 
   const descripcionHTML = marked(linea.descripcion || "")
 
-  const handleToggleProjects = () => {
-    const newState = !showProjects
-    setShowProjects(newState)
-    if (newState) setShowIntegrants(false)
-  }
+  // Render para cada proyecto
+  const renderProyecto = (proyecto) => (
+    <div className="news-card" style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "flex-start", padding: 24 }}>
+      <div className="news-image-container" style={{ marginBottom: 18 }}>
+        <img src="/placeholder.svg?height=200&width=350" alt={proyecto.nombre} className="news-image" />
+        <div className="news-image-overlay" />
+      </div>
+      <div className="news-content" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <h3 className="news-title" style={{ fontSize: "1.1rem", marginBottom: 8, fontWeight: 700 }}>{proyecto.nombre}</h3>
+        <p className="news-description" style={{ fontSize: "0.98rem", color: "#bdbdbd", marginBottom: 0 }}>{proyecto.descripcion}</p>
+      </div>
+    </div>
+  )
 
-  const handleToggleIntegrants = () => {
-    const newState = !showIntegrants
-    setShowIntegrants(newState)
-    if (newState) setShowProjects(false)
-  }
+  // Render para cada publicación
+  const renderPublicacion = (pub) => (
+    <div className="news-card" style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "flex-start", padding: 36, minWidth: 380, maxWidth: 500, margin: "0 auto" }}>
+      <div className="news-content" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div className="news-meta" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+          <span className="news-category" style={{ background: "#2196F3", color: "white", alignSelf: "flex-start", fontSize: "0.8rem", borderRadius: 8, padding: "2px 12px" }}>{pub.tipo}</span>
+          <div className="news-views" style={{ display: "flex", alignItems: "center", gap: 4, background: "#e3e9f7", color: "#1a237e", borderRadius: 8, padding: "2px 12px", fontWeight: 700, fontSize: 15, boxShadow: "0 1px 4px #0001" }}>
+            <CalendarOutlined style={{ fontSize: 16, marginRight: 4 }} />
+            <span>{pub.anio}</span>
+          </div>
+        </div>
+        <h3 className="news-title" style={{ fontSize: "1.1rem", marginBottom: 8, fontWeight: 700 }}>{pub.titulo}</h3>
+        <div className="news-meta" style={{ fontSize: "0.92rem", color: "var(--color-text-secondary)", marginBottom: 8, fontWeight: 500 }}>
+          <div dangerouslySetInnerHTML={{ __html: pub.autores }} />
+        </div>
+        {pub.publicacion && (
+          <div style={{ fontSize: "0.8rem", color: "var(--color-text-muted)", marginBottom: 8, fontStyle: "italic" }}>
+            Publicado en: {pub.publicacion}
+          </div>
+        )}
+        <div className="news-description" style={{ fontSize: "0.98rem", color: "#bdbdbd", marginBottom: 0 }}>
+          <div dangerouslySetInnerHTML={{ __html: pub.resumen }} />
+        </div>
+        <div className="news-actions" style={{ marginTop: 18, display: "flex", gap: 12, alignItems: "center" }}>
+          {pub.enlace ? (
+            <a href={pub.enlace} target="_blank" rel="noopener noreferrer" className="news-btn-primary" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontWeight: 600, fontSize: 13 }}>
+              <span>Ver publicación</span>
+              <ArrowRightOutlined />
+            </a>
+          ) : (
+            <div className="news-btn-primary" style={{ opacity: 0.5, cursor: "not-allowed", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, fontWeight: 600, fontSize: 16 }}>
+              <span>No disponible</span>
+            </div>
+          )}
+          <button className="news-btn-secondary" aria-label="Compartir publicación" style={{ padding: 10, borderRadius: 8, fontSize: 18, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <ShareAltOutlined />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
 
-  const getRoleColor = (role) => {
-    const colors = {
-      director: "#E91E63",
-      investigador: "#2196F3",
-      colaborador: "#4CAF50",
-      becario: "#FF9800",
-    }
-    return colors[role] || "#6B7280"
-  }
+  // Render para cada integrante
+  const renderIntegrante = (integrante) => (
+    <div className="news-card" style={{ minWidth: 220, display: "flex", flexDirection: "column", alignItems: "center", padding: 24 }}>
+      <div className="news-image-container" style={{ marginBottom: 14, width: "100%" }}>
+        <img
+          src={integrante.photo?.[0]?.url || "/placeholder.svg?height=200&width=300"}
+          alt={integrante.full_name}
+          className="news-image"
+        />
+        <div className="news-image-overlay">
+          <UserOutlined />
+        </div>
+      </div>
+      <div className="news-content" style={{ width: "100%", textAlign: "center" }}>
+        <span className="news-category" style={{ background: "#4CAF50", color: "white", marginBottom: 8, fontSize: "0.95rem", borderRadius: 8, padding: "2px 12px", display: "inline-block" }}>{integrante.role_person}</span>
+        <h3 className="news-title" style={{ fontSize: "1.1rem", marginBottom: 8, fontWeight: 700 }}>{integrante.full_name}</h3>
+        <p className="news-description" style={{ fontSize: "0.98rem", color: "#bdbdbd", marginBottom: 0 }}>{integrante.biography || "Miembro del equipo de investigación."}</p>
+      </div>
+    </div>
+  )
 
   return (
     <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
-      <div className="exploration-container">
-        {/* Header */}
+      <div className="exploration-container" style={{ maxWidth: 1400, margin: "0 auto" }}>
+        {/* Título */}
         <div className="section-header">
           <h2 className="section-title">{linea.nombre}</h2>
-          <p className="section-description">
-            Explora los detalles de esta línea de investigación, sus proyectos activos, publicaciones científicas y el
-            equipo de investigadores que la conforman.
-          </p>
         </div>
-
-        {/* Content */}
+        {/* Descripción */}
         <div className="carousel-container" style={{ marginBottom: "2rem" }}>
           <div
-            style={{
-              fontSize: "1rem",
-              lineHeight: "1.6",
-              color: "var(--color-text-secondary)",
-            }}
+            style={{ fontSize: "1rem", lineHeight: "1.6", color: "var(--color-text-secondary)" }}
             dangerouslySetInnerHTML={{ __html: descripcionHTML }}
           />
         </div>
-        {showProjects && (
-          <ProyectosPorLineaInvestigacion researchLineId={linea.id} />
+
+        {/* Publicaciones */}
+        {publicaciones.length > 0 && (
+          <div className="multi-card-carousel">
+            <div className="carousel-container">
+              <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "2rem", padding: "0.5em 0" }}>Publicaciones</h3>
+              <SimpleCarousel items={publicaciones} renderItem={renderPublicacion} itemsPerPage={3} />
+            </div>
+          </div>
         )}
-
-        {/* Actions */}
-        <div className="carousel-container" style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h3
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "700",
-              color: "var(--color-text-primary)",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Explora más sobre esta línea
-          </h3>
-
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "1rem",
-            }}
-          >
-            <Link to={`/lineas-investigacion/${linea.id}/proyectos`} className="news-btn-primary">
-              <FolderOutlined />
-              <span>Ver proyectos</span>
-            </Link>
-
-            <Link to="/post" state={{ linea: linea.nombre }} className="news-btn-primary">
-              <BookOutlined />
-              <span>Ver publicaciones</span>
-            </Link>
-
-            <button onClick={handleToggleIntegrants} className="news-btn-primary">
-              <TeamOutlined />
-              <span>Ver integrantes</span>
-            </button>
+        {/* Integrantes */}
+        <div className="multi-card-carousel">
+          <div className="carousel-container">
+            <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "2rem", padding: "0.5em 0" }}>Integrantes</h3>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 32, justifyContent: "center" }}>
+              {linea.people && linea.people.length > 0 ? (
+                linea.people.map(renderIntegrante)
+              ) : (
+                <div style={{ color: "#aaa" }}>No hay integrantes registrados.</div>
+              )}
+            </div>
           </div>
         </div>
-
-        {/* Projects List */}
-        {showProjects && linea.proyectos?.length > 0 && (
-          <div ref={projectListRef} className="multi-card-carousel">
-            <div className="carousel-container">
-              <h3
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "var(--color-text-primary)",
-                  marginBottom: "1.5rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  textAlign: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FolderOutlined />
-                Proyectos de Investigación
-              </h3>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-                  gap: "2rem",
-                }}
-              >
-                {linea.proyectos.map((proyecto) => (
-                  <div key={proyecto.id} className="news-card">
-                    <div className="news-image-container">
-                      <img src="/placeholder.svg?height=200&width=350" alt={proyecto.nombre} className="news-image" />
-                      <div className="news-image-overlay">
-                        <CheckCircleOutlined />
-                      </div>
-                    </div>
-
-                    <div className="news-content">
-                      <div className="news-meta">
-                        <span className="news-category">Proyecto</span>
-                        <div className="news-views">
-                          <StarOutlined />
-                          <span>Activo</span>
-                        </div>
-                      </div>
-
-                      <h3 className="news-title">{proyecto.nombre}</h3>
-
-                      <p className="news-description">{proyecto.descripcion}</p>
-
-                      <div className="news-actions">
-                        <Link to={`/proyecto/${proyecto.id}`} className="news-btn-primary">
-                          <span>Ver detalles</span>
-                          <ArrowRightOutlined />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Integrants List */}
-        {showIntegrants && linea.people?.length > 0 && (
-          <div ref={integrantsListRef} className="multi-card-carousel">
-            <div className="carousel-container">
-              <h3
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "var(--color-text-primary)",
-                  marginBottom: "1.5rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  textAlign: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <TeamOutlined />
-                Integrantes del Equipo
-              </h3>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-                  gap: "2rem",
-                }}
-              >
-                {linea.people.map((integrante) => (
-                  <div key={integrante.id} className="news-card">
-                    <div className="news-image-container">
-                      <img
-                        src={integrante.photo?.[0]?.url || "/placeholder.svg?height=200&width=300"}
-                        alt={integrante.full_name}
-                        className="news-image"
-                      />
-                      <div className="news-image-overlay">
-                        <UserOutlined />
-                      </div>
-                    </div>
-
-                    <div className="news-content">
-                      <div className="news-meta">
-                        <span
-                          className="news-category"
-                          style={{
-                            background: getRoleColor(integrante.role_person),
-                            color: "white",
-                          }}
-                        >
-                          {integrante.role_person}
-                        </span>
-                      </div>
-
-                      <h3 className="news-title">{integrante.full_name}</h3>
-
-                      <p className="news-description">
-                        {integrante.biography || "Miembro del equipo de investigación especializado en esta línea."}
-                      </p>
-
-                      <div className="news-actions">
-                        {integrante.social_links && (
-                          <a href={`mailto:${integrante.social_links}`} className="news-btn-primary">
-                            <span>Contactar</span>
-                            <ArrowRightOutlined />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </section>
   )
 }
 
-export default ListLineasContainer
+export default DetallesLineaDeInvestigacion

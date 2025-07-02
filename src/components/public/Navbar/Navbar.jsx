@@ -142,7 +142,6 @@ const Navbar = () => {
         <div className="navbar-container">
           {/* Logo */}
           <Link to="/" className="navbar-logo" onClick={() => handleMenuItemClick()}>
-            <div className="navbar-logo-icon">G</div>
             <span>GILIA</span>
           </Link>
 

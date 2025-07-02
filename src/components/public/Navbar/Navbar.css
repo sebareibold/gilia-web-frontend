@@ -168,13 +168,12 @@
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   padding: 0.5rem;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid transparent;
 }
 
 [data-theme="dark"] .navbar-nav {
   background: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
 }
 
 .navbar-nav-item {
@@ -215,12 +214,21 @@
 }
 
 .navbar-nav-link:hover {
-  color: #000;
-  transform: translateY(-2px);
+  color: #000000;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 24px 0 rgba(0, 159, 227, 0.13);
+  border-radius: 12px;
+  transition: background 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 [data-theme="dark"] .navbar-nav-link:hover {
-  color: #fff;
+  color: #000000;
+  background: rgba(0, 34, 51, 0.45);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 24px 0 rgba(34, 193, 253, 0.13);
+  border-radius: 12px;
+  transition: background 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .navbar-nav-link:hover::before {
@@ -338,7 +346,7 @@
   width: 48px;
   height: 48px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: none;
   border-radius: 12px;
   color: rgba(0, 0, 0, 0.7);
   cursor: pointer;
@@ -351,7 +359,7 @@
 
 [data-theme="dark"] .navbar-action-btn {
   background: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -370,14 +378,21 @@
 }
 
 .navbar-action-btn:hover {
-  color: #000;
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  color: #000000;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 24px 0 rgba(0, 159, 227, 0.13);
+  transform: scale(1.07);
+  border: none;
 }
 
 [data-theme="dark"] .navbar-action-btn:hover {
-  color: #fff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  color: #000000;
+  background: rgba(0, 34, 51, 0.45);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 24px 0 rgba(34, 193, 253, 0.13);
+  transform: scale(1.07);
+  border: none;
 }
 
 .navbar-action-btn:hover::after {
@@ -685,4 +700,26 @@
 /* Transiciones suaves para el tema */
 * {
   transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+
+@font-face {
+  font-family: 'Anurati';
+  src: url('../../../Assets/fonts/Anurati.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Aplica la fuente solo al texto GILIA dentro del logo */
+.navbar-logo span {
+  font-family: 'Anurati', sans-serif;
+  letter-spacing: 0.18em;
+  font-size: 2.3rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #0f2c3f 0%, #047fb4 60%, #1d9dcc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }

@@ -352,8 +352,9 @@
     0 2px 8px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: clamp(160px, 40vw, 240px);
-  max-width: clamp(200px, 50vw, 280px);
+  min-width: 140px;
+  max-width: 340px;
+  width: auto;
   position: relative;
   overflow: hidden;
 }
@@ -462,9 +463,9 @@
   color: var(--color-text-primary);
   margin-bottom: var(--space-1);
   line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .floating-subtitle {

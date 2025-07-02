@@ -2,27 +2,41 @@
 import { 
   ArrowRightOutlined, 
   BookOutlined,
-  RobotOutlined,
   ApiOutlined,
-  ThunderboltOutlined,
-  EyeOutlined,
-  BarChartOutlined,
-  BulbOutlined,
-  SettingOutlined,
-  WifiOutlined
+  EyeOutlined
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
 import "./HomePresentation.css"
 import { useState, useEffect } from "react"
+import { dataService } from '../../../../services/dataService'
+
+function shuffleArray(array) {
+  // Algoritmo de Fisher-Yates
+  const arr = [...array]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
 
 export default function HomePresentation() {
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
   const [showFloating, setShowFloating] = useState(false)
+  const [researchLines, setResearchLines] = useState([])
+  const [extensionLines, setExtensionLines] = useState([])
 
   useEffect(() => {
     const timeout = setTimeout(() => setShowFloating(true), 1200)
+    // Cargar líneas de investigación y extensión
+    dataService.getResearchLines().then(res => {
+      setResearchLines(res.data?.data || res.data || [])
+    })
+    dataService.getExtensionLines().then(res => {
+      setExtensionLines(res.data?.data || res.data || [])
+    })
     return () => clearTimeout(timeout)
   }, [])
 
@@ -36,6 +50,19 @@ export default function HomePresentation() {
   const handleWatchDemo = () => {
     window.location.href = "/post"
   }
+
+  // Seleccionar las 8 líneas con nombre más corto (de ambas listas), sin duplicados y aleatorias
+  const uniqueLinesMap = new Map();
+  [...researchLines.map(l => ({...l, tipo: 'Investigación'})),
+   ...extensionLines.map(l => ({...l, tipo: 'Extensión'}))]
+    .forEach(l => {
+      const key = (l.nombre || l.title)?.trim();
+      if (key && !uniqueLinesMap.has(key)) {
+        uniqueLinesMap.set(key, l);
+      }
+    });
+  // Mezclar aleatoriamente y tomar 8
+  const floatingLines = shuffleArray(Array.from(uniqueLinesMap.values())).slice(0, 8)
 
   return (
     <section className="home-presentation" data-theme={isDarkTheme ? "dark" : "light"}>
@@ -65,112 +92,32 @@ export default function HomePresentation() {
           </div>
         </div>
 
-        {/* Cards flotantes con líneas de investigación */}
+        {/* Cards flotantes con líneas de investigación y extensión */}
         {showFloating && (
           <div className="floating-cards-container">
-            {/* Card 1 - Machine Learning */}
-            <div className="floating-element floating-element-1" style={{ animationDelay: "0.2s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <ThunderboltOutlined className="floating-icon-svg" />
+            {floatingLines.map((line, idx) => {
+              const text = line.nombre || line.title || ''
+              // Ancho mínimo 140px, máximo 260px, proporcional al largo del texto
+              const minW = 140, maxW = 260
+              const width = Math.max(minW, Math.min(maxW, minW + text.length * 7))
+              return (
+                <div
+                  key={`${line.tipo}-${line.id}`}
+                  className={`floating-element floating-element-${idx+1}`}
+                  style={{ animationDelay: `${0.2 + idx*0.2}s`, width }}
+                >
+                  <div className="floating-card">
+                    <div className="floating-icon">
+                      {line.tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
+                    </div>
+                    <div className="floating-content">
+                      <div className="floating-title">{text}</div>
+                      <div className="floating-subtitle">{line.tipo}</div>
+                    </div>
+                  </div>
                 </div>
-                <div className="floating-content">
-                  <div className="floating-title">IA Avanzada</div>
-                  <div className="floating-subtitle">Machine Learning</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2 - NLP */}
-            <div className="floating-element floating-element-2" style={{ animationDelay: "0.4s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <ApiOutlined className="floating-icon-svg" />
-                </div>
-                <div className="floating-content">
-                  <div className="floating-title">Procesamiento NLP</div>
-                  <div className="floating-subtitle">Natural Language Processing</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3 - Deep Learning */}
-            <div className="floating-element floating-element-3" style={{ animationDelay: "0.6s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <BulbOutlined className="floating-icon-svg" />
-                </div>
-                <div className="floating-content">
-                  <div className="floating-title">Deep Learning</div>
-                  <div className="floating-subtitle">Redes Neuronales Profundas</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 4 - Computer Vision */}
-            <div className="floating-element floating-element-4" style={{ animationDelay: "0.8s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <EyeOutlined className="floating-icon-svg" />
-                </div>
-                <div className="floating-content">
-                  <div className="floating-title">Computer Vision</div>
-                  <div className="floating-subtitle">Visión por Computadora</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 5 - Data Science */}
-            <div className="floating-element floating-element-5" style={{ animationDelay: "1.0s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <BarChartOutlined className="floating-icon-svg" />
-                </div>
-                <div className="floating-content">
-                  <div className="floating-title">Data Science</div>
-                  <div className="floating-subtitle">Ciencia de Datos</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 6 - Sistemas Inteligentes */}
-            <div className="floating-element floating-element-6" style={{ animationDelay: "1.2s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <SettingOutlined className="floating-icon-svg" />
-                </div>
-                <div className="floating-content">
-                  <div className="floating-title">Sistemas IA</div>
-                  <div className="floating-subtitle">Inteligencia Artificial</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 7 - Robótica */}
-            <div className="floating-element floating-element-7" style={{ animationDelay: "1.4s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <RobotOutlined className="floating-icon-svg" />
-                </div>
-                <div className="floating-content">
-                  <div className="floating-title">Robótica</div>
-                  <div className="floating-subtitle">Automatización Inteligente</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 8 - IoT */}
-            <div className="floating-element floating-element-8" style={{ animationDelay: "1.6s" }}>
-              <div className="floating-card">
-                <div className="floating-icon">
-                  <WifiOutlined className="floating-icon-svg" />
-                </div>
-                <div className="floating-content">
-                  <div className="floating-title">Internet de las Cosas</div>
-                  <div className="floating-subtitle">Conectividad Inteligente</div>
-                </div>
-              </div>
-            </div>
+              )
+            })}
           </div>
         )}
       </div>

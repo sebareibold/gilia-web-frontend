@@ -16,6 +16,7 @@ import Proyectos from "./components/public/Proyectos/Proyectos"
 import ExtensionLista from "./components/public/linea_extension/ExtensionLista"
 import LinesDetailContainer from "./components/public/DetallesLineaDeInvestigación/DetallesLineaDeInvestigación"
 import ExtensionDetails from "./components/public/linea_extension/ExtensionDetails"
+import ProyectoDetail from "./components/public/Proyectos/ProyectoDetail"
 
 // Admin Components
 import AdminLogin from "./components/admin/AdminLogin/AdminLogin"
@@ -52,6 +53,7 @@ function App() {
               <Route path="gallery" element={<GaleryContainer />} />
               <Route path="posts" element={<PostList />} />
               <Route path="projects" element={<Proyectos />} />
+              <Route path="projects/:id" element={<ProyectoDetail />} />
               <Route path="research-lines" element={<ExtensionLista />} />
               <Route path="research-lines/:id" element={<LinesDetailContainer />} />
               <Route path="extension/:id" element={<ExtensionDetails />} />

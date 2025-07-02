@@ -1,36 +1,32 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { marked } from "marked"
-import asyncMock from "../../../../asyncMock"
-import {
-  FolderOutlined,
-  BookOutlined,
-  BankOutlined,
-  TeamOutlined,
-  ArrowRightOutlined,
-  CheckCircleOutlined,
-  BranchesOutlined,
-  StarOutlined,
-} from "@ant-design/icons"
+import { dataService } from "../../../services/dataService"
+import { FolderOutlined, BankOutlined, BranchesOutlined } from "@ant-design/icons"
+import SimpleCarousel from "../DetallesLineaDeInvestigación/SimpleCarousel"
 
 const LineaExtensionDetail = () => {
   const { id } = useParams()
   const [linea, setLinea] = useState(null)
-  const [showProjects, setShowProjects] = useState(false)
-  const projectListRef = useRef(null)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
   useEffect(() => {
     const fetchLineaExtensionDetail = async () => {
       try {
-        const response = await asyncMock.getLineaExtension(id)
-        setLinea(response.data)
-      } catch (error) {
-        console.error(error)
+        const response = await dataService.getExtensionLine(id)
+        // Buscar los proyectos asociados por id
+        let proyectos = []
+        if (response.data.proyectos && Array.isArray(response.data.proyectos)) {
+          const allProjects = (await dataService.getProjects()).data
+          proyectos = response.data.proyectos.map(pid => allProjects.find(p => p.id === pid)).filter(Boolean)
+        }
+        setLinea({ ...response.data, proyectos })
+      } catch {
+        setLinea(null)
       }
     }
     fetchLineaExtensionDetail()
@@ -51,22 +47,35 @@ const LineaExtensionDetail = () => {
 
   const descripcionHTML = marked(linea.descripcion || "")
 
-  const handleToggleProjects = () => {
-    const newState = !showProjects
-    setShowProjects(newState)
-
-    if (!showProjects) {
-      setTimeout(() => {
-        if (projectListRef.current) {
-          projectListRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
-        }
-      }, 100)
-    }
+  // Render para cada proyecto (igual que en detalles de investigación)
+  const renderProyecto = (proyecto) => {
+    const nombre = proyecto.nombre || proyecto.title || "Proyecto sin nombre"
+    const descripcion = proyecto.descripcion || proyecto.description || "Sin descripción disponible"
+    // Truncar la descripción a 20 palabras
+    const palabras = descripcion.split(" ")
+    const descripcionCorta = palabras.length > 20 ? palabras.slice(0, 20).join(" ") + " ..." : descripcion
+    return (
+      <div className="news-card" style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "flex-start", padding: 20, minWidth: 320, maxWidth: 370, margin: "0 auto" }}>
+        <div className="news-image-container" style={{ marginBottom: 14 }}>
+          <img src="/placeholder.svg?height=200&width=350" alt={nombre} className="news-image" />
+          <div className="news-image-overlay" />
+        </div>
+        <div className="news-content" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <h3 className="news-title" style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 700 }}>{nombre}</h3>
+          <p className="news-description" style={{ fontSize: "0.95rem", color: "#bdbdbd", marginBottom: 0 }}>{descripcionCorta}</p>
+          <div className="news-actions" style={{ marginTop: 16 }}>
+            <Link to={`/projects/${proyecto.id}`} className="news-btn-primary" style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+              <span>Ver proyecto</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
     <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
-      <div className="exploration-container">
+      <div className="exploration-container" style={{ maxWidth: 1400, margin: "0 auto" }}>
         {/* Header */}
         <div className="section-header">
           <div className="section-badge">
@@ -75,43 +84,22 @@ const LineaExtensionDetail = () => {
           </div>
           <h2 className="section-title">{linea.nombre}</h2>
           <p className="section-description">
-            Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la
-            comunidad.
+            Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la comunidad.
           </p>
         </div>
-
-        {/* Content */}
+        {/* Descripción */}
         <div className="carousel-container" style={{ marginBottom: "2rem" }}>
           <div
-            style={{
-              fontSize: "1rem",
-              lineHeight: "1.6",
-              color: "var(--color-text-secondary)",
-            }}
+            style={{ fontSize: "1rem", lineHeight: "1.6", color: "var(--color-text-secondary)" }}
             dangerouslySetInnerHTML={{ __html: descripcionHTML }}
           />
         </div>
-
         {/* Instituciones */}
         {linea.instituciones && (
           <div className="carousel-container" style={{ marginBottom: "2rem" }}>
-            <h3
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "700",
-                color: "var(--color-text-primary)",
-                marginBottom: "1rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                textAlign: "center",
-                justifyContent: "center",
-              }}
-            >
-              <BankOutlined />
-              Escuelas e Instituciones Participantes
+            <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "1.35rem", padding: "0.5em 0" }}>
+              <BankOutlined style={{ marginRight: 8 }} />Escuelas e Instituciones Participantes
             </h3>
-
             <div className="news-card">
               <div className="news-content">
                 <p style={{ color: "var(--color-text-secondary)", margin: 0, lineHeight: "1.6", textAlign: "center" }}>
@@ -121,105 +109,14 @@ const LineaExtensionDetail = () => {
             </div>
           </div>
         )}
-
-        {/* Actions */}
-        <div className="carousel-container" style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <h3
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "700",
-              color: "var(--color-text-primary)",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Explora más sobre esta línea
-          </h3>
-
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              gap: "1rem",
-            }}
-          >
-            <button onClick={handleToggleProjects} className="news-btn-primary">
-              <FolderOutlined />
-              <span>Ver proyectos</span>
-            </button>
-
-            <Link to="/post" state={{ linea: linea.nombre }} className="news-btn-primary">
-              <BookOutlined />
-              <span>Ver publicaciones</span>
-            </Link>
-
-            <div className="news-btn-primary" style={{ cursor: "default" }}>
-              <TeamOutlined />
-              <span>Contactar equipo</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Projects List */}
-        {showProjects && linea.proyectos?.length > 0 && (
-          <div ref={projectListRef} className="multi-card-carousel">
+        {/* Proyectos */}
+        {linea.proyectos && linea.proyectos.length > 0 && (
+          <div className="multi-card-carousel">
             <div className="carousel-container">
-              <h3
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: "700",
-                  color: "var(--color-text-primary)",
-                  marginBottom: "1.5rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  textAlign: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FolderOutlined />
-                Proyectos Activos
+              <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "2rem", padding: "0.5em 0" }}>
+                <FolderOutlined style={{ marginRight: 8 }} />Proyectos
               </h3>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-                  gap: "2rem",
-                }}
-              >
-                {linea.proyectos.map((proyecto) => (
-                  <div key={proyecto.id} className="news-card">
-                    <div className="news-image-container">
-                      <img src="/placeholder.svg?height=200&width=350" alt={proyecto.nombre} className="news-image" />
-                      <div className="news-image-overlay">
-                        <CheckCircleOutlined />
-                      </div>
-                    </div>
-
-                    <div className="news-content">
-                      <div className="news-meta">
-                        <span className="news-category">Proyecto</span>
-                        <div className="news-views">
-                          <StarOutlined />
-                          <span>Activo</span>
-                        </div>
-                      </div>
-
-                      <h3 className="news-title">{proyecto.nombre}</h3>
-
-                      <p className="news-description">{proyecto.descripcion}</p>
-
-                      <div className="news-actions">
-                        <Link to={`/proyecto/${proyecto.id}`} className="news-btn-primary">
-                          <span>Ver detalles</span>
-                          <ArrowRightOutlined />
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SimpleCarousel items={linea.proyectos} renderItem={renderProyecto} itemsPerPage={3} />
             </div>
           </div>
         )}

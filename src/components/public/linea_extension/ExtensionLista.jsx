@@ -93,7 +93,7 @@ const LineaExtensionList = () => {
                     </p>
 
                     <div className="news-actions">
-                      <Link to={`/linea-extension/${linea.id}`} className="news-btn-primary">
+                      <Link to={`/extension/${linea.id}`} className="news-btn-primary">
                         <span>Ver más</span>
                         <ArrowRightOutlined />
                       </Link>
