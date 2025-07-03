@@ -1181,6 +1181,13 @@ export const asyncMock = {
       filteredLines = filteredLines.filter((line) => line.leaderId === Number.parseInt(filters.leaderId))
     }
 
+    // Mapeo de campos para compatibilidad
+    filteredLines = filteredLines.map(line => ({
+      ...line,
+      nombre: line.nombre || line.title,
+      descripcion: line.descripcion || line.description,
+    }))
+
     return {
       data: filteredLines,
       meta: {
@@ -1196,7 +1203,8 @@ export const asyncMock = {
     await delay(500)
     const line = mockData.researchLines.find((l) => l.id === Number.parseInt(id))
     if (!line) throw new Error("Línea de investigación no encontrada")
-    return { data: line }
+    // Mapeo de campos para compatibilidad
+    return { data: { ...line, nombre: line.nombre || line.title, descripcion: line.descripcion || line.description } }
   },
 
   // ===== PUBLICACIONES =====
@@ -1310,6 +1318,13 @@ export const asyncMock = {
       filteredLines = filteredLines.filter((line) => line.leaderId === Number.parseInt(filters.leaderId))
     }
 
+    // Mapeo de campos para compatibilidad
+    filteredLines = filteredLines.map(line => ({
+      ...line,
+      nombre: line.nombre || line.title,
+      descripcion: line.descripcion || line.description,
+    }))
+
     return {
       data: filteredLines,
       meta: {
@@ -1325,7 +1340,8 @@ export const asyncMock = {
     await delay(500)
     const line = mockData.extensionLines.find((l) => l.id === Number.parseInt(id))
     if (!line) throw new Error("Línea de extensión no encontrada")
-    return { data: line }
+    // Mapeo de campos para compatibilidad
+    return { data: { ...line, nombre: line.nombre || line.title, descripcion: line.descripcion || line.description } }
   },
 
   // ===== CONFIGURACIÓN =====

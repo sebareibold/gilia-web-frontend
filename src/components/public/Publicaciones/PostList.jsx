@@ -1,20 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useTheme } from "../../../contexts/ThemeContext"
 import {
-  FilterOutlined,
   SearchOutlined,
   ShareAltOutlined,
   ArrowRightOutlined,
   CalendarOutlined,
-  UserOutlined,
-  TagOutlined,
-  LeftOutlined,
-  RightOutlined,
 } from "@ant-design/icons"
 import asyncMock from "../../../../asyncMock"
 import { useLocation } from "react-router-dom"
+import PublicationFilters from './PublicationFilters'
+import './PublicationFilters.css'
 
 const PostList = () => {
   const { state } = useLocation()
@@ -23,9 +20,17 @@ const PostList = () => {
   const [loading, setLoading] = useState(true)
   const [pagina, setPagina] = useState(1)
   const [filtro, setFiltro] = useState({ anio: "", tipo: "", linea: linea })
-  const [totalPaginas, setTotalPaginas] = useState(1)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const [visibleCount, setVisibleCount] = useState(6)
+  const [animatedIndexes, setAnimatedIndexes] = useState(new Set())
+  const cardRefs = useRef([])
+  const filterRef = useRef(null)
+  const headerRef = useRef(null)
+  const loadMoreRef = useRef(null)
+
+  const visiblePublicaciones = publicaciones.slice(0, visibleCount)
+  const hasMore = visibleCount < publicaciones.length
 
   useEffect(() => {
     const fetchPublicaciones = async () => {
@@ -33,7 +38,6 @@ const PostList = () => {
       try {
         const response = await asyncMock.getPublicaciones(filtro)
         setPublicaciones(response.data || [])
-        setTotalPaginas(response.meta?.pagination?.pageCount || 1)
       } catch (err) {
         console.error("Error fetching publicaciones:", err)
       } finally {
@@ -44,9 +48,48 @@ const PostList = () => {
     fetchPublicaciones()
   }, [pagina, filtro])
 
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = entry.target.dataset.index
+            setAnimatedIndexes((prev) => new Set([...prev, index]))
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+    // Header
+    if (headerRef.current) observer.observe(headerRef.current)
+    // Filtros
+    if (filterRef.current) observer.observe(filterRef.current)
+    // Cards
+    cardRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref)
+    })
+    // Botón ver más
+    if (loadMoreRef.current) observer.observe(loadMoreRef.current)
+    return () => {
+      if (headerRef.current) observer.unobserve(headerRef.current)
+      if (filterRef.current) observer.unobserve(filterRef.current)
+      cardRefs.current.forEach((ref) => {
+        if (ref) observer.unobserve(ref)
+      })
+      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current)
+    }
+  }, [visiblePublicaciones, hasMore])
+
   const handleFiltroChange = (e) => {
     setFiltro({ ...filtro, [e.target.name]: e.target.value })
     setPagina(1)
+    setVisibleCount(6)
+  }
+
+  const handleClearFilters = () => {
+    setFiltro({ anio: '', tipo: '', autores: '' })
+    setPagina(1)
+    setVisibleCount(6)
   }
 
   const getTypeColor = (tipo) => {
@@ -65,8 +108,12 @@ const PostList = () => {
     <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="exploration-container">
         {/* Header */}
-        <div className="section-header">
-
+        <div
+          className={`section-header${animatedIndexes.has('header') ? ' animated' : ''}`}
+          ref={headerRef}
+          data-index="header"
+          style={{ animationDelay: '0.1s' }}
+        >
           <h2 className="section-title">Publicaciones Científicas</h2>
           <p className="section-description">
             Explora nuestras investigaciones, artículos y contribuciones académicas en el campo de la inteligencia
@@ -74,106 +121,14 @@ const PostList = () => {
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="carousel-container" style={{ marginBottom: "2rem" }}>
-          <h3
-            style={{
-              fontSize: "1.2rem",
-              fontWeight: "600",
-              color: "var(--color-text-primary)",
-              marginBottom: "1.5rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-            }}
-          >
-            <FilterOutlined />
-            Filtros de Búsqueda
-          </h3>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-              gap: "1rem",
-            }}
-          >
-            <div>
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  marginBottom: "0.5rem",
-                  color: "var(--color-text-primary)",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                }}
-              >
-                <CalendarOutlined />
-                Año de Publicación
-              </label>
-              <input
-                type="number"
-                name="anio"
-                placeholder="Ej: 2024"
-                value={filtro.anio || ""}
-                onChange={handleFiltroChange}
-                className="input"
-              />
-            </div>
-
-            <div>
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  marginBottom: "0.5rem",
-                  color: "var(--color-text-primary)",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                }}
-              >
-                <TagOutlined />
-                Tipo de Publicación
-              </label>
-              <select name="tipo" value={filtro.tipo || ""} onChange={handleFiltroChange} className="input">
-                <option value="">Todos los tipos</option>
-                <option value="Artículo">Artículo</option>
-                <option value="Capítulo de Libro">Capítulo de Libro</option>
-                <option value="Paper">Paper</option>
-                <option value="Libro">Libro</option>
-                <option value="Informe Técnico">Informe Técnico</option>
-                <option value="Tesis">Tesis</option>
-              </select>
-            </div>
-
-            <div>
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  marginBottom: "0.5rem",
-                  color: "var(--color-text-primary)",
-                  fontSize: "0.9rem",
-                  fontWeight: "500",
-                }}
-              >
-                <UserOutlined />
-                Autor
-              </label>
-              <input
-                type="text"
-                name="autores"
-                placeholder="Buscar por autor"
-                value={filtro.autores || ""}
-                onChange={handleFiltroChange}
-                className="input"
-              />
-            </div>
-          </div>
+        {/* Filtros */}
+        <div
+          ref={filterRef}
+          data-index="filters"
+          className={`filters-animated${animatedIndexes.has('filters') ? ' animated' : ''}`}
+          style={{ animationDelay: '0.2s' }}
+        >
+          <PublicationFilters filtro={filtro} onChange={handleFiltroChange} onClear={handleClearFilters} />
         </div>
 
         {/* Content */}
@@ -200,8 +155,14 @@ const PostList = () => {
                   gap: "2rem",
                 }}
               >
-                {publicaciones.map((pub) => (
-                  <div key={pub.id} className="news-card">
+                {visiblePublicaciones.map((pub, idx) => (
+                  <div
+                    key={pub.id}
+                    ref={el => cardRefs.current[idx] = el}
+                    data-index={idx}
+                    className={`news-card${animatedIndexes.has(idx.toString()) ? ' animated' : ''}`}
+                    style={{ animationDelay: `${0.3 + idx * 0.1}s` }}
+                  >
                     {/* Header de la publicación */}
                     <div className="news-content">
                       <div className="news-meta">
@@ -270,45 +231,20 @@ const PostList = () => {
                 ))}
               </div>
             </div>
-
-            {/* Pagination */}
-            {totalPaginas > 1 && (
-              <div className="carousel-navigation">
+            {/* Botón Ver más */}
+            {hasMore && (
+              <div
+                className={`load-more-container${animatedIndexes.has('loadmore') ? ' animated' : ''}`}
+                ref={loadMoreRef}
+                data-index="loadmore"
+                style={{ animationDelay: `${0.3 + visiblePublicaciones.length * 0.1}s` }}
+              >
                 <button
-                  disabled={pagina === 1}
-                  onClick={() => setPagina(pagina - 1)}
-                  className="carousel-nav-btn"
-                  style={{
-                    opacity: pagina === 1 ? 0.3 : 1,
-                    cursor: pagina === 1 ? "not-allowed" : "pointer",
-                  }}
+                  className="load-more-btn"
+                  onClick={() => setVisibleCount((prev) => prev + 6)}
+                  aria-label="Cargar más publicaciones"
                 >
-                  <LeftOutlined />
-                </button>
-
-                <div
-                  style={{
-                    padding: "0.5rem 1rem",
-                    background: "rgba(255, 255, 255, 0.1)",
-                    borderRadius: "0.5rem",
-                    color: "var(--color-text-secondary)",
-                    fontSize: "0.875rem",
-                    fontWeight: "500",
-                  }}
-                >
-                  Página {pagina} de {totalPaginas}
-                </div>
-
-                <button
-                  disabled={pagina === totalPaginas}
-                  onClick={() => setPagina(pagina + 1)}
-                  className="carousel-nav-btn"
-                  style={{
-                    opacity: pagina === totalPaginas ? 0.3 : 1,
-                    cursor: pagina === totalPaginas ? "not-allowed" : "pointer",
-                  }}
-                >
-                  <RightOutlined />
+                  <span>Ver más publicaciones</span>
                 </button>
               </div>
             )}

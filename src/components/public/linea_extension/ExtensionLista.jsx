@@ -11,6 +11,7 @@ const LineaExtensionList = () => {
   const [loading, setLoading] = useState(true)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const [visibleCount, setVisibleCount] = useState(6)
 
   useEffect(() => {
     const fetchLineasExtension = async () => {
@@ -25,6 +26,9 @@ const LineaExtensionList = () => {
     }
     fetchLineasExtension()
   }, [])
+
+  const visibleLineas = lineas.slice(0, visibleCount)
+  const hasMore = visibleCount < lineas.length
 
   if (loading) {
     return (
@@ -62,7 +66,7 @@ const LineaExtensionList = () => {
                 gap: "2rem",
               }}
             >
-              {lineas.map((linea) => (
+              {visibleLineas.map((linea) => (
                 <div key={linea.id} className="news-card">
                   <div className="news-image-container">
                     <img
@@ -103,6 +107,18 @@ const LineaExtensionList = () => {
               ))}
             </div>
           </div>
+          {/* Botón Ver más */}
+          {hasMore && (
+            <div className="load-more-container">
+              <button
+                className="load-more-btn"
+                onClick={() => setVisibleCount((prev) => prev + 6)}
+                aria-label="Cargar más líneas de extensión"
+              >
+                <span>Ver más líneas de extensión</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Stats Section */}

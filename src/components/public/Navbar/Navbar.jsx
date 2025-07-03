@@ -17,57 +17,27 @@ import {
 } from "@ant-design/icons"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { Link, useLocation } from "react-router-dom"
-import { API_BASE_URL } from "../../../config/apiConfig"
 import "./Navbar.css"
+import { dataService } from "../../../services/dataService"
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [lineas, setLineas] = useState([])
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const [researchLines, setResearchLines] = useState([])
   const { theme, toggleTheme } = useTheme()
   const location = useLocation()
 
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
   useEffect(() => {
-    const fetchLineas = async () => {
+    const fetchLines = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/linea-investigacions`)
-        const result = await response.json()
-        if (result.data && Array.isArray(result.data)) {
-          setLineas(result.data)
-        }
+        const res = await dataService.getResearchLines()
+        setResearchLines(res.data)
       } catch (error) {
         console.error("Error al obtener las líneas:", error)
-        // Fallback con datos mock
-        setLineas([
-          { id: 1, nombre: "Ontologías y Web Semántica" },
-          { id: 2, nombre: "Procesamiento de Lenguaje Natural" },
-          { id: 3, nombre: "Sistemas Inteligentes" },
-          { id: 4, nombre: "Robótica y Sistemas Embebidos" },
-          { id: 5, nombre: "Educación en Ciencias de la Computación" },
-          { id: 6, nombre: "Lenguajes de Programación" },
-          { id: 7, nombre: "Ética en Ciencias de la Computación" },
-        ])
       }
     }
-
-    fetchLineas()
-  }, [])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = (scrollTop / docHeight) * 100
-
-      setScrolled(scrollTop > 50)
-      setScrollProgress(progress)
-    }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    fetchLines()
   }, [])
 
   useEffect(() => {
@@ -105,7 +75,7 @@ const Navbar = () => {
       label: "Investigación",
       icon: <ExperimentOutlined />,
       active: location.pathname.startsWith("/research-lines"),
-      dropdown: lineas.map((linea) => ({
+      dropdown: researchLines.map((linea) => ({
         label: linea.nombre,
         path: `/research-lines/${linea.id}`,
       })),
@@ -138,7 +108,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`navbar ${scrolled ? "navbar-scroll" : ""}`} data-theme={isDarkTheme ? "dark" : "light"}>
+      <nav className="navbar" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="navbar-container">
           {/* Logo */}
           <Link to="/" className="navbar-logo" onClick={() => handleMenuItemClick()}>
@@ -207,9 +177,6 @@ const Navbar = () => {
             <span></span>
           </button>
         </div>
-
-        {/* Barra de progreso de scroll */}
-        <div className="navbar-progress" style={{ width: `${scrollProgress}%` }}></div>
       </nav>
 
       {/* Menú móvil */}

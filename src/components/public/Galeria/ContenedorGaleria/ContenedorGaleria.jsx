@@ -8,6 +8,7 @@ import Loader from "../../Loader/Loader"
 import "../../../shared/FuturisticStyles.css"
 import "../../Home/Novedades/HomeExploration.css"
 import "./ContenedorGaleria.css"
+import { dataService } from "../../../../services/dataService"
 
 const Galery = () => {
   const [gallerySections, setGallerySections] = useState([])
@@ -17,17 +18,13 @@ const Galery = () => {
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchGallery = async () => {
       setLoading(true)
       try {
-        const response = await fetch(`${API_BASE_URL}/api/galerias`)
-        if (!response.ok) {
-          throw new Error(`Error HTTP: ${response.status} ${response.statusText}`)
-        }
-        const data = await response.json()
-        setGallerySections(data)
-      } catch (error) {
-        console.error("Error al cargar galería:", error)
+        const res = await dataService.getGalleryItems()
+        setGallerySections(res.data)
+      } catch (err) {
+        console.error("Error al obtener la galería:", err)
         // Mock data con imágenes de diferentes resoluciones
         setGallerySections([
           {
@@ -147,7 +144,7 @@ const Galery = () => {
       }
     }
 
-    fetchData()
+    fetchGallery()
   }, [])
 
   const openModal = (image, section) => {
