@@ -9,13 +9,12 @@ import {
   RocketOutlined,
   ThunderboltOutlined,
   StarOutlined,
-  LeftOutlined,
-  RightOutlined,
   ShareAltOutlined,
   EyeOutlined,
   FireOutlined,
   TrophyOutlined,
   TeamOutlined,
+  DownOutlined,
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
 import "./HomeExploration.css"
@@ -38,30 +37,36 @@ export default function HomeExploration() {
   const [novedades, setNovedades] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [cardsPerView, setCardsPerView] = useState(3)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const autoPlayRef = useRef(null)
+  const [visibleCount, setVisibleCount] = useState(3) // Mostrar 3 novedades inicialmente (1 fila)
+  const [loadingMore, setLoadingMore] = useState(false)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
-  // Determinar cuántas cards mostrar según el tamaño de pantalla
-  useEffect(() => {
-    const updateCardsPerView = () => {
-      if (window.innerWidth >= 1200) {
-        setCardsPerView(3)
-      } else if (window.innerWidth >= 768) {
-        setCardsPerView(2)
-      } else {
-        setCardsPerView(1)
-      }
-    }
+  // Animación de aparición
+  const [animatedCards, setAnimatedCards] = useState(new Set())
+  const cardRefs = useRef([])
 
-    updateCardsPerView()
-    window.addEventListener("resize", updateCardsPerView)
-    return () => window.removeEventListener("resize", updateCardsPerView)
-  }, [])
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.dataset.index)
+            setAnimatedCards(prev => new Set([...prev, index]))
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+    cardRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref)
+    })
+    return () => {
+      cardRefs.current.forEach((ref) => {
+        if (ref) observer.unobserve(ref)
+      })
+    }
+  }, [novedades, visibleCount])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,67 +86,13 @@ export default function HomeExploration() {
     fetchData()
   }, [])
 
-  // Auto-play del carrusel
-  useEffect(() => {
-    if (novedades.length > 0 && !isTransitioning) {
-      autoPlayRef.current = setInterval(() => {
-        setCurrentIndex((prevIndex) => {
-          const maxIndex = Math.max(0, novedades.length - cardsPerView)
-          const newIndex = prevIndex >= maxIndex ? 0 : prevIndex + 1
-          
-          // Ejecutar animaciones escalonadas en auto-play
-          setIsAnimating(true)
-          setTimeout(() => {
-            setIsAnimating(false)
-          }, 1000) // Tiempo para que terminen las animaciones escalonadas
-          
-          return newIndex
-        })
-      }, 8000) // Aumentado de 6000ms a 8000ms (8 segundos)
-
-      return () => {
-        if (autoPlayRef.current) {
-          clearInterval(autoPlayRef.current)
-        }
-      }
-    }
-  }, [novedades.length, isTransitioning, cardsPerView])
-
-  const handleTransition = (newIndex) => {
-    const maxIndex = Math.max(0, novedades.length - cardsPerView)
-    if (isTransitioning || newIndex === currentIndex || newIndex < 0 || newIndex > maxIndex) return
-
-    // Pausar auto-play durante transición manual
-    if (autoPlayRef.current) {
-      clearInterval(autoPlayRef.current)
-    }
-
-    setIsTransitioning(true)
-    setIsAnimating(true)
-    setCurrentIndex(newIndex)
-
-    // Resetear el estado de transición y animación
+  const handleLoadMore = () => {
+    setLoadingMore(true)
+    // Simular carga asíncrona
     setTimeout(() => {
-      setIsTransitioning(false)
-      setTimeout(() => {
-        setIsAnimating(false)
-      }, 1000) // Aumentado de 600ms a 1000ms para animaciones más lentas
-    }, 600) // Aumentado de 400ms a 600ms para transición más lenta
-  }
-
-  const handlePrevious = () => {
-    const newIndex = currentIndex === 0 ? Math.max(0, novedades.length - cardsPerView) : currentIndex - 1
-    handleTransition(newIndex)
-  }
-
-  const handleNext = () => {
-    const maxIndex = Math.max(0, novedades.length - cardsPerView)
-    const newIndex = currentIndex >= maxIndex ? 0 : currentIndex + 1
-    handleTransition(newIndex)
-  }
-
-  const handleIndicatorClick = (index) => {
-    handleTransition(index)
+      setVisibleCount(prev => prev + 6) // Cargar 6 novedades más (2 filas de 3)
+      setLoadingMore(false)
+    }, 800)
   }
 
   const formatViews = (views) => {
@@ -151,12 +102,12 @@ export default function HomeExploration() {
     return views.toString()
   }
 
-  const getVisibleCards = () => {
-    return novedades.slice(currentIndex, currentIndex + cardsPerView)
+  const getVisibleNovedades = () => {
+    return novedades.slice(0, visibleCount)
   }
 
-  const getTotalSlides = () => {
-    return Math.max(0, novedades.length - cardsPerView + 1)
+  const hasMoreNovedades = () => {
+    return visibleCount < novedades.length
   }
 
   if (loading) {
@@ -191,8 +142,7 @@ export default function HomeExploration() {
     )
   }
 
-  const visibleCards = getVisibleCards()
-  const totalSlides = getTotalSlides()
+  const visibleNovedades = getVisibleNovedades()
 
   return (
     <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
@@ -210,103 +160,90 @@ export default function HomeExploration() {
           </p>
         </div>
 
-        {/* Carrusel multi-card */}
-        <div className="multi-card-carousel">
-          {/* Controles de navegación */}
-          <div className="carousel-navigation">
-            <button
-              className="carousel-nav-btn carousel-nav-prev"
-              onClick={handlePrevious}
-              disabled={isTransitioning}
-              aria-label="Noticias anteriores"
-            >
-              <LeftOutlined />
-            </button>
-            <button
-              className="carousel-nav-btn carousel-nav-next"
-              onClick={handleNext}
-              disabled={isTransitioning}
-              aria-label="Siguientes noticias"
-            >
-              <RightOutlined />
-            </button>
-          </div>
-
-          <div className="carousel-container">
-            {/* Track del carrusel */}
-            <div className="carousel-track">
-              {visibleCards.map((novedad, index) => {
-                const NewsIcon = newsIcons[(currentIndex + index) % newsIcons.length]
-                return (
-                  <div 
-                    key={`${novedad.id}-${currentIndex}`} 
-                    className={`carousel-slide ${isAnimating ? 'carousel-slide-animating' : ''}`}
-                    style={{
-                      animationDelay: isAnimating ? `${index * 0.15}s` : '0s'
-                    }}
-                  >
-                    <div className="news-card">
-                      {/* Imagen */}
-                      <div className="news-image-container">
-                        <img
-                          src={novedad.imagen || "/placeholder.svg?height=300&width=400"}
-                          alt={novedad.Titulo}
-                          className="news-image"
-                          loading="lazy"
-                        />
-                        <div className="news-image-overlay">
-                          <NewsIcon />
-                        </div>
-                      </div>
-
-                      {/* Contenido */}
-                      <div className="news-content">
-                        <div className="news-meta">
-                          <span className="news-category">{novedad.categoria}</span>
-                          <div className="news-views">
-                            <EyeOutlined />
-                            <span>{formatViews(novedad.vistas)}</span>
-                          </div>
-                        </div>
-
-                        <h3 className="news-title">{novedad.Titulo}</h3>
-
-                        <p className="news-description">{novedad.Descripcion}</p>
-
-                        <div className="news-actions">
-                          <a
-                            href={novedad.Enlace}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="news-btn-primary"
-                          >
-                            <span>Leer más</span>
-                            <ArrowRightOutlined />
-                          </a>
-                          <button className="news-btn-secondary" aria-label="Compartir noticia">
-                            <ShareAltOutlined />
-                          </button>
-                        </div>
-                      </div>
+        {/* Grid de novedades */}
+        <div className="news-grid-container">
+          <div className="news-grid">
+            {visibleNovedades.map((novedad, index) => {
+              const NewsIcon = newsIcons[index % newsIcons.length]
+              const isAnimated = animatedCards.has(index)
+              return (
+                <div 
+                  key={novedad.id} 
+                  ref={el => cardRefs.current[index] = el}
+                  data-index={index}
+                  className={`news-card${isAnimated ? ' animated' : ''}`}
+                  style={{
+                    animationDelay: `${index * 0.1}s`
+                  }}
+                >
+                  {/* Imagen */}
+                  <div className="news-image-container">
+                    <img
+                      src={novedad.imagen || "/placeholder.svg?height=300&width=400"}
+                      alt={novedad.Titulo}
+                      className="news-image"
+                      loading="lazy"
+                    />
+                    <div className="news-image-overlay">
+                      <NewsIcon />
                     </div>
                   </div>
-                )
-              })}
-            </div>
+
+                  {/* Contenido */}
+                  <div className="news-content">
+                    <div className="news-meta">
+                      <span className="news-category">{novedad.categoria}</span>
+                      <div className="news-views">
+                        <EyeOutlined />
+                        <span>{formatViews(novedad.vistas)}</span>
+                      </div>
+                    </div>
+
+                    <h3 className="news-title">{novedad.Titulo}</h3>
+
+                    <p className="news-description">{novedad.Descripcion}</p>
+
+                    <div className="news-actions">
+                      <a
+                        href={novedad.Enlace}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="news-btn-primary"
+                      >
+                        <span>Leer más</span>
+                        <ArrowRightOutlined />
+                      </a>
+                      <button className="news-btn-secondary" aria-label="Compartir noticia">
+                        <ShareAltOutlined />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
           </div>
 
-          {/* Indicadores */}
-          {totalSlides > 1 && (
-            <div className="carousel-indicators">
-              {Array.from({ length: totalSlides }, (_, index) => (
-                <button
-                  key={index}
-                  className={`carousel-indicator ${index === currentIndex ? "active" : ""}`}
-                  onClick={() => handleIndicatorClick(index)}
-                  disabled={isTransitioning}
-                  aria-label={`Ir al grupo de noticias ${index + 1}`}
-                />
-              ))}
+          {/* Botón "Ver más" */}
+          {hasMoreNovedades() && (
+            <div className="load-more-container">
+              <button
+                className="load-more-btn"
+                onClick={handleLoadMore}
+                disabled={loadingMore}
+                aria-label="Cargar más novedades"
+              >
+                {loadingMore ? (
+                  <>
+                    <div className="loading-spinner-small" />
+                    <span>Cargando...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Ver más novedades</span>
+                    <DownOutlined />
+                  </>
+                )}
+              </button>
             </div>
           )}
         </div>

@@ -20,10 +20,22 @@ function shuffleArray(array) {
   return arr
 }
 
+// Hook para detectar mobile
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < breakpoint);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < breakpoint);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function HomePresentation() {
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
 
+  const isMobile = useIsMobile();
   const [showFloating, setShowFloating] = useState(false)
   const [researchLines, setResearchLines] = useState([])
   const [extensionLines, setExtensionLines] = useState([])
@@ -64,9 +76,32 @@ export default function HomePresentation() {
   // Mezclar aleatoriamente y tomar 8
   const floatingLines = shuffleArray(Array.from(uniqueLinesMap.values())).slice(0, 8)
 
+  // Para mobile, solo 2 cards: la primera y la segunda
+  const floatingLinesMobile = floatingLines.slice(0, 2)
+
   return (
     <section className="home-presentation" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="home-container">
+        {/* Card flotante arriba del título (solo mobile) */}
+        {isMobile && showFloating && floatingLinesMobile[0] && (
+          <div className="floating-cards-container floating-mobile-top">
+            <div
+              key={`${floatingLinesMobile[0].tipo}-${floatingLinesMobile[0].id}`}
+              className={`floating-element floating-element-1`}
+              style={{ animationDelay: `0.2s`, width: Math.max(140, Math.min(260, 140 + (floatingLinesMobile[0].nombre || floatingLinesMobile[0].title || '').length * 7)) }}
+            >
+              <div className="floating-card">
+                <div className="floating-icon">
+                  {floatingLinesMobile[0].tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">{floatingLinesMobile[0].nombre || floatingLinesMobile[0].title || ''}</div>
+                  <div className="floating-subtitle">{floatingLinesMobile[0].tipo}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Contenido principal centrado */}
         <div className="hero-content-centered">
           <h1 className="hero-title">
@@ -92,8 +127,28 @@ export default function HomePresentation() {
           </div>
         </div>
 
-        {/* Cards flotantes con líneas de investigación y extensión */}
-        {showFloating && (
+        {/* Card flotante abajo del título (solo mobile) */}
+        {isMobile && showFloating && floatingLinesMobile[1] && (
+          <div className="floating-cards-container floating-mobile-bottom">
+            <div
+              key={`${floatingLinesMobile[1].tipo}-${floatingLinesMobile[1].id}`}
+              className={`floating-element floating-element-2`}
+              style={{ animationDelay: `0.4s`, width: Math.max(140, Math.min(260, 140 + (floatingLinesMobile[1].nombre || floatingLinesMobile[1].title || '').length * 7)) }}
+            >
+              <div className="floating-card">
+                <div className="floating-icon">
+                  {floatingLinesMobile[1].tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
+                </div>
+                <div className="floating-content">
+                  <div className="floating-title">{floatingLinesMobile[1].nombre || floatingLinesMobile[1].title || ''}</div>
+                  <div className="floating-subtitle">{floatingLinesMobile[1].tipo}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Cards flotantes normales (desktop) */}
+        {!isMobile && showFloating && (
           <div className="floating-cards-container">
             {floatingLines.map((line, idx) => {
               const text = line.nombre || line.title || ''

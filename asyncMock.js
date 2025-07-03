@@ -987,7 +987,7 @@ const mockData = {
       id: 1,
       Titulo: "Revolucionario Modelo de IA para Procesamiento de Lenguaje Natural",
       Descripcion:
-        "Desarrollo de un modelo de inteligencia artificial que supera a los enfoques existentes en un 15% en tareas de comprensión de texto y análisis de sentimientos para el español.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://www.ieee.org/publications/",
       imagen: "/novedad.png",
       categoria: "Investigación",
@@ -998,7 +998,7 @@ const mockData = {
       id: 2,
       Titulo: "Participación Destacada en ICAI 2024",
       Descripcion:
-        "Tres ponencias magistrales sobre ética en IA, sistemas adaptativos y robótica educativa. Nuestros investigadores fueron keynote speakers principales.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://www.icai-conference.org/",
       imagen: "/novedad.png",
       categoria: "Conferencia",
@@ -1009,7 +1009,7 @@ const mockData = {
       id: 3,
       Titulo: "Proyecto Horizon Europe Multinacional",
       Descripcion:
-        "Colaboración internacional con universidades de Brasil y Chile, financiado con 2.5 millones de euros para desarrollar sistemas inteligentes adaptativos.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://ec.europa.eu/programmes/horizon2020/",
       imagen: "/novedad.png",
       categoria: "Proyecto",
@@ -1020,7 +1020,7 @@ const mockData = {
       id: 4,
       Titulo: "Premio Nacional: Traductor Español-Guaraní",
       Descripcion:
-        "Reconocimiento del Ministerio de Ciencia por desarrollar el primer sistema de traducción automática que preserva lenguas originarias digitalmente.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://www.conicet.gov.ar/",
       imagen: "/novedad.png",
       categoria: "Premio",
@@ -1031,7 +1031,7 @@ const mockData = {
       id: 5,
       Titulo: "Plataforma Educativa con IA Personalizada",
       Descripcion:
-        "Lanzamiento exitoso de nuestra plataforma de e-learning que adapta contenido y metodología según el perfil de cada estudiante. Más de 1000 usuarios activos.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://www.edx.org/",
       imagen: "/novedad.png",
       categoria: "Lanzamiento",
@@ -1042,7 +1042,7 @@ const mockData = {
       id: 6,
       Titulo: "Colaboración Internacional en Robótica",
       Descripcion:
-        "Nuevo proyecto de investigación en robótica educativa con universidades europeas, enfocado en el desarrollo de asistentes pedagógicos inteligentes.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://www.robotics-education.org/",
       imagen: "/novedad.png",
       categoria: "Colaboración",
@@ -1053,7 +1053,7 @@ const mockData = {
       id: 7,
       Titulo: "Avances en Procesamiento de Voz",
       Descripcion:
-        "Desarrollo de tecnologías de reconocimiento y síntesis de voz para dialectos regionales, mejorando la accesibilidad tecnológica en comunidades locales.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://www.speech-tech.org/",
       imagen: "/novedad.png",
       categoria: "Tecnología",
@@ -1064,7 +1064,7 @@ const mockData = {
       id: 8,
       Titulo: "Publicación en Nature AI",
       Descripcion:
-        "Artículo científico sobre redes neuronales explicables publicado en una de las revistas más prestigiosas del campo de la inteligencia artificial.",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi eu consectetur consectetur, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod.",
       Enlace: "https://www.nature.com/",
       imagen: "/novedad.png",
       categoria: "Publicación",
