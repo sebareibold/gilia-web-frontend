@@ -106,9 +106,9 @@ export default function HomePresentation() {
         <div className="hero-content-centered">
           <h1 className="hero-title">
             <span className="hero-title-normal">Grupo de Investigación en </span>
-            <span className="hero-title-highlight">Inteligencia Artificial</span>
-            <span className="hero-title-normal"> y </span>
             <span className="hero-title-highlight">Lenguajes</span>
+            <span className="hero-title-normal"> y </span>
+            <span className="hero-title-highlight">Inteligencia Artificial</span>
           </h1>
 
           <p className="hero-description">

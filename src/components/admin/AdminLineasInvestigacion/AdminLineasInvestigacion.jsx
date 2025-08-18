@@ -382,49 +382,7 @@ const LineasInvestigacion = () => {
                 </div>
               </div>
 
-              {/* Estadísticas */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-                  gap: "1rem",
-                  marginBottom: "1.5rem",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    padding: "0.75rem",
-                    background: "rgba(102, 126, 234, 0.1)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <TeamOutlined style={{ color: "#667eea", fontSize: "1.2rem" }} />
-                  <div>
-                    <div style={{ fontSize: "1.25rem", fontWeight: "600", color: "#667eea" }}>{linea.miembros}</div>
-                    <div style={{ fontSize: "0.75rem", color: "#64748b" }}>Miembros</div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    padding: "0.75rem",
-                    background: "rgba(6, 182, 212, 0.1)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  <ProjectOutlined style={{ color: "#06b6d4", fontSize: "1.2rem" }} />
-                  <div>
-                    <div style={{ fontSize: "1.25rem", fontWeight: "600", color: "#06b6d4" }}>{linea.proyectos}</div>
-                    <div style={{ fontSize: "0.75rem", color: "#64748b" }}>Proyectos</div>
-                  </div>
-                </div>
-              </div>
-
+             
               {/* Objetivos */}
               <div>
                 <h4 style={{ fontSize: "0.9rem", fontWeight: "600", color: "#64748b", marginBottom: "0.75rem" }}>

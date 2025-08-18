@@ -3,12 +3,15 @@
 import { useState } from "react"
 import { useAuth } from "../../../contexts/AuthContext"
 import {
-  DashboardOutlined,
   TeamOutlined,
   ProjectOutlined,
   FileTextOutlined,
   ExperimentOutlined,
   PictureOutlined,
+  PlusOutlined,
+  EditOutlined,
+  EyeOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons"
 import "./AdminHome.css"
 
@@ -83,97 +86,82 @@ const AdminHome = () => {
 
   return (
     <div className="admin-home">
-      {/* Header Section */}
+      {/* Elementos decorativos futuristas */}
+      <div className="admin-home-decorations">
+        <div className="floating-element floating-element-1"></div>
+        <div className="floating-element floating-element-2"></div>
+        <div className="floating-element floating-element-3"></div>
+      </div>
+
       <div className="admin-home-header">
-        <div className="admin-welcome">
-          <div className="admin-welcome-content">
-            <h1 className="admin-welcome-title">Bienvenido, {user?.name || "Administrador"}</h1>
-            <p className="admin-welcome-subtitle">Panel de control del Grupo de Investigación GILIA</p>
+        <div className="admin-welcome-text">
+          <div className="admin-welcome-badge">
+            <span>Panel de Control</span>
           </div>
-          <div className="admin-welcome-icon">
-            <DashboardOutlined />
-          </div>
+          <h1 className="admin-welcome-title">Bienvenido, {user?.name || "Administrador"}</h1>
+          <p className="admin-welcome-subtitle">Sistema de Gestión del Grupo de Investigación G.I.L.I.A </p>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="admin-quick-actions-section">
-        <h2 className="admin-section-title">Acciones Rápidas</h2>
+        <h2 className="admin-section-title">
+          <span>Acciones Rápidas</span>
+        </h2>
         <div className="admin-quick-actions-grid">
           {quickActions.map((action, index) => (
             <div key={index} className={`admin-quick-action-card ${action.color}`}>
-              <div className="admin-quick-action-icon">{action.icon}</div>
+              <div className="admin-quick-action-header">
+                <div className="admin-quick-action-icon">{action.icon}</div>
+              </div>
               <div className="admin-quick-action-content">
                 <h3 className="admin-quick-action-title">{action.title}</h3>
                 <p className="admin-quick-action-description">{action.description}</p>
               </div>
-              <button className="admin-quick-action-button">Ir a sección</button>
+
+              <div className="admin-action-buttons">
+                <button className="admin-action-btn admin-action-add">
+                  <PlusOutlined />
+                  <span>Agregar</span>
+                </button>
+                <button className="admin-action-btn admin-action-view">
+                  <EyeOutlined />
+                  <span>Ver</span>
+                </button>
+                <button className="admin-action-btn admin-action-edit">
+                  <EditOutlined />
+                  <span>Editar</span>
+                </button>
+                <button className="admin-action-btn admin-action-delete">
+                  <DeleteOutlined />
+                  <span>Eliminar</span>
+                </button>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Recent Activity */}
-      <div className="admin-activity-section">
-        <h2 className="admin-section-title">Actividad Reciente</h2>
-        <div className="admin-activity-list">
-          {recentActivities.map((activity) => (
-            <div key={activity.id} className={`admin-activity-item ${activity.type}`}>
+      {/* Recent Activities 
+      <div className="admin-recent-activities-section">
+        <h2 className="admin-section-title">
+          <span>Actividad Reciente</span>
+        </h2>
+        <div className="admin-activities-timeline">
+          {recentActivities.map((activity, index) => (
+            <div key={activity.id} className="admin-activity-item">
               <div className="admin-activity-icon">{activity.icon}</div>
               <div className="admin-activity-content">
                 <h4 className="admin-activity-title">{activity.title}</h4>
                 <p className="admin-activity-description">{activity.description}</p>
                 <span className="admin-activity-time">{activity.time}</span>
               </div>
+              <div className="admin-activity-line"></div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* System Status */}
-      <div className="admin-system-section">
-        <h2 className="admin-section-title">Estado del Sistema</h2>
-        <div className="admin-system-grid">
-          <div className="admin-system-card">
-            <div className="admin-system-header">
-              <h3>Rendimiento</h3>
-              <div className="admin-system-status good">Excelente</div>
-            </div>
-            <div className="admin-system-progress">
-              <div className="admin-progress-bar">
-                <div className="admin-progress-fill" style={{ width: "92%" }}></div>
-              </div>
-              <span className="admin-progress-text">92%</span>
-            </div>
-          </div>
-
-          <div className="admin-system-card">
-            <div className="admin-system-header">
-              <h3>Almacenamiento</h3>
-              <div className="admin-system-status warning">Moderado</div>
-            </div>
-            <div className="admin-system-progress">
-              <div className="admin-progress-bar">
-                <div className="admin-progress-fill warning" style={{ width: "68%" }}></div>
-              </div>
-              <span className="admin-progress-text">68%</span>
-            </div>
-          </div>
-
-          <div className="admin-system-card">
-            <div className="admin-system-header">
-              <h3>Seguridad</h3>
-              <div className="admin-system-status good">Seguro</div>
-            </div>
-            <div className="admin-system-progress">
-              <div className="admin-progress-bar">
-                <div className="admin-progress-fill" style={{ width: "98%" }}></div>
-              </div>
-              <span className="admin-progress-text">98%</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      */}
     </div>
   )
 }

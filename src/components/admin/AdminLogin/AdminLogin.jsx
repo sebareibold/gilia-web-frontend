@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "../../../contexts/AuthContext"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons"
+import "../../../styles/admin-theme.css"
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({

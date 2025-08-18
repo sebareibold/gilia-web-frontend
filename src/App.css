@@ -1,5 +1,4 @@
 /* ===== SISTEMA DE DISEÑO RESPONSIVE GILIA ===== */
-
 /* Import de fuentes modernas */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
@@ -695,10 +694,6 @@ body {
 }
 
 @media (min-width: 768px) {
-  body {
-    padding-top: 72px;
-  }
-
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
