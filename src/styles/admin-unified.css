@@ -1,0 +1,393 @@
+/* Estilos unificados para todas las secciones del BackOffice */
+/* Basado en el diseño de AdminHome con fondo transparente y títulos grandes */
+
+.admin-unified-page {
+  padding: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+  margin-top: 2%;
+}
+
+/* Elementos decorativos flotantes */
+.admin-unified-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.admin-floating-element {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  animation: adminFloat 8s ease-in-out infinite;
+}
+
+.admin-floating-element-1 {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15));
+  top: 10%;
+  right: 10%;
+  animation-delay: 0s;
+}
+
+.admin-floating-element-2 {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.1));
+  bottom: 20%;
+  left: 15%;
+  animation-delay: 2s;
+}
+
+.admin-floating-element-3 {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.08));
+  top: 60%;
+  right: 20%;
+  animation-delay: 4s;
+}
+
+@keyframes adminFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(10px) rotate(240deg);
+  }
+}
+
+.admin-unified-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header unificado */
+.admin-unified-header {
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.admin-unified-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-unified-subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0 0 2rem 0;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Tablas unificadas */
+.admin-unified-table-container {
+  background: transparent;
+  border-radius: 2rem;
+  box-shadow: 0 16px 48px rgba(59, 130, 246, 0.08),
+              0 8px 24px rgba(59, 130, 246, 0.06);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.admin-unified-table {
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+  backdrop-filter: blur(10px);
+  border-collapse: collapse;
+  background: transparent;
+}
+
+.admin-unified-table th {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.08));
+  color: #1e293b;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-bottom: 2px solid rgba(59, 130, 246, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.admin-unified-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+  color: #1e293b;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+}
+
+.admin-unified-table tr:hover td {
+  background: rgba(59, 130, 246, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+/* Botones de acción en tablas */
+.admin-table-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.admin-table-btn {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-size: 0.85rem;
+  min-width: auto;
+}
+
+.admin-table-btn-view {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.admin-table-btn-edit {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.admin-table-btn-delete {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.admin-table-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Filtros y búsqueda */
+.admin-unified-filters {
+  
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.admin-unified-search {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+}
+
+.admin-unified-search input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: #1e293b;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.admin-unified-search input:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.admin-unified-search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  font-size: 1rem;
+}
+
+.admin-unified-filter-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: #1e293b;
+  font-size: 0.9rem;
+  min-width: 200px;
+  cursor: pointer;
+}
+
+/* Botón principal */
+.admin-unified-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(139, 92, 246, 0.8));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.admin-unified-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Estados de carga */
+.admin-unified-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.admin-unified-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(59, 130, 246, 0.2);
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estado vacío */
+.admin-unified-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.admin-unified-empty-icon {
+  font-size: 3rem;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.admin-unified-empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.admin-unified-empty-description {
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Badges de estado */
+.admin-unified-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.admin-unified-badge-active {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.admin-unified-badge-inactive {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.admin-unified-badge-pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-unified-page {
+    margin-top: 0%;
+
+    padding: 1.5rem;
+  }
+
+  .admin-unified-title {
+    font-size: 1.8rem;
+  }
+
+  .admin-unified-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-unified-search {
+    min-width: auto;
+  }
+
+  .admin-unified-table-container {
+    overflow-x: auto;
+  }
+
+  .admin-unified-table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-unified-page {
+    margin-top: 0%;
+    padding: 1rem;
+  }
+
+  .admin-unified-title {
+    font-size: 1.6rem;
+  }
+}

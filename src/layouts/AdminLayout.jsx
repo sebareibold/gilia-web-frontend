@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
 import {
-  SettingOutlined,
+  HomeOutlined,
   LogoutOutlined,
   ExperimentOutlined,
   BranchesOutlined,
@@ -20,8 +20,8 @@ import "../styles/admin-theme.css"
 const MENU_ITEMS = [
   {
     key: "/admin",
-    icon: <AppstoreOutlined />,
-    label: "Dashboard",
+    icon: <HomeOutlined />,
+    label: "Inicio",
   },
   {
     key: "/admin/lineas",
@@ -47,11 +47,6 @@ const MENU_ITEMS = [
     key: "/admin/galeria",
     icon: <AppstoreOutlined />,
     label: "Galería",
-  },
-  {
-    key: "/admin/configuracion",
-    icon: <SettingOutlined />,
-    label: "Configuración",
   },
 ]
 

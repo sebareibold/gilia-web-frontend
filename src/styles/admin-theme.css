@@ -1185,7 +1185,6 @@
 
   .admin-main-wrapper {
     margin-left: 0 !important;
-    padding-top: 80px; /* Add padding for always visible header */
   }
 
   .admin-main-wrapper.expanded,
@@ -1562,7 +1561,6 @@
 
   .admin-main-wrapper {
     margin-left: 0 !important;
-    padding-top: 80px; /* Add padding for always visible header */
   }
 
   .admin-main-wrapper.expanded,

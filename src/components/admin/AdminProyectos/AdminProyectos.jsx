@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
 import {
   BranchesOutlined,
   PlusOutlined,
@@ -9,15 +8,13 @@ import {
   DeleteOutlined,
   EyeOutlined,
   SearchOutlined,
-  FilterOutlined,
-  CalendarOutlined,
   TeamOutlined,
+  CalendarOutlined,
   DollarOutlined,
-  UserOutlined,
-  BarChartOutlined,
 } from "@ant-design/icons"
+import "../../../styles/admin-unified.css"
 
-const Proyectos = () => {
+const AdminProyectos = () => {
   const [proyectos, setProyectos] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
@@ -39,11 +36,6 @@ const Proyectos = () => {
           equipo: ["Dr. Juan Pérez", "Ing. Ana López", "Dra. Carmen Silva"],
           progreso: 65,
           lineaInvestigacion: "Inteligencia Artificial y Machine Learning",
-          objetivos: [
-            "Desarrollar algoritmos de detección temprana",
-            "Integrar con sistemas hospitalarios existentes",
-            "Validar con datos clínicos reales",
-          ],
         },
         {
           id: 2,
@@ -58,11 +50,6 @@ const Proyectos = () => {
           equipo: ["Dra. Laura Martínez", "Ing. Roberto Vega"],
           progreso: 100,
           lineaInvestigacion: "Ciberseguridad y Blockchain",
-          objetivos: [
-            "Implementar protocolo de consenso seguro",
-            "Desarrollar interfaz de usuario intuitiva",
-            "Realizar pruebas piloto en elecciones locales",
-          ],
         },
         {
           id: 3,
@@ -77,11 +64,6 @@ const Proyectos = () => {
           equipo: ["Dr. Elena Morales", "Dra. Isabel Jiménez", "Ing. Patricia Silva"],
           progreso: 40,
           lineaInvestigacion: "Internet de las Cosas (IoT)",
-          objetivos: [
-            "Desplegar red de sensores distribuidos",
-            "Implementar sistema de alertas automáticas",
-            "Crear dashboard de visualización de datos",
-          ],
         },
         {
           id: 4,
@@ -96,11 +78,6 @@ const Proyectos = () => {
           equipo: ["Dr. Miguel Torres", "Ing. Luis Ramírez"],
           progreso: 5,
           lineaInvestigacion: "Realidad Virtual y Aumentada",
-          objetivos: [
-            "Desarrollar simulaciones realistas",
-            "Integrar feedback háptico avanzado",
-            "Validar con profesionales médicos",
-          ],
         },
         {
           id: 5,
@@ -115,11 +92,6 @@ const Proyectos = () => {
           equipo: ["Dra. Carmen Ruiz", "Dr. Antonio López"],
           progreso: 30,
           lineaInvestigacion: "Computación Cuántica",
-          objetivos: [
-            "Implementar algoritmos QAOA",
-            "Optimizar para hardware cuántico actual",
-            "Comparar con métodos clásicos",
-          ],
         },
       ])
       setLoading(false)
@@ -143,28 +115,21 @@ const Proyectos = () => {
     return matchesSearch && matchesFilter
   })
 
-  const getEstadoColor = (estado) => {
+  const getEstadoBadgeClass = (estado) => {
     switch (estado) {
       case "Completado":
-        return "#10b981"
+        return "admin-unified-badge-active"
       case "En progreso":
-        return "#667eea"
+        return "admin-unified-badge-active"
       case "Planificado":
-        return "#f59e0b"
+        return "admin-unified-badge-pending"
       case "Pausado":
-        return "#ef4444"
+        return "admin-unified-badge-inactive"
       case "Cancelado":
-        return "#ef4444"
+        return "admin-unified-badge-inactive"
       default:
-        return "#64748b"
+        return "admin-unified-badge-pending"
     }
-  }
-
-  const getProgresoColor = (progreso) => {
-    if (progreso >= 80) return "#10b981"
-    if (progreso >= 50) return "#667eea"
-    if (progreso >= 25) return "#f59e0b"
-    return "#ef4444"
   }
 
   const formatCurrency = (amount) => {
@@ -176,400 +141,179 @@ const Proyectos = () => {
 
   if (loading) {
     return (
-      <div className="admin-page">
-        <div className="admin-loading">
-          <BranchesOutlined style={{ fontSize: "2rem", marginRight: "1rem" }} />
-          Cargando proyectos...
+      <div className="admin-unified-page">
+        <div className="admin-unified-loading">
+          <div className="admin-unified-spinner"></div>
+          <p>Cargando proyectos...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="admin-page">
-      {/* Header */}
-      <div className="admin-page-header">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "1rem",
-          }}
+    <div className="admin-unified-page">
+      <div className="admin-unified-decorations">
+        <div className="admin-floating-element admin-floating-element-1"></div>
+        <div className="admin-floating-element admin-floating-element-2"></div>
+        <div className="admin-floating-element admin-floating-element-3"></div>
+      </div>
+
+      <div className="admin-unified-header">
+        <h1 className="admin-unified-title">
+          <BranchesOutlined />
+          Proyectos de Investigación
+        </h1>
+        <p className="admin-unified-subtitle">
+          Gestiona los proyectos de investigación del grupo GILIA. Controla el progreso, presupuestos y equipos de
+          trabajo de cada proyecto.
+        </p>
+
+        <button className="admin-unified-primary-btn">
+          <PlusOutlined />
+          Nuevo Proyecto
+        </button>
+      </div>
+
+      <div className="admin-unified-filters">
+        <div className="admin-unified-search">
+          <SearchOutlined className="admin-unified-search-icon" />
+          <input
+            type="text"
+            placeholder="Buscar proyectos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <select
+          value={filterStatus}
+          onChange={(e) => setFilterStatus(e.target.value)}
+          className="admin-unified-filter-select"
         >
-          <div>
-            <h1 className="admin-page-title">
-              <BranchesOutlined style={{ marginRight: "0.5rem" }} />
-              Proyectos de Investigación
-            </h1>
-            <p className="admin-page-subtitle">
-              Gestiona los proyectos de investigación del grupo GILIA. Controla el progreso, presupuestos y equipos de
-              trabajo de cada proyecto.
-            </p>
-          </div>
-          <div className="admin-page-actions">
-            <Link to="/admin/proyectos/crear" className="admin-btn admin-btn-primary">
-              <PlusOutlined />
-              Nuevo Proyecto
-            </Link>
-          </div>
-        </div>
+          <option value="all">Todos los estados</option>
+          <option value="Planificado">Planificado</option>
+          <option value="En progreso">En progreso</option>
+          <option value="Completado">Completado</option>
+          <option value="Pausado">Pausado</option>
+          <option value="Cancelado">Cancelado</option>
+        </select>
       </div>
 
-      {/* Stats Overview */}
-      <div className="admin-content-card">
-        <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#1e293b", marginBottom: "1.5rem" }}>
-          Resumen de Proyectos
-        </h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem" }}>
-          <div
-            style={{
-              textAlign: "center",
-              padding: "1rem",
-              background: "rgba(102, 126, 234, 0.1)",
-              borderRadius: "12px",
-              border: "1px solid rgba(102, 126, 234, 0.2)",
-            }}
-          >
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#667eea", marginBottom: "0.5rem" }}>
-              {proyectos.filter((p) => p.estado === "En progreso").length}
-            </div>
-            <div style={{ color: "#64748b", fontWeight: "500" }}>En Progreso</div>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              padding: "1rem",
-              background: "rgba(16, 185, 129, 0.1)",
-              borderRadius: "12px",
-              border: "1px solid rgba(16, 185, 129, 0.2)",
-            }}
-          >
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#10b981", marginBottom: "0.5rem" }}>
-              {proyectos.filter((p) => p.estado === "Completado").length}
-            </div>
-            <div style={{ color: "#64748b", fontWeight: "500" }}>Completados</div>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              padding: "1rem",
-              background: "rgba(245, 158, 11, 0.1)",
-              borderRadius: "12px",
-              border: "1px solid rgba(245, 158, 11, 0.2)",
-            }}
-          >
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#f59e0b", marginBottom: "0.5rem" }}>
-              {proyectos.filter((p) => p.estado === "Planificado").length}
-            </div>
-            <div style={{ color: "#64748b", fontWeight: "500" }}>Planificados</div>
-          </div>
-          <div
-            style={{
-              textAlign: "center",
-              padding: "1rem",
-              background: "rgba(6, 182, 212, 0.1)",
-              borderRadius: "12px",
-              border: "1px solid rgba(6, 182, 212, 0.2)",
-            }}
-          >
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#06b6d4", marginBottom: "0.5rem" }}>
-              {formatCurrency(proyectos.reduce((acc, p) => acc + p.presupuesto, 0))}
-            </div>
-            <div style={{ color: "#64748b", fontWeight: "500" }}>Presupuesto Total</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Search and Filters */}
-      <div className="admin-content-card">
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap" }}>
-          <div style={{ position: "relative", flex: 1, minWidth: "300px" }}>
-            <SearchOutlined
-              style={{
-                position: "absolute",
-                left: "1rem",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "#94a3b8",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Buscar proyectos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="admin-form-input"
-              style={{ paddingLeft: "3rem" }}
-            />
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <FilterOutlined style={{ color: "#64748b" }} />
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="admin-form-select"
-              style={{ minWidth: "180px" }}
-            >
-              <option value="all">Todos los estados</option>
-              <option value="Planificado">Planificado</option>
-              <option value="En progreso">En progreso</option>
-              <option value="Completado">Completado</option>
-              <option value="Pausado">Pausado</option>
-              <option value="Cancelado">Cancelado</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
       {filteredProyectos.length === 0 ? (
-        <div className="admin-content-card">
-          <div className="admin-empty">
-            <div className="admin-empty-icon">
-              <BranchesOutlined />
-            </div>
-            <h3 className="admin-empty-title">No hay proyectos</h3>
-            <p className="admin-empty-description">
-              {searchTerm || filterStatus !== "all"
-                ? "No se encontraron resultados para los filtros aplicados."
-                : "Comienza creando tu primer proyecto de investigación."}
-            </p>
-            {!searchTerm && filterStatus === "all" && (
-              <Link to="/admin/proyectos/crear" className="admin-btn admin-btn-primary">
-                <PlusOutlined />
-                Crear Primer Proyecto
-              </Link>
-            )}
-          </div>
+        <div className="admin-unified-empty">
+          <BranchesOutlined className="admin-unified-empty-icon" />
+          <h3 className="admin-unified-empty-title">No hay proyectos</h3>
+          <p className="admin-unified-empty-description">
+            {searchTerm || filterStatus !== "all"
+              ? "No se encontraron resultados para los filtros aplicados."
+              : "Comienza creando tu primer proyecto de investigación."}
+          </p>
+          {!searchTerm && filterStatus === "all" && (
+            <button className="admin-unified-primary-btn">
+              <PlusOutlined />
+              Crear Primer Proyecto
+            </button>
+          )}
         </div>
       ) : (
-        <div style={{ display: "grid", gap: "1.5rem" }}>
-          {filteredProyectos.map((proyecto) => (
-            <div key={proyecto.id} className="admin-content-card">
-              {/* Header del proyecto */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  gap: "1rem",
-                  marginBottom: "1.5rem",
-                }}
-              >
-                <div style={{ flex: 1 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "1rem",
-                      alignItems: "center",
-                      marginBottom: "0.75rem",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <span
-                      style={{
-                        padding: "0.25rem 0.75rem",
-                        borderRadius: "20px",
-                        fontSize: "0.75rem",
-                        fontWeight: "500",
-                        backgroundColor: `${getEstadoColor(proyecto.estado)}15`,
-                        color: getEstadoColor(proyecto.estado),
-                        border: `1px solid ${getEstadoColor(proyecto.estado)}30`,
-                      }}
-                    >
+        <div className="admin-unified-table-container">
+          <table className="admin-unified-table">
+            <thead>
+              <tr>
+                <th>Proyecto</th>
+                <th>Estado</th>
+                <th>Responsable</th>
+                <th>Línea de Investigación</th>
+                <th>Progreso</th>
+                <th>Presupuesto</th>
+                <th>Fechas</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProyectos.map((proyecto) => (
+                <tr key={proyecto.id}>
+                  <td>
+                    <strong>{proyecto.titulo}</strong>
+                    <br />
+                    <small style={{ color: "#64748b", lineHeight: "1.4" }}>
+                      {proyecto.descripcion.substring(0, 80)}...
+                    </small>
+                  </td>
+                  <td>
+                    <span className={`admin-unified-badge ${getEstadoBadgeClass(proyecto.estado)}`}>
                       {proyecto.estado}
                     </span>
-                    <span
-                      style={{
-                        fontSize: "0.8rem",
-                        color: "#64748b",
-                        background: "rgba(102, 126, 234, 0.1)",
-                        padding: "0.25rem 0.75rem",
-                        borderRadius: "20px",
-                        border: "1px solid rgba(102, 126, 234, 0.2)",
-                      }}
-                    >
-                      {proyecto.lineaInvestigacion}
-                    </span>
-                  </div>
-
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#1e293b", margin: "0 0 0.5rem 0" }}>
-                    {proyecto.titulo}
-                  </h3>
-
-                  <p style={{ color: "#64748b", margin: "0 0 1rem 0", fontSize: "0.9rem", lineHeight: "1.5" }}>
-                    {proyecto.descripcion}
-                  </p>
-                </div>
-
-                <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
-                  <button
-                    className="admin-btn admin-btn-primary"
-                    style={{ padding: "0.5rem", minWidth: "auto" }}
-                    title="Ver detalles"
-                  >
-                    <EyeOutlined />
-                  </button>
-                  <button
-                    className="admin-btn admin-btn-warning"
-                    style={{ padding: "0.5rem", minWidth: "auto" }}
-                    title="Editar"
-                  >
-                    <EditOutlined />
-                  </button>
-                  <button
-                    className="admin-btn admin-btn-danger"
-                    style={{ padding: "0.5rem", minWidth: "auto" }}
-                    title="Eliminar"
-                    onClick={() => handleDelete(proyecto.id)}
-                  >
-                    <DeleteOutlined />
-                  </button>
-                </div>
-              </div>
-
-              {/* Información del proyecto */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-                  gap: "1.5rem",
-                  marginBottom: "1.5rem",
-                }}
-              >
-                <div>
-                  <h4 style={{ fontSize: "0.9rem", fontWeight: "600", color: "#64748b", marginBottom: "0.75rem" }}>
-                    Información General
-                  </h4>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", fontSize: "0.85rem" }}>
+                  </td>
+                  <td>
+                    <TeamOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
+                    {proyecto.responsable}
+                    <br />
+                    <small style={{ color: "#64748b" }}>Equipo: {proyecto.equipo.length} miembros</small>
+                  </td>
+                  <td>
+                    <small style={{ color: "#64748b" }}>{proyecto.lineaInvestigacion}</small>
+                  </td>
+                  <td>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <UserOutlined style={{ color: "#667eea", width: "14px" }} />
-                      <span style={{ color: "#64748b" }}>
-                        <strong>Responsable:</strong> {proyecto.responsable}
-                      </span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <CalendarOutlined style={{ color: "#06b6d4", width: "14px" }} />
-                      <span style={{ color: "#64748b" }}>
-                        <strong>Duración:</strong> {new Date(proyecto.fechaInicio).toLocaleDateString()} -{" "}
-                        {new Date(proyecto.fechaFin).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <DollarOutlined style={{ color: "#10b981", width: "14px" }} />
-                      <span style={{ color: "#64748b" }}>
-                        <strong>Presupuesto:</strong> {formatCurrency(proyecto.presupuesto)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 style={{ fontSize: "0.9rem", fontWeight: "600", color: "#64748b", marginBottom: "0.75rem" }}>
-                    Progreso del Proyecto
-                  </h4>
-                  <div style={{ marginBottom: "0.75rem" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      <span style={{ fontSize: "0.85rem", color: "#64748b" }}>Completado</span>
-                      <span
-                        style={{ fontSize: "0.85rem", fontWeight: "600", color: getProgresoColor(proyecto.progreso) }}
-                      >
-                        {proyecto.progreso}%
-                      </span>
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "8px",
-                        backgroundColor: "rgba(102, 126, 234, 0.1)",
-                        borderRadius: "4px",
-                        overflow: "hidden",
-                      }}
-                    >
                       <div
                         style={{
-                          width: `${proyecto.progreso}%`,
-                          height: "100%",
-                          backgroundColor: getProgresoColor(proyecto.progreso),
-                          borderRadius: "4px",
-                          transition: "width 0.3s ease",
+                          width: "60px",
+                          height: "6px",
+                          backgroundColor: "rgba(102, 126, 234, 0.1)",
+                          borderRadius: "3px",
+                          overflow: "hidden",
                         }}
-                      />
+                      >
+                        <div
+                          style={{
+                            width: `${proyecto.progreso}%`,
+                            height: "100%",
+                            backgroundColor:
+                              proyecto.progreso >= 80 ? "#10b981" : proyecto.progreso >= 50 ? "#667eea" : "#f59e0b",
+                            borderRadius: "3px",
+                          }}
+                        />
+                      </div>
+                      <span style={{ fontSize: "0.8rem", color: "#64748b" }}>{proyecto.progreso}%</span>
                     </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.85rem" }}>
-                    <BarChartOutlined style={{ color: getProgresoColor(proyecto.progreso), width: "14px" }} />
-                    <span style={{ color: "#64748b" }}>
-                      Estado:{" "}
-                      <strong style={{ color: getProgresoColor(proyecto.progreso) }}>
-                        {proyecto.progreso >= 80
-                          ? "Casi completado"
-                          : proyecto.progreso >= 50
-                            ? "En buen progreso"
-                            : proyecto.progreso >= 25
-                              ? "En desarrollo"
-                              : "Iniciando"}
-                      </strong>
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Objetivos */}
-              <div style={{ marginBottom: "1.5rem" }}>
-                <h4 style={{ fontSize: "0.9rem", fontWeight: "600", color: "#64748b", marginBottom: "0.75rem" }}>
-                  Objetivos del Proyecto
-                </h4>
-                <ul
-                  style={{ margin: 0, paddingLeft: "1.5rem", color: "#64748b", fontSize: "0.85rem", lineHeight: "1.5" }}
-                >
-                  {proyecto.objetivos.map((objetivo, index) => (
-                    <li key={index} style={{ marginBottom: "0.25rem" }}>
-                      {objetivo}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Equipo */}
-              <div style={{ paddingTop: "1rem", borderTop: "1px solid rgba(102, 126, 234, 0.1)" }}>
-                <h4 style={{ fontSize: "0.9rem", fontWeight: "600", color: "#64748b", marginBottom: "0.75rem" }}>
-                  <TeamOutlined style={{ marginRight: "0.5rem" }} />
-                  Equipo de Trabajo
-                </h4>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                  {proyecto.equipo.map((miembro, index) => (
-                    <span
-                      key={index}
-                      style={{
-                        padding: "0.25rem 0.75rem",
-                        backgroundColor: "rgba(102, 126, 234, 0.1)",
-                        borderRadius: "20px",
-                        fontSize: "0.75rem",
-                        color: "#667eea",
-                        border: "1px solid rgba(102, 126, 234, 0.2)",
-                      }}
-                    >
-                      {miembro}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+                  </td>
+                  <td>
+                    <DollarOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
+                    {formatCurrency(proyecto.presupuesto)}
+                  </td>
+                  <td>
+                    <CalendarOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
+                    <small style={{ color: "#64748b" }}>
+                      {new Date(proyecto.fechaInicio).toLocaleDateString()} -{" "}
+                      {new Date(proyecto.fechaFin).toLocaleDateString()}
+                    </small>
+                  </td>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button className="admin-table-btn admin-table-btn-view" title="Ver detalles">
+                        <EyeOutlined />
+                      </button>
+                      <button className="admin-table-btn admin-table-btn-edit" title="Editar">
+                        <EditOutlined />
+                      </button>
+                      <button
+                        className="admin-table-btn admin-table-btn-delete"
+                        title="Eliminar"
+                        onClick={() => handleDelete(proyecto.id)}
+                      >
+                        <DeleteOutlined />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
   )
 }
 
-export default Proyectos
+export default AdminProyectos

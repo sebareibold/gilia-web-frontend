@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
 import {
   BookOutlined,
   PlusOutlined,
@@ -9,10 +8,10 @@ import {
   DeleteOutlined,
   EyeOutlined,
   SearchOutlined,
-  FilterOutlined,
 } from "@ant-design/icons"
+import "../../../styles/admin-unified.css"
 
-const Publicaciones = () => {
+const AdminPublicaciones = () => {
   const [publicaciones, setPublicaciones] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
@@ -98,249 +97,156 @@ const Publicaciones = () => {
     return matchesSearch && matchesFilter
   })
 
-  const getEstadoColor = (estado) => {
+  const getEstadoBadgeClass = (estado) => {
     switch (estado) {
       case "Publicado":
-        return "#43e97b"
+        return "admin-unified-badge-active"
       case "Aceptado":
-        return "#667eea"
+        return "admin-unified-badge-active"
       case "En revisión":
-        return "#ffa726"
+        return "admin-unified-badge-pending"
       case "Rechazado":
-        return "#f5576c"
+        return "admin-unified-badge-inactive"
       default:
-        return "#764ba2"
-    }
-  }
-
-  const getTipoColor = (tipo) => {
-    switch (tipo) {
-      case "Journal Article":
-        return "#667eea"
-      case "Conference Paper":
-        return "#f093fb"
-      case "Book Chapter":
-        return "#43e97b"
-      case "Review Article":
-        return "#ffa726"
-      default:
-        return "#764ba2"
+        return "admin-unified-badge-pending"
     }
   }
 
   if (loading) {
     return (
-      <div className="admin-page">
-        <div className="admin-loading">
-          <BookOutlined style={{ fontSize: "2rem", marginRight: "1rem" }} />
-          Cargando publicaciones...
+      <div className="admin-unified-page">
+        <div className="admin-unified-loading">
+          <div className="admin-unified-spinner"></div>
+          <p>Cargando publicaciones...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="admin-page">
-      {/* Header */}
-      <div className="admin-page-header">
-        <h1 className="admin-page-title">
-          <BookOutlined style={{ marginRight: "0.5rem" }} />
+    <div className="admin-unified-page">
+      <div className="admin-unified-decorations">
+        <div className="admin-floating-element admin-floating-element-1"></div>
+        <div className="admin-floating-element admin-floating-element-2"></div>
+        <div className="admin-floating-element admin-floating-element-3"></div>
+      </div>
+
+      <div className="admin-unified-header">
+        <h1 className="admin-unified-title">
+          <BookOutlined />
           Publicaciones
         </h1>
-        <p className="admin-page-subtitle">
+        <p className="admin-unified-subtitle">
           Gestiona las publicaciones científicas del grupo GILIA. Administra artículos, papers, capítulos de libros y
           otras contribuciones académicas.
         </p>
-        <div className="admin-page-actions">
-          <Link to="/admin/publicaciones/crear" className="admin-btn admin-btn-primary">
-            <PlusOutlined />
-            Nueva Publicación
-          </Link>
-        </div>
+
+        <button className="admin-unified-primary-btn">
+          <PlusOutlined />
+          Nueva Publicación
+        </button>
       </div>
 
-      {/* Search and Filters */}
-      <div className="admin-content-card">
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap" }}>
-          <div style={{ position: "relative", flex: 1, minWidth: "300px" }}>
-            <SearchOutlined
-              style={{
-                position: "absolute",
-                left: "1rem",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "rgba(255, 255, 255, 0.5)",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Buscar por título, autor o revista..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="admin-form-input"
-              style={{ paddingLeft: "3rem" }}
-            />
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <FilterOutlined style={{ color: "rgba(255, 255, 255, 0.8)" }} />
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-              className="admin-form-select"
-              style={{ minWidth: "200px" }}
-            >
-              <option value="all">Todos los tipos</option>
-              <option value="Journal Article">Artículos de revista</option>
-              <option value="Conference Paper">Papers de conferencia</option>
-              <option value="Book Chapter">Capítulos de libro</option>
-              <option value="Review Article">Artículos de revisión</option>
-            </select>
-          </div>
+      <div className="admin-unified-filters">
+        <div className="admin-unified-search">
+          <SearchOutlined className="admin-unified-search-icon" />
+          <input
+            type="text"
+            placeholder="Buscar por título, autor o revista..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
+
+        <select
+          value={filterType}
+          onChange={(e) => setFilterType(e.target.value)}
+          className="admin-unified-filter-select"
+        >
+          <option value="all">Todos los tipos</option>
+          <option value="Journal Article">Artículos de revista</option>
+          <option value="Conference Paper">Papers de conferencia</option>
+          <option value="Book Chapter">Capítulos de libro</option>
+          <option value="Review Article">Artículos de revisión</option>
+        </select>
       </div>
 
-      {/* Content */}
       {filteredPublicaciones.length === 0 ? (
-        <div className="admin-content-card">
-          <div className="admin-empty">
-            <div className="admin-empty-icon">
-              <BookOutlined />
-            </div>
-            <h3 className="admin-empty-title">No hay publicaciones</h3>
-            <p className="admin-empty-description">
-              {searchTerm || filterType !== "all"
-                ? "No se encontraron resultados para los filtros aplicados."
-                : "Comienza agregando tu primera publicación."}
-            </p>
-            {!searchTerm && filterType === "all" && (
-              <Link to="/admin/publicaciones/crear" className="admin-btn admin-btn-primary">
-                <PlusOutlined />
-                Agregar Primera Publicación
-              </Link>
-            )}
-          </div>
+        <div className="admin-unified-empty">
+          <BookOutlined className="admin-unified-empty-icon" />
+          <h3 className="admin-unified-empty-title">No hay publicaciones</h3>
+          <p className="admin-unified-empty-description">
+            {searchTerm || filterType !== "all"
+              ? "No se encontraron resultados para los filtros aplicados."
+              : "Comienza agregando tu primera publicación."}
+          </p>
+          {!searchTerm && filterType === "all" && (
+            <button className="admin-unified-primary-btn">
+              <PlusOutlined />
+              Agregar Primera Publicación
+            </button>
+          )}
         </div>
       ) : (
-        <div style={{ display: "grid", gap: "1.5rem" }}>
-          {filteredPublicaciones.map((pub) => (
-            <div key={pub.id} className="admin-content-card">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem" }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", gap: "1rem", alignItems: "center", marginBottom: "0.75rem" }}>
-                    <span
-                      style={{
-                        padding: "0.25rem 0.75rem",
-                        borderRadius: "20px",
-                        fontSize: "0.75rem",
-                        fontWeight: "500",
-                        backgroundColor: `${getTipoColor(pub.tipo)}20`,
-                        color: getTipoColor(pub.tipo),
-                        border: `1px solid ${getTipoColor(pub.tipo)}40`,
-                      }}
-                    >
-                      {pub.tipo}
-                    </span>
-                    <span
-                      style={{
-                        padding: "0.25rem 0.75rem",
-                        borderRadius: "20px",
-                        fontSize: "0.75rem",
-                        fontWeight: "500",
-                        backgroundColor: `${getEstadoColor(pub.estado)}20`,
-                        color: getEstadoColor(pub.estado),
-                        border: `1px solid ${getEstadoColor(pub.estado)}40`,
-                      }}
-                    >
-                      {pub.estado}
-                    </span>
-                  </div>
-
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: "600", color: "#ffffff", margin: "0 0 0.5rem 0" }}>
-                    {pub.titulo}
-                  </h3>
-
-                  <p style={{ color: "rgba(255, 255, 255, 0.8)", margin: "0 0 0.5rem 0", fontSize: "0.9rem" }}>
-                    <strong>Autores:</strong> {pub.autores.join(", ")}
-                  </p>
-
-                  <p style={{ color: "rgba(255, 255, 255, 0.8)", margin: "0 0 0.5rem 0", fontSize: "0.9rem" }}>
-                    <strong>Revista/Conferencia:</strong> {pub.revista}
-                  </p>
-
-                  <div style={{ display: "flex", gap: "2rem", fontSize: "0.85rem", color: "rgba(255, 255, 255, 0.7)" }}>
-                    <span>
-                      <strong>Fecha:</strong> {new Date(pub.fechaPublicacion).toLocaleDateString()}
-                    </span>
-                    <span>
-                      <strong>DOI:</strong> {pub.doi}
-                    </span>
-                    <span>
-                      <strong>Citas:</strong> {pub.citas}
-                    </span>
-                  </div>
-                </div>
-
-                <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
-                  <button
-                    className="admin-btn admin-btn-primary"
-                    style={{ padding: "0.5rem", minWidth: "auto" }}
-                    title="Ver detalles"
-                  >
-                    <EyeOutlined />
-                  </button>
-                  <button
-                    className="admin-btn admin-btn-warning"
-                    style={{ padding: "0.5rem", minWidth: "auto" }}
-                    title="Editar"
-                  >
-                    <EditOutlined />
-                  </button>
-                  <button
-                    className="admin-btn admin-btn-danger"
-                    style={{ padding: "0.5rem", minWidth: "auto" }}
-                    title="Eliminar"
-                    onClick={() => handleDelete(pub.id)}
-                  >
-                    <DeleteOutlined />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="admin-unified-table-container">
+          <table className="admin-unified-table">
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Revista/Conferencia</th>
+                <th>Fecha</th>
+                <th>Citas</th>
+                <th>DOI</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPublicaciones.map((pub) => (
+                <tr key={pub.id}>
+                  <td>
+                    <strong>{pub.titulo}</strong>
+                    <br />
+                    <small style={{ color: "#64748b" }}>{pub.autores.join(", ")}</small>
+                  </td>
+                  <td>
+                    <span className="admin-unified-badge admin-unified-badge-active">{pub.tipo}</span>
+                  </td>
+                  <td>
+                    <span className={`admin-unified-badge ${getEstadoBadgeClass(pub.estado)}`}>{pub.estado}</span>
+                  </td>
+                  <td>{pub.revista}</td>
+                  <td>{new Date(pub.fechaPublicacion).toLocaleDateString()}</td>
+                  <td>{pub.citas}</td>
+                  <td>
+                    <small style={{ color: "#64748b" }}>{pub.doi}</small>
+                  </td>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button className="admin-table-btn admin-table-btn-view" title="Ver detalles">
+                        <EyeOutlined />
+                      </button>
+                      <button className="admin-table-btn admin-table-btn-edit" title="Editar">
+                        <EditOutlined />
+                      </button>
+                      <button
+                        className="admin-table-btn admin-table-btn-delete"
+                        title="Eliminar"
+                        onClick={() => handleDelete(pub.id)}
+                      >
+                        <DeleteOutlined />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-
-      {/* Stats Footer */}
-      <div className="admin-content-card">
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "2rem" }}>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#43e97b", marginBottom: "0.5rem" }}>
-              {publicaciones.filter((p) => p.estado === "Publicado").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Publicadas</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#667eea", marginBottom: "0.5rem" }}>
-              {publicaciones.filter((p) => p.estado === "Aceptado").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Aceptadas</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#ffa726", marginBottom: "0.5rem" }}>
-              {publicaciones.filter((p) => p.estado === "En revisión").length}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>En Revisión</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "2rem", fontWeight: "700", color: "#f093fb", marginBottom: "0.5rem" }}>
-              {publicaciones.reduce((acc, p) => acc + p.citas, 0)}
-            </div>
-            <div style={{ color: "rgba(255, 255, 255, 0.8)" }}>Total Citas</div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
 
-export default Publicaciones
+export default AdminPublicaciones
