@@ -17,7 +17,6 @@
   --admin-text-muted: #94a3b8;
 
   --admin-sidebar-width: 280px;
-  --admin-sidebar-collapsed-width: 80px;
   --admin-header-height: 64px;
 
   --admin-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
@@ -33,7 +32,7 @@
 
 .admin-layout-gradient {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8edf5 50%, #d1d9e6 100%);
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
   position: relative;
   overflow-x: hidden;
 }
@@ -67,9 +66,7 @@
   overflow: hidden; /* Prevent content overflow during transitions */
 }
 
-.admin-sidebar-transparent.collapsed {
-  width: 80px;
-}
+
 
 .admin-sidebar-content {
   height: 100%;
@@ -138,12 +135,6 @@
   margin-top: 0.5rem;
 }
 
-.admin-sidebar-transparent.collapsed .admin-logo-section {
-  /* Fixed spacing for collapsed state */
-  padding: 0 1rem 2rem 1rem;
-  justify-content: center;
-}
-
 .admin-logo-icon {
   width: 48px;
   height: 48px;
@@ -175,11 +166,6 @@
   white-space: nowrap;
 }
 
-.admin-sidebar-transparent.collapsed .admin-logo-text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-}
 
 /* User Info */
 .admin-user-header {
@@ -202,12 +188,6 @@
   transform: translateX(0);
 }
 
-.admin-user-info-inline.collapsed {
-  opacity: 0;
-  transform: translateX(-10px);
-  width: 0;
-  overflow: hidden;
-}
 
 .admin-user-details {
   padding: 0;
@@ -247,12 +227,6 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.admin-sidebar-transparent.collapsed .admin-navigation {
-  /* Better spacing for collapsed navigation */
-  padding: 0 0.75rem;
-  /* Better alignment for collapsed state */
-  align-items: center;
-}
 
 .admin-nav-item {
   display: flex;
@@ -274,39 +248,8 @@
   min-height: 48px;
 }
 
-.admin-sidebar-transparent.collapsed .admin-nav-item {
-  /* Fixed collapsed spacing and enhanced glass effect */
-  padding: 1rem;
-  justify-content: center;
-  margin: 0rem;
-  background: rgba(255, 255, 255, 0.8);
-  border: 2px solid rgba(59, 130, 246, 0.15);
-  backdrop-filter: blur(15px);
-  /* Fixed width for consistent collapsed state */
-  width: calc(100% - 0.5rem);
-  /* Center icons horizontally in collapsed state */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
 
-.admin-sidebar-transparent.collapsed .admin-nav-item > * {
-  margin: 0 auto;
-  display: block;
-  text-align: center;
-}
 
-.admin-sidebar-transparent.collapsed .admin-nav-label {
-  display: none !important;
-}
-
-.admin-sidebar-transparent.collapsed .admin-nav-icon {
-  display: flex !important;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-}
 
 .admin-nav-item::before {
   /* Added subtle glow effect */
@@ -346,18 +289,6 @@
   opacity: 1;
 }
 
-.admin-sidebar-transparent.collapsed .admin-nav-item:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.98) 0%,
-    rgba(59, 130, 246, 0.2) 50%,
-    rgba(255, 255, 255, 0.98) 100%
-  );
-  transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(59, 130, 246, 0.25), 0 6px 10px rgba(139, 92, 234, 0.2), 0 0 20px rgba(59, 130, 246, 0.3);
-  color: #2563eb;
-}
-
 .admin-nav-item.active {
   /* Enhanced active state with gradient */
   background: linear-gradient(
@@ -383,11 +314,6 @@
   filter: drop-shadow(0 2px 4px rgba(59, 126, 234, 0.1));
 }
 
-/* Ensure icons are perfectly centered in collapsed state */
-.admin-sidebar-transparent.collapsed .admin-nav-icon {
-  margin: 0 auto;
-  position: relative;
-}
 
 .admin-nav-label {
   font-size: 0.95rem;
@@ -395,14 +321,6 @@
   white-space: nowrap;
   /* Smooth opacity transition for labels */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.admin-sidebar-transparent.collapsed .admin-nav-label {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-  /* Prevent layout shift during collapse */
-  transform: translateX(-10px);
 }
 
 /* User area styling */
@@ -418,14 +336,7 @@
   min-height: 48px;
 }
 
-.admin-sidebar-transparent.collapsed .admin-user-area {
-  /* Consistent collapsed padding and margin with nav items */
-  padding: 1rem;
-  margin: 0.25rem 0.25rem;
-  justify-content: center;
-  width: calc(100% - 0.5rem);
-  min-height: 48px;
-}
+
 
 /* Logout Section */
 .admin-logout-section {
@@ -437,13 +348,6 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.admin-sidebar-transparent.collapsed .admin-logout-section {
-  /* Better collapsed spacing */
-  padding: 1rem 0.75rem;
-  /* Center align for collapsed state */
-  display: flex;
-  justify-content: center;
-}
 
 .admin-logout-button {
   display: flex;
@@ -469,17 +373,6 @@
   min-height: 48px;
 }
 
-.admin-sidebar-transparent.collapsed .admin-logout-button {
-  /* Fixed collapsed logout button spacing */
-  padding: 1rem;
-  justify-content: center;
-  margin: 0.25rem 0.25rem;
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(239, 68, 68, 0.25);
-  /* Fixed width for collapsed state */
-  width: calc(100% - 0.5rem);
-  min-height: 48px;
-}
 
 .admin-logout-button::before {
   /* Added glow effect for logout */
@@ -513,17 +406,6 @@
   opacity: 1;
 }
 
-.admin-sidebar-transparent.collapsed .admin-logout-button:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(239, 68, 68, 0.2) 50%,
-    rgba(255, 255, 255, 0.95) 100%
-  );
-  border-color: rgba(239, 68, 68, 0.5);
-  transform:  translateY(-2px);
-  box-shadow: 0 5px 10px rgba(239, 68, 68, 0.25), 0 5px 15px rgba(220, 38, 38, 0.2);
-}
 
 /* Main Content */
 .admin-main-wrapper {
@@ -540,11 +422,6 @@
   overflow-x: hidden;
   /* Added default margin for expanded state */
   margin-left: var(--admin-sidebar-width);
-}
-
-/* Added collapsed state margin */
-.admin-main-wrapper.collapsed {
-  margin-left: var(--admin-sidebar-collapsed-width);
 }
 
 .admin-main-wrapper::before {
@@ -891,7 +768,7 @@
 /* Login Page Styles */
 .admin-login-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 25%, #f1f5f9 50%, #e2e8f0 75%, #f8fafc 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #72b3f3 25%, #f1f5f9 50%, #e2e8f0 75%, #79f554 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1150,29 +1027,6 @@
   color: #5a67d8;
 }
 
-/* Tooltips for collapsed sidebar */
-.admin-sidebar-transparent.collapsed .admin-nav-item {
-  position: relative;
-  margin: 0.1rem;
-}
-
-.admin-sidebar-transparent.collapsed .admin-nav-item:hover::after {
-  content: attr(title);
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(30, 41, 59, 0.9);
-  color: #ffffff;
-  padding: 0rem;
-  border-radius: 8px;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  z-index: 1000;
-  margin-left: 0.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
 /* Responsive */
 @media (max-width: 768px) {
   .admin-sidebar-transparent {
@@ -1187,10 +1041,7 @@
     margin-left: 0 !important;
   }
 
-  .admin-main-wrapper.expanded,
-  .admin-main-wrapper.collapsed {
-    margin-left: 0 !important;
-  }
+
 }
 
 @media (max-width: 480px) {
@@ -1563,10 +1414,7 @@
     margin-left: 0 !important;
   }
 
-  .admin-main-wrapper.expanded,
-  .admin-main-wrapper.collapsed {
-    margin-left: 0 !important;
-  }
+
 }
 
 @media (max-width: 480px) {
@@ -1934,7 +1782,7 @@
   top: 0;
   left: 0;
   right: 0;
-  background: #ffffff;
+  background: linear-gradient(135deg, #f5f7fa 0%, #64748b 50%, #d1d9e6 100%);
   border-bottom: 1px solid #e2e8f0;
   z-index: 1000;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -2046,3 +1894,580 @@
   }
 }
 
+/*================= CSS DE LA SIDEBAR DE ADMIN ================ */
+
+/*================= FUTURISTIC SIDEBAR STYLES ================ */
+
+/* Estilos mejorados para el navbar móvil con mejor responsividad */
+.mobile-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+/* Ocultar navbar móvil en desktop */
+@media (min-width: 1024px) {
+  .mobile-navbar {
+    display: none !important;
+  }
+}
+
+.mobile-navbar-bg-pattern {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05), rgba(16, 185, 129, 0.05));
+  opacity: 0.6;
+}
+
+.mobile-navbar-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.9));
+}
+
+.mobile-navbar-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  width: 100%;
+}
+
+.mobile-navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.logo-icon-inner {
+  width: 18px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+}
+
+.logo-text {
+  color: #1e293b;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.logo-text-admin {
+  font-weight: 400;
+  color: #64748b;
+}
+
+/* Botón de menú hamburguesa mejorado solo para móvil */
+.mobile-menu-button {
+  position: relative;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.mobile-menu-button:hover {
+  background: rgba(248, 250, 252, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.mobile-menu-button-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu-button:hover .mobile-menu-button-bg {
+  opacity: 1;
+}
+
+.mobile-menu-button-icon {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-icon {
+  color: #64748b;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-button:hover .menu-icon {
+  color: #3b82f6;
+}
+
+/* Dropdown móvil mejorado con mejor posicionamiento */
+.mobile-dropdown {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  z-index: 45;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-dropdown-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.02), rgba(147, 51, 234, 0.02));
+}
+
+.mobile-dropdown-content {
+  position: relative;
+  z-index: 10;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Items de navegación móvil con mejor animación */
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: #64748b;
+  background: rgba(248, 250, 252, 0.5);
+  border: 1px solid transparent;
+  opacity: 0;
+  transform: translateX(20px);
+  animation: slideInRight 0.3s ease forwards;
+  animation-delay: calc(var(--item-index, 0) * 0.05s);
+}
+
+@keyframes slideInRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.mobile-nav-item:hover {
+  color: #1e293b;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transform: translateX(4px);
+}
+
+.mobile-nav-item-active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  color: #1e293b;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+}
+
+.mobile-nav-item-active-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.nav-icon-active {
+  color: #3b82f6;
+}
+
+.nav-text {
+  position: relative;
+  z-index: 10;
+}
+
+/* Información de usuario móvil mejorada */
+.mobile-user-info {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  animation: fadeInUp 0.4s ease 0.3s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Botón de logout móvil mejorado */
+.mobile-logout-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #64748b;
+  background: rgba(248, 250, 252, 0.5);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+  animation: fadeInUp 0.4s ease 0.4s both;
+}
+
+.mobile-logout-button:hover {
+  background: rgba(254, 226, 226, 0.8);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+  transform: translateX(4px);
+}
+
+.logout-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Contenedor de la navbar (PADRE)*/
+.desktop-sidebar {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  flex-direction: column;
+  background: transparent;
+  transition: all 0.3s ease-in-out;
+  width: 280px;
+  overflow: hidden;
+}
+
+.desktop-sidebar-expanded {
+  width: 280px;
+}
+
+/* Mostrar sidebar de escritorio solo en pantallas grandes */
+@media (min-width: 1024px) {
+  .desktop-sidebar {
+    display: flex !important;
+  }
+}
+
+/* Header del sidebar de escritorio mejorado */
+.desktop-sidebar-header {
+  position: relative;
+  z-index: 10;
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.desktop-sidebar-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Información de usuario de escritorio con mejor responsive */
+.desktop-user-info {
+  flex: 1;
+  min-width: 0;
+  transition: all 0.3s ease;
+}
+
+
+.desktop-user-info-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+
+.desktop-user-avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+  flex-shrink: 0;
+}
+
+.desktop-user-avatar-icon {
+  width: 18px;
+  height: 18px;
+  color: white;
+}
+
+.desktop-user-details {
+  flex: 1;
+  min-width: 0;
+  transition: all 0.3s ease;
+}
+
+.desktop-user-details-hidden {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.desktop-user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 2px 0;
+}
+
+.desktop-user-role {
+  font-size: 12px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+
+/* Seccion de Navegacion */
+.desktop-nav {
+  flex: 1;
+  position: relative;
+  z-index: 10;
+  padding: 16px 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.desktop-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*  ========= Items de navegación de escritorio ========= */
+
+.desktop-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 3rem;
+  margin: 2% 2%;
+  padding: 8% 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #64748b;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.623);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid transparent;
+  
+}
+
+.desktop-nav-item:hover {
+  background: rgba(255, 255, 255, 0.623);
+}
+
+.desktop-nav-item-active {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  color: #1e293b;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+}
+
+.desktop-nav-item-active-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(147, 51, 234, 0.05));
+}
+
+.desktop-nav-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.desktop-nav-icon-active {
+  color: #3b82f6;
+}
+
+.desktop-nav-text {
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.desktop-nav-text-hidden {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Footer del sidebar de escritorio mejorado */
+.desktop-sidebar-footer {
+  position: relative;
+  z-index: 10;
+  padding: 16px 12px;
+  border-top: 1px solid rgba(226, 232, 240, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.desktop-logout-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #64748b;
+  background: rgba(248, 250, 252, 0.5);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+.desktop-logout-button:hover {
+  background: rgba(254, 226, 226, 0.8);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+}
+
+.desktop-logout-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.desktop-logout-text {
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.desktop-logout-text-hidden {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+/* Utilidades responsive adicionales */
+@media (max-width: 1023px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* Transiciones suaves para todos los elementos */
+* {
+  transition-property: margin, padding, width, height, transform, opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus states mejorados */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

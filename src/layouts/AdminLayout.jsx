@@ -1,220 +1,132 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom"
-import { useAuth } from "../contexts/AuthContext"
-import {
-  HomeOutlined,
-  LogoutOutlined,
-  ExperimentOutlined,
-  BranchesOutlined,
-  BookOutlined,
-  UserOutlined,
-  AppstoreOutlined,
-  LeftOutlined,
-  RightOutlined,
-  MenuOutlined,
-} from "@ant-design/icons"
+import { Outlet } from "react-router-dom"
+import { Suspense, useState, useCallback, useEffect } from "react"
+import AdminSidebar from "../components/admin/AdminSideBar/AdminSideBar"
 import "../styles/admin-theme.css"
 
-const MENU_ITEMS = [
-  {
-    key: "/admin",
-    icon: <HomeOutlined />,
-    label: "Inicio",
-  },
-  {
-    key: "/admin/lineas",
-    icon: <ExperimentOutlined />,
-    label: "Líneas de Investigación",
-  },
-  {
-    key: "/admin/publicaciones",
-    icon: <BookOutlined />,
-    label: "Publicaciones",
-  },
-  {
-    key: "/admin/proyectos",
-    icon: <BranchesOutlined />,
-    label: "Proyectos",
-  },
-  {
-    key: "/admin/equipo",
-    icon: <UserOutlined />,
-    label: "Equipo",
-  },
-  {
-    key: "/admin/galeria",
-    icon: <AppstoreOutlined />,
-    label: "Galería",
-  },
-]
-
-const useMobileMenu = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const location = useLocation()
-
-  useEffect(() => {
-    setMobileMenuOpen(false)
-  }, [location.pathname])
-
-  return { mobileMenuOpen, setMobileMenuOpen }
-}
-
-const useBodyStyles = () => {
-  useEffect(() => {
-    const originalPadding = document.body.style.paddingTop
-    const originalBackground = document.body.style.background
-    const originalColor = document.body.style.color
-
-    document.body.style.paddingTop = "0px"
-    document.body.style.background = "transparent"
-    document.body.style.color = "#1e293b"
-
-    return () => {
-      document.body.style.paddingTop = originalPadding
-      document.body.style.background = originalBackground
-      document.body.style.color = originalColor
-    }
-  }, [])
-}
-
-const MobileAppBar = ({ user, isMenuOpen, onToggleMenu }) => (
-  <div className="mobile-appbar">
-    <div className="mobile-appbar-content">
-      <div className="mobile-user-display">
-        <span className="mobile-username">{user?.name || "Admin"}</span>
+const AdminPageSkeleton = () => (
+  <div className="space-y-4 sm:space-y-6 lg:space-y-8 animate-pulse">
+    {/* Header skeleton */}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div className="h-6 sm:h-8 bg-gray-700/50 rounded-lg w-48 sm:w-64 mb-2"></div>
+        <div className="h-3 sm:h-4 bg-gray-700/30 rounded w-64 sm:w-96"></div>
       </div>
-      <button
-        className="mobile-menu-toggle"
-        onClick={onToggleMenu}
-        aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-      >
-        <MenuOutlined />
-      </button>
     </div>
 
-    {isMenuOpen && (
-      <div className="mobile-dropdown-menu">
-        {MENU_ITEMS.map((item) => (
-          <Link key={item.key} to={item.key} className="mobile-dropdown-item" onClick={onToggleMenu}>
-            <span className="mobile-item-icon">{item.icon}</span>
-            <span className="mobile-item-label">{item.label}</span>
-          </Link>
-        ))}
-        <button
-          onClick={() => {
-            onToggleMenu()
-            // handleLogout will be passed from parent
-          }}
-          className="mobile-dropdown-item mobile-logout"
-        >
-          <LogoutOutlined className="mobile-item-icon" />
-          <span className="mobile-item-label">Cerrar Sesión</span>
-        </button>
-      </div>
-    )}
-  </div>
-)
-
-const MobileMenuButton = ({ isOpen, onToggle }) => (
-  <button className="mobile-hamburger-button" onClick={onToggle} aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}>
-    <div className={`hamburger-lines ${isOpen ? "open" : ""}`}>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </button>
-)
-
-const UserHeader = ({ user, sidebarOpen, onToggleSidebar }) => (
-  <div className="admin-user-header">
-    <div className={`admin-user-info-inline ${sidebarOpen ? "expanded" : "collapsed"}`}>
-      {sidebarOpen && (
-        <div className="admin-user-details">
-          <p className="admin-user-name">{user?.name || "Admin"}</p>
-          <p className="admin-user-email">{user?.email || "admin@gilia.com"}</p>
+    {/* Content skeleton */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="bg-gray-800/40 border border-gray-700/30 rounded-xl p-4 sm:p-6">
+          <div className="flex items-center">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-700/50 rounded-xl mr-3 sm:mr-4"></div>
+            <div className="flex-1">
+              <div className="h-4 sm:h-6 bg-gray-700/50 rounded w-12 sm:w-16 mb-2"></div>
+              <div className="h-3 sm:h-4 bg-gray-700/30 rounded w-16 sm:w-24"></div>
+            </div>
+          </div>
         </div>
-      )}
+      ))}
     </div>
 
-    <button
-      className="admin-sidebar-toggle"
-      onClick={onToggleSidebar}
-      title={sidebarOpen ? "Plegar sidebar" : "Expandir sidebar"}
-      aria-label={sidebarOpen ? "Plegar sidebar" : "Expandir sidebar"}
-    >
-      {sidebarOpen ? <LeftOutlined /> : <RightOutlined />}
-    </button>
-  </div>
-)
-
-const Navigation = ({ currentPath }) => (
-  <nav className="admin-navigation">
-    {MENU_ITEMS.map((item) => (
-      <Link
-        key={item.key}
-        to={item.key}
-        className={`admin-nav-item ${
-          currentPath === item.key || (item.key === "/admin" && currentPath === "/admin") ? "active" : ""
-        }`}
-        title={item.label}
-      >
-        <span className="admin-nav-icon">{item.icon}</span>
-        <span className="admin-nav-label">{item.label}</span>
-      </Link>
-    ))}
-  </nav>
-)
-
-const LogoutSection = ({ onLogout }) => (
-  <div className="admin-logout-section">
-    <button onClick={onLogout} className="admin-logout-button" title="Cerrar Sesión" aria-label="Cerrar Sesión">
-      <LogoutOutlined className="admin-nav-icon" />
-      <span className="admin-nav-label">Cerrar Sesión</span>
-    </button>
+    {/* Large content skeleton */}
+    <div className="bg-gray-800/40 border border-gray-700/30 rounded-xl p-4 sm:p-6">
+      <div className="h-4 sm:h-6 bg-gray-700/50 rounded w-32 sm:w-48 mb-4"></div>
+      <div className="space-y-3">
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="h-12 sm:h-16 bg-gray-700/30 rounded-lg"></div>
+        ))}
+      </div>
+    </div>
   </div>
 )
 
 const AdminLayout = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const { user, logout } = useAuth()
-  const location = useLocation()
-  const navigate = useNavigate()
-  const { mobileMenuOpen, setMobileMenuOpen } = useMobileMenu()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
-  useBodyStyles()
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 1024 // lg breakpoint
+      setIsMobile(mobile)
 
-  const handleLogout = () => {
-    logout()
-    navigate("/admin/login")
+      // Cerrar sidebar móvil automáticamente cuando se cambia a desktop
+      if (!mobile && isSidebarOpen) {
+        setIsSidebarOpen(false)
+      }
+    }
+
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [isSidebarOpen])
+
+  // Función para manejar el toggle de la sidebar en móvil
+  const handleSidebarToggle = useCallback((isOpen) => {
+    setIsSidebarOpen(isOpen)
+    console.log("Sidebar móvil toggled:", isOpen)
+  }, [])
+
+  // Función para manejar el colapso de la sidebar en desktop
+  const handleSidebarCollapse = useCallback((isCollapsed) => {
+    setIsSidebarCollapsed(isCollapsed)
+    console.log("Sidebar desktop collapsed:", isCollapsed)
+  }, [])
+
+  // Funciones para calcular márgenes y paddings dinámicos
+  const getMainContentMargin = () => {
+    if (isMobile) {
+      return "0px" // Sin margen en móvil
+    }
+    return isSidebarCollapsed ? "80px" : "280px" // Margen dinámico en desktop
   }
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen)
+  // Función para calcular el padding del contenido principal
+  const getMainContentPadding = () => {
+    if (isMobile) {
+      return "1rem" // Padding reducido en móvil
+    }
+    return isSidebarCollapsed ? "2rem 3rem" : "2rem 1.5rem" // Padding adaptativo en desktop
+  }
 
   return (
-    <div className="admin-layout-gradient">
-      <div className="mobile-only">
-        <MobileAppBar user={user} isMenuOpen={mobileMenuOpen} onToggleMenu={toggleMobileMenu} />
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      {/* Componente SideBar la Navegacion*/}
+      <AdminSidebar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={handleSidebarToggle}
+        isSidebarCollapsed={isSidebarCollapsed}
+        setIsSidebarCollapsed={handleSidebarCollapse}
+      />
 
-      {mobileMenuOpen && <div className="mobile-simple-overlay" onClick={() => setMobileMenuOpen(false)} />}
+      <div
+        className="transition-all duration-300 ease-in-out"
+        style={{
+          marginLeft: getMainContentMargin(),
+          paddingTop: isMobile ? "80px" : "0px", // Espacio para navbar móvil
+        }}
+      >
+        <main
+          className="transition-all duration-300 ease-in-out min-h-screen"
+          style={{
+            padding: getMainContentPadding(),
+            width: isMobile ? "100%" : `calc(100vw - ${getMainContentMargin()})`,
+            maxWidth: "100%",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            className="transition-all duration-300 ease-in-out w-full"
+            style={{
+              maxWidth: isSidebarCollapsed && !isMobile ? "1400px" : "1200px",
+              margin: "0 auto",
+            }}
+          > 
 
-      <aside className={`admin-sidebar-transparent ${sidebarOpen ? "" : "collapsed"} desktop-only`}>
-        <div className="admin-sidebar-content">
-          <UserHeader user={user} sidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} />
-
-          <Navigation currentPath={location.pathname} />
-
-          <LogoutSection onLogout={handleLogout} />
-        </div>
-      </aside>
-
-      <div className={`admin-main-wrapper ${sidebarOpen ? "expanded" : "collapsed"}`}>
-        <main className="admin-page-content">
-          <div className="admin-content-wrapper">
-            <Outlet />
+            <Suspense fallback={<AdminPageSkeleton />}>
+              <Outlet />
+            </Suspense>
           </div>
         </main>
       </div>
@@ -223,3 +135,27 @@ const AdminLayout = () => {
 }
 
 export default AdminLayout
+
+
+/*   
+
+================= COMENTARIOS =================
+
+Este componente AdminLayout maneja la estructura principal
+del layout de administración, puntualmente utiliza un sidebar
+para la navegación y un sistema de responsive design para
+adaptarse a diferentes tamaños de pantalla. Incluye un
+skeleton de carga para mejorar la experiencia del usuario
+mientras se cargan los contenidos.
+
+El componente nuevo es "AdminPageSkeleton", que proporciona
+un esqueleto de carga visualmente atractivo y funcional
+para las páginas de administración, mejorando la UX durante
+la carga de datos. Es responsible de calcular márgenes y paddings
+dinámicos según el estado del sidebar y el tamaño de pantalla,
+asegurando una experiencia fluida tanto en dispositivos móviles
+como en desktop. Tambien sirve para la carga asincronica de contenido 
+de los hijos.
+
+
+ */
