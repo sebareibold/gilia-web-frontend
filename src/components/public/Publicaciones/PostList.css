@@ -1,0 +1,41 @@
+/* Animaciones */
+
+/* 1. Ocultar los elementos que se van a animar por defecto */
+.section-header,
+.filters-container,
+.publications-content,
+.empty-state-container {
+  opacity: 0;
+}
+
+/* 2. Cuando la sección está cargada, aplicar la animación de entrada en secuencia */
+.is-loaded .section-header {
+  animation: fadeInUp 0.8s ease-out 0.1s both;
+}
+
+.is-loaded .filters-container {
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.is-loaded .publications-content,
+.is-loaded .empty-state-container {
+  animation: fadeInUp 0.8s ease-out 0.5s both;
+}
+
+/* Estilos para el grid de publicaciones y el estado vacío */
+.publications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.empty-state-container {
+  text-align: center;
+  padding: 3rem;
+}
+
+.empty-state-container h3 {
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+

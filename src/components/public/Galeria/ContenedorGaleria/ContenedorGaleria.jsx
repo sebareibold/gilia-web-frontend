@@ -5,8 +5,7 @@ import { useTheme } from "../../../../contexts/ThemeContext"
 import { PictureOutlined, EyeOutlined, CameraOutlined, ExpandOutlined, CloseOutlined } from "@ant-design/icons"
 import { API_BASE_URL } from "../../../../config/apiConfig"
 import Loader from "../../Loader/Loader"
-import "../../../shared/FuturisticStyles.css"
-import "../../Home/Novedades/HomeExploration.css"
+
 import "./ContenedorGaleria.css"
 import { dataService } from "../../../../services/dataService"
 

@@ -1,4 +1,4 @@
-import "./HomeContainer.css";
+
 import HomePresentation from "../Presentacion/HomePresentation";
 import HomeExploration from "../Novedades/HomeExploration";
 import HistoriaGilia from "../HistoriaGilia/HistoriaGilia";

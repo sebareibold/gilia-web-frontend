@@ -42,13 +42,25 @@ export default function HomePresentation() {
 
   useEffect(() => {
     const timeout = setTimeout(() => setShowFloating(true), 1200)
-    // Cargar líneas de investigación y extensión
-    dataService.getResearchLines().then(res => {
-      setResearchLines(res.data?.data || res.data || [])
-    })
-    dataService.getExtensionLines().then(res => {
-      setExtensionLines(res.data?.data || res.data || [])
-    })
+    
+    // Cargar líneas de investigación y extensión en paralelo para evitar recargas
+    const loadData = async () => {
+      try {
+        const [researchRes, extensionRes] = await Promise.all([
+          dataService.getResearchLines(),
+          dataService.getExtensionLines()
+        ])
+        
+        setResearchLines(researchRes.data?.data || researchRes.data || [])
+        setExtensionLines(extensionRes.data?.data || extensionRes.data || [])
+      } catch (error) {
+        console.error('Error loading research/extension lines:', error)
+        setResearchLines([])
+        setExtensionLines([])
+      }
+    }
+    
+    loadData()
     return () => clearTimeout(timeout)
   }, [])
 

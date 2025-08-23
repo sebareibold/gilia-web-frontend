@@ -28,7 +28,7 @@ import Equipo from "./components/admin/AdminEquipo/AdminEquipo"
 import Galeria from "./components/admin/AdminGaleria/AdminGaleria"
 import Configuracion from "./components/admin/AdminConfiguracion/AdminConfiguracion"
 
-import "./App.css"
+import "./styles/base.css"
 
 // ScrollToTop component
 function ScrollToTop() {
@@ -56,6 +56,7 @@ function App() {
               <Route path="projects/:id" element={<ProyectoDetail />} />
               <Route path="research-lines" element={<ExtensionLista />} />
               <Route path="research-lines/:id" element={<LinesDetailContainer />} />
+              <Route path="extension" element={<ExtensionLista />} />
               <Route path="extension/:id" element={<ExtensionDetails />} />
             </Route>
 

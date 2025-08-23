@@ -1074,14 +1074,22 @@ const mockData = {
   ],
 }
 
-// Simulación de delay para APIs
+// Simulación de delay optimizado para mejor rendimiento
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+// Delays optimizados para mejor experiencia de usuario
+const DELAYS = {
+  FAST: 150,      // Para datos críticos (about, objectives)
+  NORMAL: 250,    // Para datos principales (team, extensions)
+  SLOW: 400,      // Para datos secundarios (statistics, search)
+  UPLOAD: 800     // Para operaciones de archivo
+}
 
 // AsyncMock completo del sistema GILIA
 export const asyncMock = {
   // ===== AUTENTICACIÓN =====
   async simulateBackofficeAccess(credentials) {
-    await delay(800)
+    await delay(DELAYS.SLOW) // Longer for auth operations
     console.log("AsyncMock - Simulando acceso con:", credentials)
 
     if (credentials?.username === "admin" && credentials?.password === "admin123") {
@@ -1101,7 +1109,7 @@ export const asyncMock = {
 
   // ===== EQUIPO =====
   async getPersonas(filters = {}) {
-    await delay(600)
+    await delay(DELAYS.NORMAL)
     let filteredMembers = [...mockData.teamMembers]
 
     if (filters.role) {
@@ -1128,7 +1136,7 @@ export const asyncMock = {
   },
 
   async getPersona(id) {
-    await delay(400)
+    await delay(DELAYS.FAST)
     const member = mockData.teamMembers.find((m) => m.id === Number.parseInt(id))
     if (!member) throw new Error("Miembro del equipo no encontrado")
     return { data: member }
@@ -1136,7 +1144,7 @@ export const asyncMock = {
 
   // ===== PROYECTOS =====
   async getProyectos(filters = {}) {
-    await delay(700)
+    await delay(DELAYS.NORMAL)
     let filteredProjects = [...mockData.projects]
 
     if (filters.status) {
@@ -1163,7 +1171,7 @@ export const asyncMock = {
   },
 
   async getProyecto(id) {
-    await delay(500)
+    await delay(DELAYS.FAST)
     const project = mockData.projects.find((p) => p.id === Number.parseInt(id))
     if (!project) throw new Error("Proyecto no encontrado")
     return { data: project }
@@ -1171,7 +1179,7 @@ export const asyncMock = {
 
   // ===== LÍNEAS DE INVESTIGACIÓN =====
   async getLineasInvestigacion(filters = {}) {
-    await delay(600)
+    await delay(DELAYS.NORMAL)
     let filteredLines = [...mockData.researchLines]
 
     if (filters.status) {
@@ -1200,7 +1208,7 @@ export const asyncMock = {
   },
 
   async getLineaInvestigacion(id) {
-    await delay(500)
+    await delay(DELAYS.FAST)
     const line = mockData.researchLines.find((l) => l.id === Number.parseInt(id))
     if (!line) throw new Error("Línea de investigación no encontrada")
     // Mapeo de campos para compatibilidad
@@ -1209,14 +1217,25 @@ export const asyncMock = {
 
   // ===== PUBLICACIONES =====
   async getPublicaciones(filters = {}) {
-    await delay(800)
+    await delay(DELAYS.NORMAL)
     let filteredPublications = [...mockData.publications]
 
-    if (filters.year) {
-      filteredPublications = filteredPublications.filter((pub) => pub.year === Number.parseInt(filters.year))
+    // Handle both Spanish (anio, tipo, autores) and English (year, type, authors) filter names
+    const year = filters.year || filters.anio
+    const type = filters.type || filters.tipo
+    const authors = filters.authors || filters.autores
+
+    if (year) {
+      filteredPublications = filteredPublications.filter((pub) => pub.year === Number.parseInt(year))
     }
-    if (filters.type) {
-      filteredPublications = filteredPublications.filter((pub) => pub.type === filters.type)
+    if (type) {
+      filteredPublications = filteredPublications.filter((pub) => pub.type === type)
+    }
+    if (authors) {
+      filteredPublications = filteredPublications.filter((pub) => {
+        const pubAuthors = Array.isArray(pub.authors) ? pub.authors.join(" ").toLowerCase() : (pub.authors || "").toLowerCase()
+        return pubAuthors.includes(authors.toLowerCase())
+      })
     }
     if (filters.status) {
       filteredPublications = filteredPublications.filter((pub) => pub.status === filters.status)
@@ -1242,8 +1261,8 @@ export const asyncMock = {
       autores: pub.autores || (Array.isArray(pub.authors) ? pub.authors.join(", ") : pub.authors) || "Autores no disponibles",
       // Año
       anio: pub.anio || pub.year || "Año no disponible",
-      // Tipo
-      tipo: pub.tipo || pub.type || "Tipo no disponible",
+      // Tipo - Map type values to Spanish
+      tipo: pub.tipo || (pub.type === "Artículo de Revista" ? "Artículo" : pub.type) || "Tipo no disponible",
       // Resumen
       resumen: pub.resumen || pub.abstract || "Sin resumen disponible",
       // Enlace
@@ -1259,12 +1278,17 @@ export const asyncMock = {
           total: filteredPublications.length,
           pageCount: Math.ceil(filteredPublications.length / 10),
         },
+        filters: {
+          applied: Object.keys(filters).filter(key => filters[key]),
+          count: filteredPublications.length,
+          total: mockData.publications.length
+        }
       },
     }
   },
 
   async getPublicacion(id) {
-    await delay(500)
+    await delay(DELAYS.FAST)
     const publication = mockData.publications.find((p) => p.id === Number.parseInt(id))
     if (!publication) throw new Error("Publicación no encontrada")
     return { data: publication }
@@ -1272,7 +1296,7 @@ export const asyncMock = {
 
   // ===== GALERÍA =====
   async getGaleria(filters = {}) {
-    await delay(600)
+    await delay(DELAYS.NORMAL)
     let filteredItems = [...mockData.galleryItems]
 
     if (filters.type) {
@@ -1300,7 +1324,7 @@ export const asyncMock = {
   },
 
   async getGaleriaItem(id) {
-    await delay(400)
+    await delay(DELAYS.FAST)
     const item = mockData.galleryItems.find((i) => i.id === Number.parseInt(id))
     if (!item) throw new Error("Elemento de galería no encontrado")
     return { data: item }
@@ -1308,7 +1332,7 @@ export const asyncMock = {
 
   // ===== LÍNEAS DE EXTENSIÓN =====
   async getLineasExtension(filters = {}) {
-    await delay(600)
+    await delay(DELAYS.FAST) // Reduced delay for extension cards
     let filteredLines = [...mockData.extensionLines]
 
     if (filters.status) {
@@ -1337,7 +1361,7 @@ export const asyncMock = {
   },
 
   async getLineaExtension(id) {
-    await delay(500)
+    await delay(DELAYS.FAST)
     const line = mockData.extensionLines.find((l) => l.id === Number.parseInt(id))
     if (!line) throw new Error("Línea de extensión no encontrada")
     // Mapeo de campos para compatibilidad
@@ -1346,24 +1370,24 @@ export const asyncMock = {
 
   // ===== CONFIGURACIÓN =====
   async getGlobal() {
-    await delay(400)
+    await delay(DELAYS.FAST)
     return { data: mockData.systemConfig }
   },
 
   // ===== ESTADÍSTICAS =====
   async getEstadisticas() {
-    await delay(500)
+    await delay(DELAYS.FAST)
     return { data: mockData.statistics }
   },
 
   // ===== INFORMACIÓN PÚBLICA =====
   async getAbout() {
-    await delay(400)
+    await delay(DELAYS.FAST) // Fast load for critical info
     return { about: mockData.aboutInfo }
   },
 
   async getObjetivos() {
-    await delay(400)
+    await delay(DELAYS.FAST) // Fast load for critical info
     return {
       data: mockData.objectives,
       meta: {
@@ -1376,7 +1400,7 @@ export const asyncMock = {
   },
 
   async getNovedades(filters = {}) {
-    await delay(600)
+    await delay(DELAYS.NORMAL)
     let filteredNews = [...mockData.news]
 
     if (filters.category) {
@@ -1401,7 +1425,7 @@ export const asyncMock = {
   },
 
   async getNovedad(id) {
-    await delay(400)
+    await delay(DELAYS.FAST)
     const news = mockData.news.find((n) => n.id === Number.parseInt(id))
     if (!news) throw new Error("Noticia no encontrada")
     return { data: news }
@@ -1409,7 +1433,7 @@ export const asyncMock = {
 
   // ===== BÚSQUEDA GLOBAL =====
   async searchGlobal(query, filters = {}) {
-    await delay(800)
+    await delay(DELAYS.SLOW) // Slower for complex operations
     const searchTerm = query.toLowerCase()
     const results = {
       teamMembers: [],
@@ -1485,7 +1509,7 @@ export const asyncMock = {
 
   // ===== SIMULACIÓN DE ACCIONES =====
   async simulateFormSubmission(formType, formData) {
-    await delay(600)
+    await delay(DELAYS.NORMAL)
     console.log(`AsyncMock - Simulando envío de formulario: ${formType}`, formData)
     return {
       success: true,
@@ -1496,7 +1520,7 @@ export const asyncMock = {
   },
 
   async simulateUserAction(action, data) {
-    await delay(400)
+    await delay(DELAYS.FAST)
     console.log(`AsyncMock - Simulando acción: ${action}`, data)
     return {
       success: true,
@@ -1507,7 +1531,7 @@ export const asyncMock = {
 
   // ===== SIMULACIÓN DE UPLOADS =====
   async simulateFileUpload(file, metadata = {}) {
-    await delay(1200)
+    await delay(DELAYS.UPLOAD) // Longer for file operations
     console.log("AsyncMock - Simulando upload de archivo:", file.name, metadata)
     return {
       success: true,

@@ -1,96 +1,60 @@
-"use client"
-
-import { useEffect, useState, useRef } from "react"
-import { useTheme } from "../../../contexts/ThemeContext"
+import { useEffect, useState, useRef } from "react";
+import { useTheme } from "../../../contexts/ThemeContext";
 import {
   SearchOutlined,
   ShareAltOutlined,
   ArrowRightOutlined,
   CalendarOutlined,
-} from "@ant-design/icons"
-import asyncMock from "../../../../asyncMock"
-import { useLocation } from "react-router-dom"
-import PublicationFilters from './PublicationFilters'
-import './PublicationFilters.css'
+} from "@ant-design/icons";
+import asyncMock from "../../../../asyncMock";
+import { useLocation } from "react-router-dom";
+import PublicationFilters from "./PublicationFilters";
+import "./PublicationFilters.css";
+import "./PostList.css";
 
 const PostList = () => {
-  const { state } = useLocation()
-  const linea = state?.linea || ""
-  const [publicaciones, setPublicaciones] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [pagina, setPagina] = useState(1)
-  const [filtro, setFiltro] = useState({ anio: "", tipo: "", linea: linea })
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
-  const [visibleCount, setVisibleCount] = useState(6)
-  const [animatedIndexes, setAnimatedIndexes] = useState(new Set())
-  const cardRefs = useRef([])
-  const filterRef = useRef(null)
-  const headerRef = useRef(null)
-  const loadMoreRef = useRef(null)
-
-  const visiblePublicaciones = publicaciones.slice(0, visibleCount)
-  const hasMore = visibleCount < publicaciones.length
+  const { state } = useLocation();
+  const linea = state?.linea || "";
+  const [publicaciones, setPublicaciones] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pagina, setPagina] = useState(1);
+  const [filtro, setFiltro] = useState({ anio: "", tipo: "", linea: linea });
+  const { theme } = useTheme();
+  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a";
+  const [visibleCount, setVisibleCount] = useState(6); // Mantener paginación
+  const [isReady, setIsReady] = useState(false); // Nuevo estado para controlar la animación
 
   useEffect(() => {
     const fetchPublicaciones = async () => {
-      setLoading(true)
+      setLoading(true);
+      setIsReady(false); // Reiniciar animación en cada carga
       try {
-        const response = await asyncMock.getPublicaciones(filtro)
-        setPublicaciones(response.data || [])
+        const response = await asyncMock.getPublicaciones(filtro);
+        setPublicaciones(response.data || []);
       } catch (err) {
-        console.error("Error fetching publicaciones:", err)
+        console.error("Error fetching publicaciones:", err);
+        setPublicaciones([]);
       } finally {
-        setLoading(false)
+        setLoading(false);
+        // Pequeño retraso para asegurar que el DOM se actualice antes de animar
+        setTimeout(() => setIsReady(true), 50);
       }
-    }
+    };
 
-    fetchPublicaciones()
-  }, [pagina, filtro])
-
-  useEffect(() => {
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = entry.target.dataset.index
-            setAnimatedIndexes((prev) => new Set([...prev, index]))
-          }
-        })
-      },
-      { threshold: 0.2 }
-    )
-    // Header
-    if (headerRef.current) observer.observe(headerRef.current)
-    // Filtros
-    if (filterRef.current) observer.observe(filterRef.current)
-    // Cards
-    cardRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref)
-    })
-    // Botón ver más
-    if (loadMoreRef.current) observer.observe(loadMoreRef.current)
-    return () => {
-      if (headerRef.current) observer.unobserve(headerRef.current)
-      if (filterRef.current) observer.unobserve(filterRef.current)
-      cardRefs.current.forEach((ref) => {
-        if (ref) observer.unobserve(ref)
-      })
-      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current)
-    }
-  }, [visiblePublicaciones, hasMore])
+    fetchPublicaciones();
+  }, [pagina, filtro]);
 
   const handleFiltroChange = (e) => {
-    setFiltro({ ...filtro, [e.target.name]: e.target.value })
-    setPagina(1)
-    setVisibleCount(6)
-  }
+    setFiltro({ ...filtro, [e.target.name]: e.target.value });
+    setPagina(1);
+    setVisibleCount(6);
+  };
 
   const handleClearFilters = () => {
-    setFiltro({ anio: '', tipo: '', autores: '' })
-    setPagina(1)
-    setVisibleCount(6)
-  }
+    setFiltro({ anio: "", tipo: "", autores: "" });
+    setPagina(1);
+    setVisibleCount(6);
+  };
 
   const getTypeColor = (tipo) => {
     const colors = {
@@ -100,35 +64,36 @@ const PostList = () => {
       Libro: "#FF9800",
       "Informe Técnico": "#4CAF50",
       Tesis: "#795548",
-    }
-    return colors[tipo] || "#6B7280"
-  }
+    };
+    return colors[tipo] || "#6B7280";
+  };
+
+  const visiblePublicaciones = publicaciones.slice(0, visibleCount);
+  const hasMore = visibleCount < publicaciones.length;
 
   return (
-    <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+    <section
+      className={`exploration-section ${isReady ? "is-loaded" : ""}`}
+      data-theme={isDarkTheme ? "dark" : "light"}
+    >
       <div className="exploration-container">
         {/* Header */}
-        <div
-          className={`section-header${animatedIndexes.has('header') ? ' animated' : ''}`}
-          ref={headerRef}
-          data-index="header"
-          style={{ animationDelay: '0.1s' }}
-        >
+        <div className="section-header">
           <h2 className="section-title">Publicaciones Científicas</h2>
           <p className="section-description">
-            Explora nuestras investigaciones, artículos y contribuciones académicas en el campo de la inteligencia
-            artificial, procesamiento de lenguaje natural y tecnologías emergentes.
+            Explora nuestras investigaciones, artículos y contribuciones
+            académicas en el campo de la inteligencia artificial, procesamiento
+            de lenguaje natural y tecnologías emergentes.
           </p>
         </div>
 
         {/* Filtros */}
-        <div
-          ref={filterRef}
-          data-index="filters"
-          className={`filters-animated${animatedIndexes.has('filters') ? ' animated' : ''}`}
-          style={{ animationDelay: '0.2s' }}
-        >
-          <PublicationFilters filtro={filtro} onChange={handleFiltroChange} onClear={handleClearFilters} />
+        <div className="filters-container">
+          <PublicationFilters
+            filtro={filtro}
+            onChange={handleFiltroChange}
+            onClear={handleClearFilters}
+          />
         </div>
 
         {/* Content */}
@@ -138,31 +103,32 @@ const PostList = () => {
             <span className="loading-text">Cargando publicaciones...</span>
           </div>
         ) : publicaciones.length === 0 ? (
-          <div className="carousel-container" style={{ textAlign: "center", padding: "3rem" }}>
-            <SearchOutlined style={{ fontSize: "3rem", color: "var(--color-text-secondary)", marginBottom: "1rem" }} />
-            <h3 style={{ color: "var(--color-text-primary)", marginBottom: "0.5rem" }}>No hay publicaciones</h3>
+          <div className="empty-state-container">
+            <SearchOutlined
+              style={{
+                fontSize: "3rem",
+                color: "var(--color-text-secondary)",
+                marginBottom: "1rem",
+              }}
+            />
+            <h3
+              style={{
+                color: "var(--color-text-primary)",
+                marginBottom: "0.5rem",
+              }}
+            >
+              No hay publicaciones
+            </h3>
             <p style={{ color: "var(--color-text-secondary)" }}>
               No se encontraron publicaciones con los filtros aplicados.
             </p>
           </div>
         ) : (
-          <div className="multi-card-carousel">
+          <div className="publications-content">
             <div className="carousel-container">
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-                  gap: "2rem",
-                }}
-              >
+              <div className="publications-grid">
                 {visiblePublicaciones.map((pub, idx) => (
-                  <div
-                    key={pub.id}
-                    ref={el => cardRefs.current[idx] = el}
-                    data-index={idx}
-                    className={`news-card${animatedIndexes.has(idx.toString()) ? ' animated' : ''}`}
-                    style={{ animationDelay: `${0.3 + idx * 0.1}s` }}
-                  >
+                  <div key={pub.id} className="news-card">
                     {/* Header de la publicación */}
                     <div className="news-content">
                       <div className="news-meta">
@@ -191,7 +157,9 @@ const PostList = () => {
                           fontWeight: "500",
                         }}
                       >
-                        <div dangerouslySetInnerHTML={{ __html: pub.autores }} />
+                        <div
+                          dangerouslySetInnerHTML={{ __html: pub.autores }}
+                        />
                       </div>
 
                       {pub.publicacion && (
@@ -208,21 +176,34 @@ const PostList = () => {
                       )}
 
                       <div className="news-description">
-                        <div dangerouslySetInnerHTML={{ __html: pub.resumen }} />
+                        <div
+                          dangerouslySetInnerHTML={{ __html: pub.resumen }}
+                        />
                       </div>
 
                       <div className="news-actions">
                         {pub.enlace ? (
-                          <a href={pub.enlace} target="_blank" rel="noopener noreferrer" className="news-btn-primary">
+                          <a
+                            href={pub.enlace}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="news-btn-primary"
+                          >
                             <span>Ver publicación</span>
                             <ArrowRightOutlined />
                           </a>
                         ) : (
-                          <div className="news-btn-primary" style={{ opacity: 0.5, cursor: "not-allowed" }}>
+                          <div
+                            className="news-btn-primary"
+                            style={{ opacity: 0.5, cursor: "not-allowed" }}
+                          >
                             <span>No disponible</span>
                           </div>
                         )}
-                        <button className="news-btn-secondary" aria-label="Compartir publicación">
+                        <button
+                          className="news-btn-secondary"
+                          aria-label="Compartir publicación"
+                        >
                           <ShareAltOutlined />
                         </button>
                       </div>
@@ -233,12 +214,7 @@ const PostList = () => {
             </div>
             {/* Botón Ver más */}
             {hasMore && (
-              <div
-                className={`load-more-container${animatedIndexes.has('loadmore') ? ' animated' : ''}`}
-                ref={loadMoreRef}
-                data-index="loadmore"
-                style={{ animationDelay: `${0.3 + visiblePublicaciones.length * 0.1}s` }}
-              >
+              <div className="load-more-container">
                 <button
                   className="load-more-btn"
                   onClick={() => setVisibleCount((prev) => prev + 6)}
@@ -252,7 +228,7 @@ const PostList = () => {
         )}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default PostList
+export default PostList;

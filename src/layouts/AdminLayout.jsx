@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom"
 import { Suspense, useState, useCallback, useEffect } from "react"
 import AdminSidebar from "../components/admin/AdminSideBar/AdminSideBar"
+import { applyAdminConfig } from "../config/adminConfig"
 import "../styles/admin-theme.css"
 
 const AdminPageSkeleton = () => (
@@ -44,6 +45,11 @@ const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+
+  // Aplicar configuración del admin al montar el componente
+  useEffect(() => {
+    applyAdminConfig();
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {

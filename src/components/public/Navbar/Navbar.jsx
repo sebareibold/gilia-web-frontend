@@ -61,7 +61,10 @@ const Navbar = () => {
   }
 
   const isActive = (path) => {
-    return location.pathname === path
+    if (path === "/") {
+      return location.pathname === "/"
+    }
+    return location.pathname.startsWith(path)
   }
 
   const navigationItems = [
@@ -88,9 +91,9 @@ const Navbar = () => {
     },
     {
       label: "Extensión",
-      path: "/research-lines",
+      path: "/extension",
       icon: <BranchesOutlined />,
-      active: isActive("/research-lines"),
+      active: location.pathname.startsWith("/extension"),
     },
     {
       label: "Equipo",

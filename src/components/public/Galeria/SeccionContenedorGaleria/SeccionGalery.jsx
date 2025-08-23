@@ -1,7 +1,7 @@
 "use client"
 import { API_BASE_URL } from "../../../config/apiConfig"
 import { ExpandOutlined, CalendarOutlined } from "@ant-design/icons"
-import "../../Home/Novedades/HomeExploration.css"
+
 
 const SeccionGalery = ({ section, onImageClick }) => {
   if (!section || !section.imagenes) {

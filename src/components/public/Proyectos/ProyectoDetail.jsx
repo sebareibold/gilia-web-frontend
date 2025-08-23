@@ -5,7 +5,7 @@ import { CalendarOutlined, TagOutlined } from "@ant-design/icons";
 import { marked } from "marked";
 import Loader from "../Loader/Loader";
 import { dataService } from "../../../services/dataService";
-import "../../shared/FuturisticStyles.css";
+
 import "./ProyectoDetail.css";
 
 const ProyectoDetail = () => {
