@@ -8,7 +8,7 @@ import {
 import { useTheme } from "../../../../contexts/ThemeContext"
 import "./HomePresentation.css"
 import { useState, useEffect } from "react"
-import { dataService } from '../../../../services/dataService'
+import { dataService } from '/src/services/dataService.js'
 
 function shuffleArray(array) {
   // Algoritmo de Fisher-Yates
@@ -43,12 +43,14 @@ export default function HomePresentation() {
   useEffect(() => {
     const timeout = setTimeout(() => setShowFloating(true), 1200)
     // Cargar líneas de investigación y extensión
-    dataService.getResearchLines().then(res => {
-      setResearchLines(res.data?.data || res.data || [])
-    })
-    dataService.getExtensionLines().then(res => {
-      setExtensionLines(res.data?.data || res.data || [])
-    })
+            dataService.getLineasInvestigacion().then(res => {
+      console.log('Líneas de Investigación:', res.data);
+      setResearchLines(res.data || []);
+    });
+            dataService.getLineasExtension().then(res => {
+      console.log('Líneas de Extensión:', res.data);
+      setExtensionLines(res.data || []);
+    });
     return () => clearTimeout(timeout)
   }, [])
 
@@ -68,7 +70,7 @@ export default function HomePresentation() {
   [...researchLines.map(l => ({...l, tipo: 'Investigación'})),
    ...extensionLines.map(l => ({...l, tipo: 'Extensión'}))]
     .forEach(l => {
-      const key = (l.nombre || l.title)?.trim();
+            const key = l.titulo?.trim();
       if (key && !uniqueLinesMap.has(key)) {
         uniqueLinesMap.set(key, l);
       }
@@ -151,7 +153,7 @@ export default function HomePresentation() {
         {!isMobile && showFloating && (
           <div className="floating-cards-container">
             {floatingLines.map((line, idx) => {
-              const text = line.nombre || line.title || ''
+              const text = line.titulo || ''
               // Ancho mínimo 140px, máximo 260px, proporcional al largo del texto
               const minW = 140, maxW = 260
               const width = Math.max(minW, Math.min(maxW, minW + text.length * 7))

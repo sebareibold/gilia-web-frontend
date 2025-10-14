@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { dataService } from "../../../services/dataService"
+import { notification, Modal } from "antd"
 import {
   BranchesOutlined,
   PlusOutlined,
@@ -19,96 +21,89 @@ const AdminProyectos = () => {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentProyecto, setCurrentProyecto] = useState(null)
 
   useEffect(() => {
-    setTimeout(() => {
-      setProyectos([
-        {
-          id: 1,
-          titulo: "Sistema de IA para Diagnóstico Médico",
-          descripcion:
-            "Desarrollo de un sistema de inteligencia artificial para asistir en el diagnóstico médico temprano utilizando técnicas de deep learning y análisis de imágenes médicas.",
-          estado: "En progreso",
-          fechaInicio: "2023-01-15",
-          fechaFin: "2024-12-31",
-          presupuesto: 150000,
-          responsable: "Dr. María García",
-          equipo: ["Dr. Juan Pérez", "Ing. Ana López", "Dra. Carmen Silva"],
-          progreso: 65,
-          lineaInvestigacion: "Inteligencia Artificial y Machine Learning",
-        },
-        {
-          id: 2,
-          titulo: "Plataforma Blockchain para Votación Electrónica",
-          descripcion:
-            "Implementación de una plataforma segura de votación electrónica basada en blockchain que garantice transparencia, inmutabilidad y privacidad del voto.",
-          estado: "Completado",
-          fechaInicio: "2022-06-01",
-          fechaFin: "2023-05-31",
-          presupuesto: 200000,
-          responsable: "Dr. Carlos Rodríguez",
-          equipo: ["Dra. Laura Martínez", "Ing. Roberto Vega"],
-          progreso: 100,
-          lineaInvestigacion: "Ciberseguridad y Blockchain",
-        },
-        {
-          id: 3,
-          titulo: "Red IoT para Monitoreo Ambiental",
-          descripcion:
-            "Desarrollo de una red de sensores IoT para monitoreo en tiempo real de variables ambientales en áreas urbanas y rurales.",
-          estado: "En progreso",
-          fechaInicio: "2023-03-20",
-          fechaFin: "2024-06-30",
-          presupuesto: 120000,
-          responsable: "Ing. Fernando Castro",
-          equipo: ["Dr. Elena Morales", "Dra. Isabel Jiménez", "Ing. Patricia Silva"],
-          progreso: 40,
-          lineaInvestigacion: "Internet de las Cosas (IoT)",
-        },
-        {
-          id: 4,
-          titulo: "Simulador VR para Entrenamiento Quirúrgico",
-          descripcion:
-            "Creación de un simulador de realidad virtual para entrenamiento de procedimientos quirúrgicos complejos con feedback háptico.",
-          estado: "Planificado",
-          fechaInicio: "2024-01-15",
-          fechaFin: "2025-01-15",
-          presupuesto: 180000,
-          responsable: "Dra. Sofia Hernández",
-          equipo: ["Dr. Miguel Torres", "Ing. Luis Ramírez"],
-          progreso: 5,
-          lineaInvestigacion: "Realidad Virtual y Aumentada",
-        },
-        {
-          id: 5,
-          titulo: "Algoritmos Cuánticos para Optimización",
-          descripcion:
-            "Investigación y desarrollo de algoritmos cuánticos para resolver problemas de optimización compleja en logística y finanzas.",
-          estado: "En progreso",
-          fechaInicio: "2023-08-01",
-          fechaFin: "2024-12-31",
-          presupuesto: 250000,
-          responsable: "Dr. Roberto Vega",
-          equipo: ["Dra. Carmen Ruiz", "Dr. Antonio López"],
-          progreso: 30,
-          lineaInvestigacion: "Computación Cuántica",
-        },
-      ])
-      setLoading(false)
-    }, 1000)
-  }, [])
+    fetchProyectos();
+  }, []);
+
+  const fetchProyectos = async () => {
+    setLoading(true);
+    try {
+      const response = await dataService.getProyectos();
+      setProyectos(response.data);
+    } catch (error) {
+      console.error("Error al obtener los proyectos:", error);
+      notification.error({
+        message: 'Error de Carga',
+        description: 'No se pudieron cargar los proyectos. Por favor, intente de nuevo más tarde.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenModal = (proyecto = null) => {
+    setCurrentProyecto(proyecto ? { ...proyecto } : { titulo: '', descripcion: '', estado: 'Planificado', fechaInicio: '', fechaFin: '' });
+    setIsModalOpen(true);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalOpen(false);
+    setCurrentProyecto(null);
+  };
+
+  const handleSave = async () => {
+    try {
+      if (currentProyecto.id) {
+        // Actualizar
+        const response = await dataService.updateProyecto(currentProyecto.id, currentProyecto);
+        setProyectos((prev) => prev.map((p) => (p.id === currentProyecto.id ? response.data : p)));
+        notification.success({ message: 'Proyecto Actualizado' });
+      } else {
+        // Crear
+        const response = await dataService.createProyecto(currentProyecto);
+        setProyectos((prev) => [...prev, response.data]);
+        notification.success({ message: 'Proyecto Creado' });
+      }
+      handleCancelModal();
+    } catch (error) {
+      console.error("Error al guardar el proyecto:", error);
+      notification.error({ message: 'Error al Guardar' });
+    }
+  };
 
   const handleDelete = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este proyecto?")) {
-      setProyectos(proyectos.filter((proyecto) => proyecto.id !== id))
-    }
-  }
+    Modal.confirm({
+      title: '¿Estás seguro de que deseas eliminar este proyecto?',
+      content: 'Esta acción no se puede deshacer.',
+      okText: 'Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
+      onOk: async () => {
+        try {
+          await dataService.deleteProyecto(id);
+          setProyectos((prev) => prev.filter((p) => p.id !== id));
+          notification.success({
+            message: 'Proyecto Eliminado',
+            description: 'El proyecto ha sido eliminado correctamente.',
+          });
+        } catch (error) {
+          console.error("Error al eliminar el proyecto:", error);
+          notification.error({
+            message: 'Error al Eliminar',
+            description: 'No se pudo eliminar el proyecto.',
+          });
+        }
+      },
+    });
+  };
 
   const filteredProyectos = proyectos.filter((proyecto) => {
     const matchesSearch =
-      proyecto.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      proyecto.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      proyecto.responsable.toLowerCase().includes(searchTerm.toLowerCase())
+      (proyecto.titulo?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (proyecto.descripcion?.toLowerCase() || '').includes(searchTerm.toLowerCase())
 
     const matchesFilter = filterStatus === "all" || proyecto.estado === filterStatus
 
@@ -209,7 +204,7 @@ const AdminProyectos = () => {
               : "Comienza creando tu primer proyecto de investigación."}
           </p>
           {!searchTerm && filterStatus === "all" && (
-            <button className="admin-unified-primary-btn">
+            <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
               <PlusOutlined />
               Crear Primer Proyecto
             </button>
@@ -222,10 +217,6 @@ const AdminProyectos = () => {
               <tr>
                 <th>Proyecto</th>
                 <th>Estado</th>
-                <th>Responsable</th>
-                <th>Línea de Investigación</th>
-                <th>Progreso</th>
-                <th>Presupuesto</th>
                 <th>Fechas</th>
                 <th>Acciones</th>
               </tr>
@@ -237,50 +228,13 @@ const AdminProyectos = () => {
                     <strong>{proyecto.titulo}</strong>
                     <br />
                     <small style={{ color: "#64748b", lineHeight: "1.4" }}>
-                      {proyecto.descripcion.substring(0, 80)}...
+                      {proyecto.descripcion?.substring(0, 80)}...
                     </small>
                   </td>
                   <td>
                     <span className={`admin-unified-badge ${getEstadoBadgeClass(proyecto.estado)}`}>
                       {proyecto.estado}
                     </span>
-                  </td>
-                  <td>
-                    <TeamOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
-                    {proyecto.responsable}
-                    <br />
-                    <small style={{ color: "#64748b" }}>Equipo: {proyecto.equipo.length} miembros</small>
-                  </td>
-                  <td>
-                    <small style={{ color: "#64748b" }}>{proyecto.lineaInvestigacion}</small>
-                  </td>
-                  <td>
-                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <div
-                        style={{
-                          width: "60px",
-                          height: "6px",
-                          backgroundColor: "rgba(102, 126, 234, 0.1)",
-                          borderRadius: "3px",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: `${proyecto.progreso}%`,
-                            height: "100%",
-                            backgroundColor:
-                              proyecto.progreso >= 80 ? "#10b981" : proyecto.progreso >= 50 ? "#667eea" : "#f59e0b",
-                            borderRadius: "3px",
-                          }}
-                        />
-                      </div>
-                      <span style={{ fontSize: "0.8rem", color: "#64748b" }}>{proyecto.progreso}%</span>
-                    </div>
-                  </td>
-                  <td>
-                    <DollarOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
-                    {formatCurrency(proyecto.presupuesto)}
                   </td>
                   <td>
                     <CalendarOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
@@ -294,7 +248,11 @@ const AdminProyectos = () => {
                       <button className="admin-table-btn admin-table-btn-view" title="Ver detalles">
                         <EyeOutlined />
                       </button>
-                      <button className="admin-table-btn admin-table-btn-edit" title="Editar">
+                      <button
+                        className="admin-table-btn admin-table-btn-edit"
+                        title="Editar"
+                        onClick={() => handleOpenModal(proyecto)}
+                      >
                         <EditOutlined />
                       </button>
                       <button
@@ -312,6 +270,63 @@ const AdminProyectos = () => {
           </table>
         </div>
       )}
+
+      <Modal
+        title={currentProyecto?.id ? "Editar Proyecto" : "Nuevo Proyecto"}
+        visible={isModalOpen}
+        onOk={handleSave}
+        onCancel={handleCancelModal}
+        okText="Guardar"
+        cancelText="Cancelar"
+      >
+        <form className="admin-unified-form">
+          <div className="admin-unified-form-group">
+            <label>Título</label>
+            <input
+              type="text"
+              value={currentProyecto?.titulo || ''}
+              onChange={(e) => setCurrentProyecto({ ...currentProyecto, titulo: e.target.value })}
+            />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Descripción</label>
+            <textarea
+              rows="4"
+              value={currentProyecto?.descripcion || ''}
+              onChange={(e) => setCurrentProyecto({ ...currentProyecto, descripcion: e.target.value })}
+            />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Estado</label>
+            <select
+              value={currentProyecto?.estado || 'Planificado'}
+              onChange={(e) => setCurrentProyecto({ ...currentProyecto, estado: e.target.value })}
+            >
+              <option value="Planificado">Planificado</option>
+              <option value="En progreso">En progreso</option>
+              <option value="Completado">Completado</option>
+              <option value="Pausado">Pausado</option>
+              <option value="Cancelado">Cancelado</option>
+            </select>
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Fecha de Inicio</label>
+            <input
+              type="date"
+              value={currentProyecto?.fechaInicio ? new Date(currentProyecto.fechaInicio).toISOString().split('T')[0] : ''}
+              onChange={(e) => setCurrentProyecto({ ...currentProyecto, fechaInicio: e.target.value })}
+            />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Fecha de Fin</label>
+            <input
+              type="date"
+              value={currentProyecto?.fechaFin ? new Date(currentProyecto.fechaFin).toISOString().split('T')[0] : ''}
+              onChange={(e) => setCurrentProyecto({ ...currentProyecto, fechaFin: e.target.value })}
+            />
+          </div>
+        </form>
+      </Modal>
     </div>
   )
 }

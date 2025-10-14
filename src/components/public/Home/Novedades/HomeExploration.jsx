@@ -18,7 +18,7 @@ import {
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
 import "./HomeExploration.css"
-import asyncMock from '../../../../../asyncMock'
+import { dataService } from "/src/services/dataService.js";
 
 // Array de iconos para rotar con más variedad
 const newsIcons = [
@@ -74,7 +74,7 @@ export default function HomeExploration() {
       setError(null)
       try {
         // Obtener datos desde asyncMock
-        const response = await asyncMock.getNovedades()
+                const response = await dataService.getNovedades();
         setNovedades(response.data)
       } catch (err) {
         console.error("Error detallado al obtener datos:", err)
@@ -168,7 +168,7 @@ export default function HomeExploration() {
               const isAnimated = animatedCards.has(index)
               return (
                 <div 
-                  key={novedad.id} 
+                  key={novedad.idNovedad} 
                   ref={el => cardRefs.current[index] = el}
                   data-index={index}
                   className={`news-card${isAnimated ? ' animated' : ''}`}
@@ -180,7 +180,7 @@ export default function HomeExploration() {
                   <div className="news-image-container">
                     <img
                       src={novedad.imagen || "/placeholder.svg?height=300&width=400"}
-                      alt={novedad.Titulo}
+                      alt={novedad.titulo}
                       className="news-image"
                       loading="lazy"
                     />
@@ -192,20 +192,15 @@ export default function HomeExploration() {
                   {/* Contenido */}
                   <div className="news-content">
                     <div className="news-meta">
-                      <span className="news-category">{novedad.categoria}</span>
-                      <div className="news-views">
-                        <EyeOutlined />
-                        <span>{formatViews(novedad.vistas)}</span>
-                      </div>
-                    </div>
+                                                                </div>
 
-                    <h3 className="news-title">{novedad.Titulo}</h3>
+                    <h3 className="news-title">{novedad.titulo}</h3>
 
-                    <p className="news-description">{novedad.Descripcion}</p>
+                    <p className="news-description">{novedad.descripcion}</p>
 
                     <div className="news-actions">
                       <a
-                        href={novedad.Enlace}
+                        href={novedad.enlace}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="news-btn-primary"

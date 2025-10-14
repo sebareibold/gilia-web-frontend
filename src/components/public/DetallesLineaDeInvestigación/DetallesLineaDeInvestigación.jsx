@@ -3,7 +3,7 @@
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useTheme } from "../../../contexts/ThemeContext"
-import asyncMock from "../../../../asyncMock"
+import { dataService } from "/src/services/dataService.js";
 import { marked } from "marked"
 import SimpleCarousel from "./SimpleCarousel"
 import { UserOutlined, ArrowRightOutlined, ShareAltOutlined, CalendarOutlined } from "@ant-design/icons"
@@ -19,13 +19,10 @@ const DetallesLineaDeInvestigacion = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await asyncMock.getLineaInvestigacion(id)
+                const response = await dataService.getLineaInvestigacionById(id);
         setLinea(response.data)
-        // Proyectos y publicaciones pueden venir en la línea o se pueden pedir aparte
         setProyectos(response.data.proyectos || [])
-        // Simulación: publicaciones asociadas a la línea
-        const pubs = await asyncMock.getPublicaciones({ linea: response.data.nombre })
-        setPublicaciones(pubs.data || [])
+        setPublicaciones(response.data.publicaciones || [])
       } catch {
         setLinea(null)
       }
@@ -110,7 +107,7 @@ const DetallesLineaDeInvestigacion = () => {
       <div className="news-image-container" style={{ marginBottom: 14, width: "100%" }}>
         <img
           src={integrante.photo?.[0]?.url || "/placeholder.svg?height=200&width=300"}
-          alt={integrante.full_name}
+          alt={`${integrante.nombre} ${integrante.apellido}`}
           className="news-image"
         />
         <div className="news-image-overlay">
@@ -118,9 +115,9 @@ const DetallesLineaDeInvestigacion = () => {
         </div>
       </div>
       <div className="news-content" style={{ width: "100%", textAlign: "center" }}>
-        <span className="news-category" style={{ background: "#4CAF50", color: "white", marginBottom: 8, fontSize: "0.95rem", borderRadius: 8, padding: "2px 12px", display: "inline-block" }}>{integrante.role_person}</span>
-        <h3 className="news-title" style={{ fontSize: "1.1rem", marginBottom: 8, fontWeight: 700 }}>{integrante.full_name}</h3>
-        <p className="news-description" style={{ fontSize: "0.98rem", color: "#bdbdbd", marginBottom: 0 }}>{integrante.biography || "Miembro del equipo de investigación."}</p>
+        <span className="news-category" style={{ background: "#4CAF50", color: "white", marginBottom: 8, fontSize: "0.95rem", borderRadius: 8, padding: "2px 12px", display: "inline-block" }}>{integrante.especialidad}</span>
+        <h3 className="news-title" style={{ fontSize: "1.1rem", marginBottom: 8, fontWeight: 700 }}>{`${integrante.nombre} ${integrante.apellido}`}</h3>
+        <p className="news-description" style={{ fontSize: "0.98rem", color: "#bdbdbd", marginBottom: 0 }}>{integrante.lugarDeTrabajo || "Miembro del equipo de investigación."}</p>
       </div>
     </div>
   )
@@ -130,7 +127,7 @@ const DetallesLineaDeInvestigacion = () => {
       <div className="exploration-container" style={{ maxWidth: 1400, margin: "0 auto" }}>
         {/* Título */}
         <div className="section-header">
-          <h2 className="section-title">{linea.nombre}</h2>
+          <h2 className="section-title">{linea.titulo}</h2>
         </div>
         {/* Descripción */}
         <div className="carousel-container" style={{ marginBottom: "2rem" }}>
@@ -154,8 +151,8 @@ const DetallesLineaDeInvestigacion = () => {
           <div className="carousel-container">
             <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "2rem", padding: "0.5em 0" }}>Integrantes</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 32, justifyContent: "center" }}>
-              {linea.people && linea.people.length > 0 ? (
-                linea.people.map(renderIntegrante)
+              {linea.personas && linea.personas.length > 0 ? (
+                linea.personas.map(renderIntegrante)
               ) : (
                 <div style={{ color: "#aaa" }}>No hay integrantes registrados.</div>
               )}

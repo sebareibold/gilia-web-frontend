@@ -105,6 +105,102 @@
   opacity: 0.9;
 }
 
+/* Efecto de desenfoque para el fondo del modal */
+.admin-page-blurred > *:not(.ant-modal-root) {
+  filter: blur(4px);
+  transition: filter 0.3s ease-in-out;
+  pointer-events: none; /* Evita interacción con el fondo */
+}
+
+/* Estructura de Tarjetas para Formularios */
+.admin-card {
+  background: transparent;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 1.5rem; /* Bordes más redondeados */
+  box-shadow: 0 16px 48px rgba(59, 130, 246, 0.08),
+              0 8px 24px rgba(59, 130, 246, 0.06);
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.admin-card-header {
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.admin-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-card-body {
+  padding: 1.75rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column; /* Apilado vertical por defecto */
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #334155;
+  font-size: 0.9rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.5);
+  color: #1e293b;
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.form-description {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+.admin-card-footer {
+  background: rgba(241, 245, 249, 0.5);
+  padding: 1rem 1.75rem;
+  text-align: right;
+  border-top: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+/* Media query para alinear label e input en la misma fila en pantallas grandes */
+@media (min-width: 768px) {
+  .form-group {
+    flex-direction: row;
+    align-items: center;
+  }
+  .form-label {
+    width: 30%;
+    flex-shrink: 0; /* Evita que el label se encoja */
+  }
+  .form-control-wrapper {
+    flex: 1;
+  }
+}
+
 /* Tablas unificadas */
 .admin-unified-table-container {
   background: transparent;
@@ -349,6 +445,72 @@
   background: rgba(245, 158, 11, 0.1);
   color: #f59e0b;
   border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Card Grid Layout for Items */
+.admin-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem; /* Espacio después de los filtros */
+}
+
+.admin-item-card {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.06);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.admin-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.1);
+}
+
+.admin-item-card-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.admin-item-card-body {
+  padding: 1.25rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-item-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.admin-item-card-description {
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.5;
+  flex-grow: 1;
+  margin-bottom: 1rem;
+}
+
+.admin-item-card-footer {
+  padding: 0 1.25rem 1.25rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-item-card-actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
 /* Responsive */

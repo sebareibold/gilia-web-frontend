@@ -4,7 +4,7 @@ export const ENV_CONFIG = {
   USE_MOCK_DATA: import.meta.env.VITE_USE_MOCK_DATA === "true" || import.meta.env.DEV,
 
   // URLs de API
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api",
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
 
   // Configuración de autenticación
   AUTH_ENDPOINT: import.meta.env.VITE_AUTH_ENDPOINT || "/auth",

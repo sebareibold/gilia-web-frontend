@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { dataService } from "../../../services/dataService"
+import { notification, Modal } from "antd"
 import {
   MailOutlined,
   PhoneOutlined,
@@ -17,103 +19,105 @@ const AdminEquipo = () => {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterRole, setFilterRole] = useState("all")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentMember, setCurrentMember] = useState(null)
+  const [isSaving, setIsSaving] = useState(false)
 
-  // Mock data
   useEffect(() => {
-    const mockMembers = [
-      {
-        id: 1,
-        name: "Dr. Ana María González",
-        email: "ana.gonzalez@gilia.com",
-        phone: "+57 300 123 4567",
-        role: "Director",
-        department: "Inteligencia Artificial",
-        specialization: "Machine Learning, Deep Learning",
-        education: "PhD en Ciencias de la Computación",
-        experience: "15 años",
-        projects: 8,
-        publications: 25,
-        status: "active",
-        joinDate: "2020-01-15",
-      },
-      {
-        id: 2,
-        name: "Dr. Carlos Rodríguez",
-        email: "carlos.rodriguez@gilia.com",
-        phone: "+57 301 234 5678",
-        role: "Investigador Senior",
-        department: "Robótica",
-        specialization: "Robótica Autónoma, Visión Computacional",
-        education: "PhD en Ingeniería Mecatrónica",
-        experience: "12 años",
-        projects: 6,
-        publications: 18,
-        status: "active",
-        joinDate: "2020-03-20",
-      },
-      {
-        id: 3,
-        name: "Dra. Laura Martínez",
-        email: "laura.martinez@gilia.com",
-        phone: "+57 302 345 6789",
-        role: "Investigador",
-        department: "Procesamiento de Lenguaje Natural",
-        specialization: "NLP, Análisis de Sentimientos",
-        education: "PhD en Lingüística Computacional",
-        experience: "8 años",
-        projects: 4,
-        publications: 12,
-        status: "active",
-        joinDate: "2021-06-10",
-      },
-      {
-        id: 4,
-        name: "Ing. Miguel Torres",
-        email: "miguel.torres@gilia.com",
-        phone: "+57 303 456 7890",
-        role: "Desarrollador",
-        department: "Desarrollo de Software",
-        specialization: "Full Stack Development, DevOps",
-        education: "Maestría en Ingeniería de Software",
-        experience: "5 años",
-        projects: 10,
-        publications: 3,
-        status: "active",
-        joinDate: "2022-01-15",
-      },
-      {
-        id: 5,
-        name: "Dra. Sofia Herrera",
-        email: "sofia.herrera@gilia.com",
-        phone: "+57 304 567 8901",
-        role: "Investigador Junior",
-        department: "Bioinformática",
-        specialization: "Análisis de Datos Genómicos",
-        education: "PhD en Bioinformática",
-        experience: "3 años",
-        projects: 2,
-        publications: 8,
-        status: "active",
-        joinDate: "2023-02-01",
-      },
-    ]
+    fetchMembers();
+  }, []);
 
-    setTimeout(() => {
-      setTeamMembers(mockMembers)
-      setLoading(false)
-    }, 1000)
-  }, [])
+  const fetchMembers = async () => {
+    setLoading(true);
+    try {
+      const response = await dataService.getPersonas();
+      // Adaptación de datos: el backend devuelve `nombre` y `apellido`
+      const adaptedMembers = response.data.map(p => ({ ...p, name: `${p.nombre} ${p.apellido}` }));
+      setTeamMembers(adaptedMembers);
+    } catch (error) {
+      console.error("Error al obtener los miembros del equipo:", error);
+      notification.error({
+        message: 'Error de Carga',
+        description: 'No se pudieron cargar los miembros del equipo. Por favor, intente de nuevo más tarde.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenModal = (member = null) => {
+    setCurrentMember(member);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setCurrentMember(null);
+    setIsModalOpen(false);
+  };
+
+  const handleSave = async (formData) => {
+    const isUpdating = currentMember && currentMember.id;
+    setIsSaving(true);
+    try {
+      if (isUpdating) {
+        await dataService.updatePersona(currentMember.id, formData);
+      } else {
+        await dataService.createPersona(formData);
+      }
+      notification.success({
+        message: `Miembro ${isUpdating ? 'Actualizado' : 'Creado'}`,
+        description: `El miembro del equipo se ha ${isUpdating ? 'actualizado' : 'creado'} correctamente.`,
+      });
+      fetchMembers();
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error al guardar el miembro:", error);
+      notification.error({
+        message: 'Error al Guardar',
+        description: `No se pudo ${isUpdating ? 'actualizar' : 'crear'} el miembro del equipo.`,
+      });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDelete = (id) => {
+    Modal.confirm({
+      title: '¿Estás seguro de que deseas eliminar este miembro del equipo?',
+      content: 'Esta acción no se puede deshacer.',
+      okText: 'Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
+      onOk: async () => {
+        try {
+          await dataService.deletePersona(id);
+          setTeamMembers((prev) => prev.filter((member) => member.id !== id));
+          notification.success({
+            message: 'Miembro Eliminado',
+            description: 'El miembro del equipo ha sido eliminado correctamente.',
+          });
+        } catch (error) {
+          console.error("Error al eliminar el miembro:", error);
+          notification.error({
+            message: 'Error al Eliminar',
+            description: 'No se pudo eliminar el miembro del equipo.',
+          });
+        }
+      },
+    });
+  };
 
   const filteredMembers = teamMembers.filter((member) => {
     const matchesSearch =
-      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.department.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesRole = filterRole === "all" || member.role === filterRole
+      (member.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (member.email?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (member.lugar_trabajo?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+        const matchesRole = filterRole === "all" || member.especialidad === filterRole // Asumiendo que 'especialidad' es el rol
     return matchesSearch && matchesRole
   })
 
-  const roles = ["all", "Director", "Investigador Senior", "Investigador", "Investigador Junior", "Desarrollador"]
+    // Extraer roles únicos de los miembros del equipo, usando 'especialidad'
+  const roles = ["all", ...new Set(teamMembers.map(member => member.especialidad).filter(Boolean))];
 
   if (loading) {
     return (
@@ -141,7 +145,7 @@ const AdminEquipo = () => {
         </h1>
         <p className="admin-unified-subtitle">Administra los miembros del equipo de investigación GILIA</p>
 
-        <button className="admin-unified-primary-btn">
+        <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
           <PlusOutlined /> Agregar Miembro
         </button>
       </div>
@@ -204,7 +208,7 @@ const AdminEquipo = () => {
                   <td>
                     <span className={`admin-unified-badge admin-unified-badge-active`}>{member.role}</span>
                   </td>
-                  <td>{member.department}</td>
+                  <td>{member.lugar_trabajo}</td>
                   <td>
                     <MailOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
                     {member.email}
@@ -217,10 +221,10 @@ const AdminEquipo = () => {
                   <td>{member.publications}</td>
                   <td>
                     <div className="admin-table-actions">
-                      <button className="admin-table-btn admin-table-btn-edit" title="Editar">
+                      <button className="admin-table-btn admin-table-btn-edit" title="Editar" onClick={() => handleOpenModal(member)}>
                         <EditOutlined />
                       </button>
-                      <button className="admin-table-btn admin-table-btn-delete" title="Eliminar">
+                      <button className="admin-table-btn admin-table-btn-delete" title="Eliminar" onClick={() => handleDelete(member.id)}>
                         <DeleteOutlined />
                       </button>
                     </div>
@@ -231,8 +235,74 @@ const AdminEquipo = () => {
           </table>
         </div>
       )}
+
+      {isModalOpen && <FormModal member={currentMember} onSave={handleSave} onClose={handleCloseModal} isSaving={isSaving} />}
     </div>
   )
 }
+
+const FormModal = ({ member, onSave, onClose, isSaving }) => {
+  const [formData, setFormData] = useState(
+    member || {
+      nombre: "",
+      apellido: "",
+      especialidad: "",
+      lugar_trabajo: "",
+      lugar_nacimiento: "",
+      email: "",
+      phone: "",
+    }
+  );
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <div className="admin-unified-modal-backdrop">
+      <div className="admin-unified-modal">
+        <h2>{member ? "Editar" : "Nuevo"} Miembro del Equipo</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="admin-unified-form-group">
+            <label>Nombre</label>
+            <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Apellido</label>
+            <input type="text" name="apellido" value={formData.apellido} onChange={handleChange} required />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Especialidad (Rol)</label>
+            <input type="text" name="especialidad" value={formData.especialidad} onChange={handleChange} />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Lugar de Trabajo (Departamento)</label>
+            <input type="text" name="lugar_trabajo" value={formData.lugar_trabajo} onChange={handleChange} />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Email</label>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Teléfono</label>
+            <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
+          </div>
+          <div className="admin-unified-modal-actions">
+            <button type="button" className="admin-unified-secondary-btn" onClick={onClose}>Cancelar</button>
+            <button type="submit" className="admin-unified-primary-btn" disabled={isSaving}>
+              {isSaving ? 'Guardando...' : 'Guardar'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default AdminEquipo

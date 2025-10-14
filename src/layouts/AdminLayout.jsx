@@ -14,39 +14,51 @@ import {
   LeftOutlined,
   RightOutlined,
   MenuOutlined,
+  ProjectOutlined,
+  SettingOutlined,
 } from "@ant-design/icons"
 import "../styles/admin-theme.css"
 
 const MENU_ITEMS = [
   {
-    key: "/admin",
+    key: "",
     icon: <HomeOutlined />,
     label: "Inicio",
   },
   {
-    key: "/admin/lineas",
+    key: "lineas",
     icon: <ExperimentOutlined />,
     label: "Líneas de Investigación",
   },
   {
-    key: "/admin/publicaciones",
+    key: "lineas-extension",
+    icon: <ProjectOutlined />,
+    label: "Líneas de Extensión",
+  },
+  {
+    key: "publicaciones",
     icon: <BookOutlined />,
     label: "Publicaciones",
   },
   {
-    key: "/admin/proyectos",
+    key: "proyectos",
     icon: <BranchesOutlined />,
     label: "Proyectos",
   },
   {
-    key: "/admin/equipo",
+    key: "equipo",
     icon: <UserOutlined />,
     label: "Equipo",
   },
   {
-    key: "/admin/galeria",
+    key: "galeria",
     icon: <AppstoreOutlined />,
     label: "Galería",
+  },
+  {
+    key: "configuracion",
+    icon: <SettingOutlined />,
+    label: "Configuración",
   },
 ]
 
@@ -149,23 +161,44 @@ const UserHeader = ({ user, sidebarOpen, onToggleSidebar }) => (
   </div>
 )
 
-const Navigation = ({ currentPath }) => (
-  <nav className="admin-navigation">
-    {MENU_ITEMS.map((item) => (
-      <Link
-        key={item.key}
-        to={item.key}
-        className={`admin-nav-item ${
-          currentPath === item.key || (item.key === "/admin" && currentPath === "/admin") ? "active" : ""
-        }`}
-        title={item.label}
-      >
-        <span className="admin-nav-icon">{item.icon}</span>
-        <span className="admin-nav-label">{item.label}</span>
-      </Link>
-    ))}
-  </nav>
-)
+const Navigation = ({ currentPath }) => {
+  // Normalizar la ruta actual: remover parámetros de consulta, hashes y asegurar que empiece con /
+  const normalizedCurrentPath = (currentPath || '')
+    .split('?')[0] // Remover parámetros de consulta
+    .split('#')[0] // Remover hashes
+    .replace(/\/$/, '') // Remover trailing slash
+    .replace(/^\/*/, '/'); // Asegurar que empiece con /
+  
+  // Función para determinar si un ítem está activo
+  const isActive = (itemKey) => {
+    if (itemKey === '') {
+      return normalizedCurrentPath === '/admin' || normalizedCurrentPath === '/admin/';
+    }
+    return normalizedCurrentPath === `/admin/${itemKey}` || 
+           normalizedCurrentPath.endsWith(`/admin/${itemKey}`);
+  };
+  
+  return (
+    <nav className="admin-navigation">
+      {MENU_ITEMS.map((item) => {
+        const itemPath = item.key === '' ? '/admin' : `/admin/${item.key}`;
+        const isItemActive = isActive(item.key);
+        
+        return (
+          <Link
+            key={itemPath}
+            to={itemPath}
+            className={`admin-nav-item ${isItemActive ? 'active' : ''}`}
+            title={item.label}
+          >
+            <span className="admin-nav-icon">{item.icon}</span>
+            <span className="admin-nav-label">{item.label}</span>
+          </Link>
+        );
+      })}
+    </nav>
+  );
+};
 
 const LogoutSection = ({ onLogout }) => (
   <div className="admin-logout-section">
@@ -194,14 +227,14 @@ const AdminLayout = () => {
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen)
 
   return (
-    <div className="admin-layout-gradient">
+    <div className="admin-layout-gradient admin-theme">
       <div className="mobile-only">
         <MobileAppBar user={user} isMenuOpen={mobileMenuOpen} onToggleMenu={toggleMobileMenu} />
       </div>
 
       {mobileMenuOpen && <div className="mobile-simple-overlay" onClick={() => setMobileMenuOpen(false)} />}
 
-      <aside className={`admin-sidebar-transparent ${sidebarOpen ? "" : "collapsed"} desktop-only`}>
+      <aside className={`admin-sidebar-transparent ${mobileMenuOpen ? 'mobile-open' : ''} ${!sidebarOpen ? 'collapsed' : ''}`}>
         <div className="admin-sidebar-content">
           <UserHeader user={user} sidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} />
 
@@ -211,7 +244,7 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      <div className={`admin-main-wrapper ${sidebarOpen ? "expanded" : "collapsed"}`}>
+            <div className={`admin-main-wrapper ${!sidebarOpen ? "collapsed" : ""}`}>
         <main className="admin-page-content">
           <div className="admin-content-wrapper">
             <Outlet />

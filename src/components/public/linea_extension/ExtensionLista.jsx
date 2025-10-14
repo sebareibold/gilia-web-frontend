@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { BranchesOutlined, ArrowRightOutlined, BankOutlined } from "@ant-design/icons"
-import asyncMock from "../../../../asyncMock"
+import { dataService } from "../../../services/dataService"
 
 const LineaExtensionList = () => {
   const [lineas, setLineas] = useState([])
@@ -16,7 +16,7 @@ const LineaExtensionList = () => {
   useEffect(() => {
     const fetchLineasExtension = async () => {
       try {
-        const response = await asyncMock.getLineasExtension()
+        const response = await dataService.getLineasExtension()
         setLineas(response.data || [])
       } catch (error) {
         console.error(error)
@@ -67,11 +67,11 @@ const LineaExtensionList = () => {
               }}
             >
               {visibleLineas.map((linea) => (
-                <div key={linea.id} className="news-card">
+                <div key={linea.idLineaExtension} className="news-card">
                   <div className="news-image-container">
                     <img
                       src={linea.imagen?.url || "/placeholder.svg?height=200&width=350"}
-                      alt={linea.nombre}
+                      alt={linea.titulo}
                       className="news-image"
                     />
                     <div className="news-image-overlay">
@@ -88,7 +88,7 @@ const LineaExtensionList = () => {
                       </div>
                     </div>
 
-                    <h3 className="news-title">{linea.nombre}</h3>
+                    <h3 className="news-title">{linea.titulo}</h3>
 
                     <p className="news-description">
                       {typeof linea.descripcion === "string" && linea.descripcion.length > 150
@@ -97,7 +97,7 @@ const LineaExtensionList = () => {
                     </p>
 
                     <div className="news-actions">
-                      <Link to={`/extension/${linea.id}`} className="news-btn-primary">
+                      <Link to={`/extension/${linea.idLineaExtension}`} className="news-btn-primary">
                         <span>Ver más</span>
                         <ArrowRightOutlined />
                       </Link>

@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { dataService } from "../../../services/dataService"
+import { notification, Modal } from "antd"
 import {
   AppstoreOutlined,
   EditOutlined,
@@ -20,104 +22,116 @@ const AdminGaleria = () => {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [filterCategory, setFilterCategory] = useState("all")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentImagen, setCurrentImagen] = useState(null)
+  const [selectedFile, setSelectedFile] = useState(null)
+
+  const API_URL = 'http://localhost:3000';
 
   useEffect(() => {
-    setTimeout(() => {
-      setImagenes([
-        {
-          id: 1,
-          titulo: "Laboratorio de IA",
-          descripcion: "Espacio de trabajo del equipo de Inteligencia Artificial",
-          categoria: "Laboratorio",
-          url: "/placeholder.svg?height=300&width=400",
-          fechaSubida: "2023-09-15",
-          tamaño: "2.5 MB",
-          dimensiones: "1920x1080",
-          formato: "JPG",
-          tags: ["laboratorio", "IA", "workspace"],
-          autor: "Dr. María García",
-        },
-        {
-          id: 2,
-          titulo: "Conferencia IEEE 2023",
-          descripcion: "Presentación del proyecto de blockchain en la conferencia IEEE",
-          categoria: "Eventos",
-          url: "/placeholder.svg?height=300&width=400",
-          fechaSubida: "2023-11-20",
-          tamaño: "3.1 MB",
-          dimensiones: "2048x1536",
-          formato: "PNG",
-          tags: ["conferencia", "blockchain", "presentación"],
-          autor: "Dr. Carlos Rodríguez",
-        },
-        {
-          id: 3,
-          titulo: "Equipo GILIA 2023",
-          descripcion: "Foto oficial del equipo de investigación GILIA",
-          categoria: "Equipo",
-          url: "/placeholder.svg?height=300&width=400",
-          fechaSubida: "2023-08-10",
-          tamaño: "4.2 MB",
-          dimensiones: "3000x2000",
-          formato: "JPG",
-          tags: ["equipo", "oficial", "grupo"],
-          autor: "Fotografía profesional",
-        },
-        {
-          id: 4,
-          titulo: "Prototipo IoT",
-          descripcion: "Dispositivo IoT desarrollado para monitoreo ambiental",
-          categoria: "Proyectos",
-          url: "/placeholder.svg?height=300&width=400",
-          fechaSubida: "2023-12-05",
-          tamaño: "1.8 MB",
-          dimensiones: "1600x1200",
-          formato: "JPG",
-          tags: ["IoT", "prototipo", "sensores"],
-          autor: "Ing. Fernando Castro",
-        },
-        {
-          id: 5,
-          titulo: "Simulación VR",
-          descripcion: "Captura de pantalla del simulador de realidad virtual",
-          categoria: "Proyectos",
-          url: "/placeholder.svg?height=300&width=400",
-          fechaSubida: "2023-10-30",
-          tamaño: "2.9 MB",
-          dimensiones: "1920x1080",
-          formato: "PNG",
-          tags: ["VR", "simulación", "medicina"],
-          autor: "Dra. Sofia Hernández",
-        },
-        {
-          id: 6,
-          titulo: "Workshop Quantum Computing",
-          descripcion: "Taller sobre computación cuántica para estudiantes",
-          categoria: "Eventos",
-          url: "/placeholder.svg?height=300&width=400",
-          fechaSubida: "2023-07-22",
-          tamaño: "3.5 MB",
-          dimensiones: "2560x1440",
-          formato: "JPG",
-          tags: ["workshop", "quantum", "educación"],
-          autor: "Dr. Juan Pérez",
-        },
-      ])
-      setLoading(false)
-    }, 1000)
-  }, [])
+    fetchImagenes();
+  }, []);
+
+  const fetchImagenes = async () => {
+    setLoading(true);
+    try {
+      const response = await dataService.getGaleria();
+      setImagenes(response.data);
+    } catch (error) {
+      console.error("Error al obtener las imágenes:", error);
+      notification.error({
+        message: 'Error de Carga',
+        description: 'No se pudieron cargar las imágenes. Por favor, intente de nuevo más tarde.',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOpenModal = (imagen = null) => {
+    setCurrentImagen(imagen ? { ...imagen } : { titulo: '', descripcion: '', categoria: 'General' });
+    setSelectedFile(null);
+    setIsModalOpen(true);
+  };
+
+  const handleCancelModal = () => {
+    setIsModalOpen(false);
+    setCurrentImagen(null);
+    setSelectedFile(null);
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleSave = async () => {
+    if (!currentImagen.titulo || !currentImagen.categoria) {
+      notification.error({ message: 'Campos requeridos', description: 'El título y la categoría son obligatorios.' });
+      return;
+    }
+
+    try {
+      if (currentImagen.id) {
+        const response = await dataService.updateImagen(currentImagen.id, {
+          titulo: currentImagen.titulo,
+          descripcion: currentImagen.descripcion,
+          categoria: currentImagen.categoria,
+        });
+        setImagenes((prev) => prev.map((img) => (img.id === currentImagen.id ? response.data : img)));
+        notification.success({ message: 'Imagen Actualizada' });
+      } else {
+        if (!selectedFile) {
+          notification.error({ message: 'Archivo requerido', description: 'Por favor, selecciona un archivo de imagen.' });
+          return;
+        }
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        formData.append('titulo', currentImagen.titulo);
+        formData.append('descripcion', currentImagen.descripcion);
+        formData.append('categoria', currentImagen.categoria);
+
+        const response = await dataService.uploadImagen(formData);
+        setImagenes((prev) => [...prev, response.data]);
+        notification.success({ message: 'Imagen Subida' });
+      }
+      handleCancelModal();
+      fetchImagenes();
+    } catch (error) {
+      console.error("Error al guardar la imagen:", error);
+      notification.error({ message: 'Error al Guardar' });
+    }
+  };
 
   const handleDelete = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta imagen?")) {
-      setImagenes(imagenes.filter((imagen) => imagen.id !== id))
-    }
-  }
+    Modal.confirm({
+      title: '¿Estás seguro de que deseas eliminar esta imagen?',
+      content: 'Esta acción no se puede deshacer.',
+      okText: 'Eliminar',
+      okType: 'danger',
+      cancelText: 'Cancelar',
+      onOk: async () => {
+        try {
+          await dataService.deleteImagen(id);
+          setImagenes((prev) => prev.filter((img) => img.id !== id));
+          notification.success({
+            message: 'Imagen Eliminada',
+            description: 'La imagen ha sido eliminada correctamente.',
+          });
+        } catch (error) {
+          console.error("Error al eliminar la imagen:", error);
+          notification.error({
+            message: 'Error al Eliminar',
+            description: 'No se pudo eliminar la imagen.',
+          });
+        }
+      },
+    });
+  };
 
   const filteredImagenes = imagenes.filter((imagen) => {
     const matchesSearch =
-      imagen.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      imagen.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      imagen.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+      (imagen.titulo?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (imagen.descripcion?.toLowerCase() || '').includes(searchTerm.toLowerCase())
 
     const matchesFilter = filterCategory === "all" || imagen.categoria === filterCategory
 
@@ -170,7 +184,7 @@ const AdminGaleria = () => {
           equipo.
         </p>
 
-        <button className="admin-unified-primary-btn">
+        <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
           <UploadOutlined />
           Subir Imágenes
         </button>
@@ -211,7 +225,7 @@ const AdminGaleria = () => {
               : "Comienza subiendo tu primera imagen a la galería."}
           </p>
           {!searchTerm && filterCategory === "all" && (
-            <button className="admin-unified-primary-btn">
+            <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
               <UploadOutlined />
               Subir Primera Imagen
             </button>
@@ -225,9 +239,6 @@ const AdminGaleria = () => {
                 <th>Imagen</th>
                 <th>Información</th>
                 <th>Categoría</th>
-                <th>Detalles Técnicos</th>
-                <th>Autor</th>
-                <th>Fecha</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -236,7 +247,7 @@ const AdminGaleria = () => {
                 <tr key={imagen.id}>
                   <td>
                     <img
-                      src={imagen.url || "/placeholder.svg"}
+                      src={`${API_URL}${imagen.url}`}
                       alt={imagen.titulo}
                       style={{
                         width: "80px",
@@ -251,46 +262,13 @@ const AdminGaleria = () => {
                     <strong>{imagen.titulo}</strong>
                     <br />
                     <small style={{ color: "#64748b", lineHeight: "1.4" }}>
-                      {imagen.descripcion.length > 60
-                        ? `${imagen.descripcion.substring(0, 60)}...`
-                        : imagen.descripcion}
+                      {imagen.descripcion?.substring(0, 80)}...
                     </small>
-                    <br />
-                    <div style={{ marginTop: "0.25rem" }}>
-                      {imagen.tags.slice(0, 2).map((tag, index) => (
-                        <span
-                          key={index}
-                          style={{
-                            fontSize: "0.7rem",
-                            color: "#667eea",
-                            marginRight: "0.5rem",
-                          }}
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
                   </td>
                   <td>
                     <span className={`admin-unified-badge ${getCategoriaColor(imagen.categoria)}`}>
                       {imagen.categoria}
                     </span>
-                  </td>
-                  <td>
-                    <FileImageOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
-                    <small style={{ color: "#64748b" }}>
-                      {imagen.formato} • {imagen.tamaño}
-                      <br />
-                      {imagen.dimensiones}
-                    </small>
-                  </td>
-                  <td>
-                    <UserOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
-                    <small style={{ color: "#64748b" }}>{imagen.autor}</small>
-                  </td>
-                  <td>
-                    <CalendarOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
-                    <small style={{ color: "#64748b" }}>{new Date(imagen.fechaSubida).toLocaleDateString()}</small>
                   </td>
                   <td>
                     <div className="admin-table-actions">
@@ -300,7 +278,7 @@ const AdminGaleria = () => {
                       <button className="admin-table-btn admin-table-btn-view" title="Descargar">
                         <DownloadOutlined />
                       </button>
-                      <button className="admin-table-btn admin-table-btn-edit" title="Editar">
+                      <button className="admin-table-btn admin-table-btn-edit" title="Editar" onClick={() => handleOpenModal(imagen)}>
                         <EditOutlined />
                       </button>
                       <button
@@ -318,6 +296,58 @@ const AdminGaleria = () => {
           </table>
         </div>
       )}
+
+      <Modal
+        title={currentImagen?.id ? "Editar Imagen" : "Subir Nueva Imagen"}
+        open={isModalOpen}
+        onOk={handleSave}
+        onCancel={handleCancelModal}
+        okText="Guardar"
+        cancelText="Cancelar"
+      >
+        <form className="admin-unified-form">
+          <div className="admin-unified-form-group">
+            <label>Título</label>
+            <input
+              type="text"
+              value={currentImagen?.titulo || ''}
+              onChange={(e) => setCurrentImagen({ ...currentImagen, titulo: e.target.value })}
+            />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Descripción</label>
+            <textarea
+              rows="3"
+              value={currentImagen?.descripcion || ''}
+              onChange={(e) => setCurrentImagen({ ...currentImagen, descripcion: e.target.value })}
+            />
+          </div>
+          <div className="admin-unified-form-group">
+            <label>Categoría</label>
+            <select
+              value={currentImagen?.categoria || 'General'}
+              onChange={(e) => setCurrentImagen({ ...currentImagen, categoria: e.target.value })}
+            >
+              <option value="General">General</option>
+              <option value="Laboratorio">Laboratorio</option>
+              <option value="Eventos">Eventos</option>
+              <option value="Equipo">Equipo</option>
+              <option value="Proyectos">Proyectos</option>
+              <option value="Publicaciones">Publicaciones</option>
+            </select>
+          </div>
+          {!currentImagen?.id && (
+            <div className="admin-unified-form-group">
+              <label>Archivo de Imagen</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </div>
+          )}
+        </form>
+      </Modal>
     </div>
   )
 }

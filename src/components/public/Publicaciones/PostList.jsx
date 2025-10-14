@@ -8,7 +8,7 @@ import {
   ArrowRightOutlined,
   CalendarOutlined,
 } from "@ant-design/icons"
-import asyncMock from "../../../../asyncMock"
+import { dataService } from "/src/services/dataService.js";
 import { useLocation } from "react-router-dom"
 import PublicationFilters from './PublicationFilters'
 import './PublicationFilters.css'
@@ -36,7 +36,7 @@ const PostList = () => {
     const fetchPublicaciones = async () => {
       setLoading(true)
       try {
-        const response = await asyncMock.getPublicaciones(filtro)
+                const response = await dataService.getPublicaciones(filtro);
         setPublicaciones(response.data || [])
       } catch (err) {
         console.error("Error fetching publicaciones:", err)
@@ -157,7 +157,7 @@ const PostList = () => {
               >
                 {visiblePublicaciones.map((pub, idx) => (
                   <div
-                    key={pub.id}
+                    key={pub.idPublicacion}
                     ref={el => cardRefs.current[idx] = el}
                     data-index={idx}
                     className={`news-card${animatedIndexes.has(idx.toString()) ? ' animated' : ''}`}

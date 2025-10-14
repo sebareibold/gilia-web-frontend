@@ -1,501 +1,221 @@
-import { asyncMock } from "../../asyncMock"
-import { apiService } from "./api"
-import { ENV_CONFIG, logger } from "../config/environment"
+import axios from 'axios';
+import { ENV_CONFIG } from '../config/environment';
 
-/**
- * Servicio de datos que abstrae la fuente de datos (Mock vs API)
- * Usa variables de entorno para determinar qué fuente usar
- */
+const apiClient = axios.create({
+  baseURL: ENV_CONFIG.API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-class DataService {
-  constructor() {
-    this.useMockData = ENV_CONFIG.USE_MOCK_DATA
-    logger.log(`DataService initialized with ${this.useMockData ? "MOCK" : "API"} data source`)
-  }
-
-  // ===== AUTENTICACIÓN =====
-  async login(email, password) {
-    try {
-      logger.log("DataService - Login attempt:", { email, useMock: this.useMockData })
-
-      if (this.useMockData) {
-        return await asyncMock.simulateBackofficeAccess({ username: email, password })
-      } else {
-        return await apiService.login({ email, password })
-      }
-    } catch (error) {
-      logger.error("DataService - Login error:", error)
-      throw error
+// Interceptor para añadir el token de autenticación a las peticiones
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
+);
 
-  // ===== EQUIPO =====
-  async getTeamMembers(filters = {}) {
+export const dataService = {
+  // Función para autenticación
+  login: async (email, password) => {
     try {
-      if (this.useMockData) {
-        return await asyncMock.getPersonas(filters)
-      } else {
-        return await apiService.get("/team", { params: filters })
+      const response = await apiClient.post('/auth/login', { email, password });
+      if (response.data.access_token) {
+        localStorage.setItem('token', response.data.access_token);
       }
+      return { success: true, user: response.data };
     } catch (error) {
-      logger.error("DataService - Error getting team members:", error)
-      throw error
+      console.error('Error en el servicio de login:', error.response?.data?.message || error.message);
+      return { success: false, error: error.response?.data?.message || 'Error de autenticación' };
     }
-  }
+  },
 
-  async getTeamMember(id) {
+  // Funciones para el perfil del usuario
+  getMe: async () => {
     try {
-      if (this.useMockData) {
-        return await asyncMock.getPersona(id)
-      } else {
-        return await apiService.get(`/team/${id}`)
-      }
+      const response = await apiClient.get('/usuarios/me');
+      return { success: true, data: response.data };
     } catch (error) {
-      logger.error("DataService - Error getting team member:", error)
-      throw error
+      console.error('Error al obtener el perfil:', error.response?.data?.message || error.message);
+      return { success: false, error: 'No se pudo obtener el perfil' };
     }
-  }
+  },
 
-  async createTeamMember(data) {
+  updateProfile: async (profileData) => {
     try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("team-member", data)
-      } else {
-        return await apiService.post("/team", data)
-      }
+      const response = await apiClient.patch('/usuarios/profile', profileData);
+      return { success: true, data: response.data };
     } catch (error) {
-      logger.error("DataService - Error creating team member:", error)
-      throw error
+      console.error('Error al actualizar el perfil:', error.response?.data?.message || error.message);
+      return { success: false, error: 'No se pudo actualizar el perfil' };
     }
-  }
+  },
 
-  async updateTeamMember(id, data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("team-member-update", { id, ...data })
-      } else {
-        return await apiService.put(`/team/${id}`, data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error updating team member:", error)
-      throw error
-    }
-  }
+  // Ejemplo de una función para obtener todas las novedades
+  getNovedades: () => {
+    return apiClient.get('/novedades');
+  },
 
-  async deleteTeamMember(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateUserAction("delete-team-member", { id })
-      } else {
-        return await apiService.delete(`/team/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error deleting team member:", error)
-      throw error
-    }
-  }
+  // Obtener una novedad por ID
+  getNovedadById: (id) => {
+    return apiClient.get(`/novedades/${id}`);
+  },
 
-  // ===== PROYECTOS =====
-  async getProjects(filters = {}) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getProyectos(filters)
-      } else {
-        return await apiService.get("/projects", { params: filters })
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting projects:", error)
-      throw error
-    }
-  }
+  // Puedes añadir más funciones para otros endpoints aquí
+  // Por ejemplo, para líneas de investigación (proyectos)
+  getLineasInvestigacion: () => {
+    return apiClient.get('/lineas-investigacion');
+  },
 
-  async getProject(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getProyecto(id)
-      } else {
-        return await apiService.get(`/projects/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting project:", error)
-      throw error
-    }
-  }
+  getLineaInvestigacionById: (id) => {
+    return apiClient.get(`/lineas-investigacion/${id}`);
+  },
 
-  async createProject(data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("project", data)
-      } else {
-        return await apiService.post("/projects", data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error creating project:", error)
-      throw error
-    }
-  }
+  createLineaInvestigacion: (data) => {
+    return apiClient.post('/lineas-investigacion', data);
+  },
 
-  async updateProject(id, data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("project-update", { id, ...data })
-      } else {
-        return await apiService.put(`/projects/${id}`, data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error updating project:", error)
-      throw error
-    }
-  }
+  updateLineaInvestigacion: (id, data) => {
+    return apiClient.patch(`/lineas-investigacion/${id}`, data);
+  },
 
-  async deleteProject(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateUserAction("delete-project", { id })
-      } else {
-        return await apiService.delete(`/projects/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error deleting project:", error)
-      throw error
-    }
-  }
+  deleteLineaInvestigacion: (id) => {
+    return apiClient.delete(`/lineas-investigacion/${id}`);
+  },
 
-  // ===== LÍNEAS DE INVESTIGACIÓN =====
-  async getResearchLines(filters = {}) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getLineasInvestigacion(filters)
-      } else {
-        return await apiService.get("/research-lines", { params: filters })
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting research lines:", error)
-      throw error
-    }
-  }
+  // Funciones para líneas de extensión
+  getLineasExtension: () => {
+    return apiClient.get('/lineas-extension');
+  },
 
-  async getResearchLine(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getLineaInvestigacion(id)
-      } else {
-        return await apiService.get(`/research-lines/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting research line:", error)
-      throw error
-    }
-  }
+  getLineaExtensionById: (id) => {
+    return apiClient.get(`/lineas-extension/${id}`);
+  },
 
-  async createResearchLine(data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("research-line", data)
-      } else {
-        return await apiService.post("/research-lines", data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error creating research line:", error)
-      throw error
-    }
-  }
+  createLineaExtension: (data) => {
+    return apiClient.post('/lineas-extension', data);
+  },
 
-  async updateResearchLine(id, data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("research-line-update", { id, ...data })
-      } else {
-        return await apiService.put(`/research-lines/${id}`, data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error updating research line:", error)
-      throw error
-    }
-  }
+  updateLineaExtension: (id, data) => {
+    return apiClient.patch(`/lineas-extension/${id}`, data);
+  },
 
-  async deleteResearchLine(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateUserAction("delete-research-line", { id })
-      } else {
-        return await apiService.delete(`/research-lines/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error deleting research line:", error)
-      throw error
-    }
-  }
+  deleteLineaExtension: (id) => {
+    return apiClient.delete(`/lineas-extension/${id}`);
+  },
 
-  // ===== PUBLICACIONES =====
-  async getPublications(filters = {}) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getPublicaciones(filters)
-      } else {
-        return await apiService.get("/publications", { params: filters })
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting publications:", error)
-      throw error
-    }
-  }
+  // Funciones para publicaciones
+  getPublicaciones: (params) => {
+    return apiClient.get('/publicaciones', { params });
+  },
 
-  async getPublication(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getPublicacion(id)
-      } else {
-        return await apiService.get(`/publications/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting publication:", error)
-      throw error
-    }
-  }
+  getPublicacionById: (id) => {
+    return apiClient.get(`/publicaciones/${id}`);
+  },
 
-  async createPublication(data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("publication", data)
-      } else {
-        return await apiService.post("/publications", data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error creating publication:", error)
-      throw error
-    }
-  }
+  createPublicacion: (data) => {
+    return apiClient.post('/publicaciones', data);
+  },
 
-  async updatePublication(id, data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("publication-update", { id, ...data })
-      } else {
-        return await apiService.put(`/publications/${id}`, data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error updating publication:", error)
-      throw error
-    }
-  }
+  updatePublicacion: (id, data) => {
+    return apiClient.patch(`/publicaciones/${id}`, data);
+  },
 
-  async deletePublication(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateUserAction("delete-publication", { id })
-      } else {
-        return await apiService.delete(`/publications/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error deleting publication:", error)
-      throw error
-    }
-  }
+  deletePublicacion: (id) => {
+    return apiClient.delete(`/publicaciones/${id}`);
+  },
 
-  // ===== GALERÍA =====
-  async getGalleryItems(filters = {}) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getGaleria(filters)
-      } else {
-        return await apiService.get("/gallery", { params: filters })
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting gallery items:", error)
-      throw error
-    }
-  }
+  // Funciones para Personas (Equipo)
+  getPersonas: () => {
+    return apiClient.get('/personas');
+  },
 
-  async getGalleryItem(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getGaleriaItem(id)
-      } else {
-        return await apiService.get(`/gallery/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting gallery item:", error)
-      throw error
-    }
-  }
+  createPersona: (data) => {
+    return apiClient.post('/personas', data);
+  },
 
-  async uploadGalleryItem(data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("gallery-upload", data)
-      } else {
-        return await apiService.post("/gallery", data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-      }
-    } catch (error) {
-      logger.error("DataService - Error uploading gallery item:", error)
-      throw error
-    }
-  }
+  updatePersona: (id, data) => {
+    return apiClient.patch(`/personas/${id}`, data);
+  },
 
-  async updateGalleryItem(id, data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("gallery-update", { id, ...data })
-      } else {
-        return await apiService.put(`/gallery/${id}`, data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error updating gallery item:", error)
-      throw error
-    }
-  }
+  deletePersona: (id) => {
+    return apiClient.delete(`/personas/${id}`);
+  },
 
-  async deleteGalleryItem(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateUserAction("delete-gallery-item", { id })
-      } else {
-        return await apiService.delete(`/gallery/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error deleting gallery item:", error)
-      throw error
-    }
-  }
+  // Funciones para Proyectos
+  getProyectos: () => {
+    return apiClient.get('/proyectos');
+  },
 
-  // ===== LÍNEAS DE EXTENSIÓN =====
-  async getExtensionLines(filters = {}) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getLineasExtension(filters)
-      } else {
-        return await apiService.get("/extension-lines", { params: filters })
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting extension lines:", error)
-      throw error
-    }
-  }
+  createProyecto: (data) => {
+    return apiClient.post('/proyectos', data);
+  },
 
-  async getExtensionLine(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getLineaExtension(id)
-      } else {
-        return await apiService.get(`/extension-lines/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting extension line:", error)
-      throw error
-    }
-  }
+  updateProyecto: (id, data) => {
+    return apiClient.patch(`/proyectos/${id}`, data);
+  },
 
-  // ===== CONFIGURACIÓN =====
-  async getSystemConfig() {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getGlobal()
-      } else {
-        return await apiService.get("/config")
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting system config:", error)
-      throw error
-    }
-  }
+  deleteProyecto: (id) => {
+    return apiClient.delete(`/proyectos/${id}`);
+  },
 
-  async updateSystemConfig(data) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.simulateFormSubmission("system-config", data)
-      } else {
-        return await apiService.put("/config", data)
-      }
-    } catch (error) {
-      logger.error("DataService - Error updating system config:", error)
-      throw error
-    }
-  }
+  // Funciones para Galeria
+  getGaleria: () => {
+    return apiClient.get('/galeria');
+  },
 
-  // ===== ESTADÍSTICAS =====
-  async getStatistics() {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getEstadisticas()
-      } else {
-        return await apiService.get("/statistics")
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting statistics:", error)
-      throw error
-    }
-  }
+  uploadImagen: (formData) => {
+    return apiClient.post('/galeria/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  },
 
-  // ===== BÚSQUEDA GLOBAL =====
-  async globalSearch(query, filters = {}) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.searchGlobal(query, filters)
-      } else {
-        return await apiService.get("/search", { params: { q: query, ...filters } })
-      }
-    } catch (error) {
-      logger.error("DataService - Error in global search:", error)
-      throw error
-    }
-  }
+  updateImagen: (id, data) => {
+    return apiClient.patch(`/galeria/${id}`, data);
+  },
 
-  // ===== INFORMACIÓN PÚBLICA =====
-  async getAboutInfo() {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getAbout()
-      } else {
-        return await apiService.get("/about")
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting about info:", error)
-      throw error
-    }
-  }
+  deleteImagen: (id) => {
+    return apiClient.delete(`/galeria/${id}`);
+  },
 
-  async getObjectives() {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getObjetivos()
-      } else {
-        return await apiService.get("/objectives")
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting objectives:", error)
-      throw error
-    }
-  }
+  // Funciones para el Dashboard
+  getDashboardStats: () => {
+    return apiClient.get('/dashboard/stats');
+  },
 
-  async getNews(filters = {}) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getNovedades(filters)
-      } else {
-        return await apiService.get("/news", { params: filters })
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting news:", error)
-      throw error
-    }
-  }
+  getRecentActivity: () => {
+    return apiClient.get('/dashboard/recent-activity');
+  },
 
-  async getNewsItem(id) {
-    try {
-      if (this.useMockData) {
-        return await asyncMock.getNovedad(id)
-      } else {
-        return await apiService.get(`/news/${id}`)
-      }
-    } catch (error) {
-      logger.error("DataService - Error getting news item:", error)
-      throw error
-    }
-  }
-}
-
-// Exportar instancia singleton
-export const dataService = new DataService()
+  // Funciones para Configuración
+  getConfiguracion() {
+    return apiClient.get('/configuracion');
+  },
+  getConfiguracionByClave(clave) {
+    return apiClient.get(`/configuracion/clave/${clave}`);
+  },
+  getValorConfiguracion(clave) {
+    return apiClient.get(`/configuracion/valor?clave=${encodeURIComponent(clave)}`);
+  },
+  updateConfiguracion(id, data) {
+    return apiClient.patch(`/configuracion/${id}`, data);
+  },
+  updateValorConfiguracion(clave, valor) {
+    return apiClient.patch(`/configuracion/valor?clave=${encodeURIComponent(clave)}&valor=${encodeURIComponent(valor)}`);
+  },
+  createConfiguracion(data) {
+    return apiClient.post('/configuracion', data);
+  },
+  deleteConfiguracion(id) {
+    return apiClient.delete(`/configuracion/${id}`);
+  },
+};

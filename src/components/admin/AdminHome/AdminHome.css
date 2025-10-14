@@ -216,6 +216,12 @@
 .admin-quick-action-card.orange {
   color: #f59e0b;
 }
+.admin-quick-action-card.cyan {
+  color: #06b6d4;
+}
+.admin-quick-action-card.red {
+  color: #ef4444;
+}
 
 .admin-quick-action-card:hover {
   transform: translateY(-8px) scale(1.02);
@@ -404,87 +410,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Recent Activities Section */
-.admin-recent-activities-section {
-  margin-bottom: 4rem;
-}
-
-.admin-activities-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.admin-activity-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
-  border-radius: 16px;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(59, 130, 246, 0.1);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.06);
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.admin-activity-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.2);
-}
-
-.admin-activity-icon {
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.08));
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  color: #3b82f6;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  flex-shrink: 0;
-}
-
-.admin-activity-content {
-  flex: 1;
-}
-
-.admin-activity-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin: 0 0 0.5rem 0;
-}
-
-.admin-activity-description {
-  color: #64748b;
-  margin: 0 0 0.5rem 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.admin-activity-time {
-  font-size: 0.875rem;
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.admin-activity-line {
-  position: absolute;
-  left: 35px;
-  top: 72px;
-  bottom: -24px;
-  width: 2px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.3) 0%, transparent 100%);
-}
-
-.admin-activity-item:last-child .admin-activity-line {
-  display: none;
-}
 
 /* Responsive Design */
 @media (max-width: 1200px) {
@@ -521,13 +446,6 @@
     padding: 1.5rem;
   }
 
-  .admin-activity-item {
-    padding: 1.25rem;
-  }
-
-  .admin-activity-line {
-    left: 30px;
-  }
 
   .admin-action-buttons {
     grid-template-columns: 1fr;
@@ -563,14 +481,6 @@
     gap: 0.5rem;
   }
 
-  .admin-activity-item {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .admin-activity-line {
-    display: none;
-  }
 }
 
 /* Animaciones de entrada */
@@ -605,8 +515,7 @@
 /* Mejoras para el glass morphism */
 @supports (backdrop-filter: blur(20px)) {
   .admin-welcome,
-  .admin-quick-action-card,
-  .admin-activity-item {
+  .admin-quick-action-card {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
   }
 }

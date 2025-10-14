@@ -1,5 +1,5 @@
 /* Admin Theme Styles - Light & Modern */
-.admin-theme {
+:root {
   --admin-primary: #667eea;
   --admin-primary-hover: #5a67d8;
   --admin-secondary: #64748b;
@@ -27,6 +27,10 @@
   --admin-radius-sm: 0.375rem;
   --admin-radius-md: 0.5rem;
   --admin-radius-lg: 0.75rem;
+}
+
+.admin-theme {
+  /* Clase para temas específicos si es necesario */
 }
 
 /* ===== ADMIN LAYOUT STYLES ===== */
@@ -57,7 +61,7 @@
   top: 0;
   left: 0;
   height: 100vh;
-  width: 280px;
+  width: var(--admin-sidebar-width);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-right: 1px solid rgba(102, 126, 234, 0.1);
@@ -68,7 +72,7 @@
 }
 
 .admin-sidebar-transparent.collapsed {
-  width: 80px;
+  width: var(--admin-sidebar-collapsed-width);
 }
 
 .admin-sidebar-content {
@@ -540,6 +544,7 @@
   overflow-x: hidden;
   /* Added default margin for expanded state */
   margin-left: var(--admin-sidebar-width);
+  padding: 1rem 0;
 }
 
 /* Added collapsed state margin */
@@ -565,6 +570,9 @@
   min-height: 100vh;
   position: relative;
   z-index: 1;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
 }
 
 .admin-content-wrapper {
@@ -1181,15 +1189,23 @@
 
   .admin-sidebar-transparent.mobile-open {
     transform: translateX(0);
+    width: 280px; /* Asegurar ancho completo en móvil cuando está abierto */
   }
 
+  /* Solo aplicar margen 0 cuando el menú esté cerrado */
   .admin-main-wrapper {
     margin-left: 0 !important;
+    transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .admin-main-wrapper.expanded,
-  .admin-main-wrapper.collapsed {
-    margin-left: 0 !important;
+  /* Cuando el menú móvil está abierto, mover el contenido */
+  .admin-sidebar-transparent.mobile-open + .admin-main-wrapper {
+    margin-left: 280px !important;
+  }
+
+  /* Ocultar el botón de toggle en móvil cuando el menú está abierto */
+  .admin-sidebar-toggle.mobile-visible {
+    display: none;
   }
 }
 
@@ -1202,8 +1218,8 @@
     padding: 1rem;
   }
 
-  .admin-content-card {
-    padding: 1rem;
+  .admin-content-wrapper {
+    padding: 1.5rem 0;
   }
 
   .admin-login-card {

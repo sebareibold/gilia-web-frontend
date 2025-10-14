@@ -31,7 +31,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchLines = async () => {
       try {
-        const res = await dataService.getResearchLines()
+                const res = await dataService.getLineasInvestigacion();
         setResearchLines(res.data)
       } catch (error) {
         console.error("Error al obtener las líneas:", error)

@@ -27,6 +27,7 @@ import ProyectosAdmin from "./components/admin/AdminProyectos/AdminProyectos"
 import Equipo from "./components/admin/AdminEquipo/AdminEquipo"
 import Galeria from "./components/admin/AdminGaleria/AdminGaleria"
 import Configuracion from "./components/admin/AdminConfiguracion/AdminConfiguracion"
+import AdminLineasExtension from "./components/admin/AdminLineasExtension/AdminLineasExtension"
 
 import "./App.css"
 
@@ -72,7 +73,8 @@ function App() {
               }
             >
               <Route index element={<AdminHome />} />
-              <Route path="lineas" element={<LineasInvestigacion />} />
+                            <Route path="lineas" element={<LineasInvestigacion />} />
+              <Route path="lineas-extension" element={<AdminLineasExtension />} />
               <Route path="publicaciones" element={<Publicaciones />} />
               <Route path="proyectos" element={<ProyectosAdmin />} />
               <Route path="equipo" element={<Equipo />} />

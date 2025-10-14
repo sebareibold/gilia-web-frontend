@@ -4,18 +4,16 @@ import { useState, useEffect } from "react"
 import { dataService } from "../../../services/dataService"
 import { notification, Modal } from "antd"
 import {
-  ExperimentOutlined,
+  ProjectOutlined,
   PlusOutlined,
   EditOutlined,
   DeleteOutlined,
   EyeOutlined,
   SearchOutlined,
-  TeamOutlined,
-  ProjectOutlined,
 } from "@ant-design/icons"
 import "../../../styles/admin-unified.css"
 
-const AdminLineasInvestigacion = () => {
+const AdminLineasExtension = () => {
   const [lineas, setLineas] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
@@ -30,13 +28,13 @@ const AdminLineasInvestigacion = () => {
   const fetchLineas = async () => {
     setLoading(true);
     try {
-      const response = await dataService.getLineasInvestigacion();
+      const response = await dataService.getLineasExtension();
       setLineas(response.data);
     } catch (error) {
-            console.error("Error al obtener las líneas de investigación:", error);
+      console.error("Error al obtener las líneas de extensión:", error);
       notification.error({
         message: 'Error de Carga',
-        description: 'No se pudieron cargar las líneas de investigación. Por favor, intente de nuevo más tarde.',
+        description: 'No se pudieron cargar las líneas de extensión. Por favor, intente de nuevo más tarde.',
       });
     } finally {
       setLoading(false);
@@ -45,24 +43,24 @@ const AdminLineasInvestigacion = () => {
 
   const handleDelete = (id) => {
     Modal.confirm({
-      title: '¿Estás seguro de que deseas eliminar esta línea de investigación?',
+      title: '¿Estás seguro de que deseas eliminar esta línea de extensión?',
       content: 'Esta acción no se puede deshacer.',
       okText: 'Eliminar',
       okType: 'danger',
       cancelText: 'Cancelar',
       onOk: async () => {
         try {
-          await dataService.deleteLineaInvestigacion(id);
+          await dataService.deleteLineaExtension(id);
           setLineas((prevLineas) => prevLineas.filter((linea) => linea.id !== id));
           notification.success({
             message: 'Línea Eliminada',
-            description: 'La línea de investigación ha sido eliminada correctamente.',
+            description: 'La línea de extensión ha sido eliminada correctamente.',
           });
         } catch (error) {
-          console.error("Error al eliminar la línea de investigación:", error);
+          console.error("Error al eliminar la línea de extensión:", error);
           notification.error({
             message: 'Error al Eliminar',
-            description: 'No se pudo eliminar la línea de investigación.',
+            description: 'No se pudo eliminar la línea de extensión.',
           });
         }
       },
@@ -79,26 +77,26 @@ const AdminLineasInvestigacion = () => {
     setIsModalOpen(false);
   };
 
-      const handleSave = async (formData) => {
+  const handleSave = async (formData) => {
     const isUpdating = currentLinea && currentLinea.id;
     setIsSaving(true);
     try {
-            if (isUpdating) {
-        await dataService.updateLineaInvestigacion(currentLinea.id, formData);
+      if (isUpdating) {
+        await dataService.updateLineaExtension(currentLinea.id, formData);
       } else {
-        await dataService.createLineaInvestigacion(formData);
+        await dataService.createLineaExtension(formData);
       }
       notification.success({
         message: `Línea ${isUpdating ? 'Actualizada' : 'Creada'}`,
-        description: `La línea de investigación se ha ${isUpdating ? 'actualizado' : 'creado'} correctamente.`,
+        description: `La línea de extensión se ha ${isUpdating ? 'actualizado' : 'creado'} correctamente.`,
       });
-      fetchLineas(); // Recargar la lista
+      fetchLineas();
       handleCloseModal();
     } catch (error) {
-            console.error("Error al guardar la línea de investigación:", error);
+      console.error("Error al guardar la línea de extensión:", error);
       notification.error({
         message: 'Error al Guardar',
-        description: `No se pudo ${isUpdating ? 'actualizar' : 'crear'} la línea de investigación.`,
+        description: `No se pudo ${isUpdating ? 'actualizar' : 'crear'} la línea de extensión.`,
       });
     } finally {
       setIsSaving(false);
@@ -109,7 +107,7 @@ const AdminLineasInvestigacion = () => {
     (linea) =>
       linea.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
       linea.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
-        )
+  );
 
   const getEstadoBadgeClass = (estado) => {
     switch (estado) {
@@ -129,7 +127,7 @@ const AdminLineasInvestigacion = () => {
       <div className="admin-unified-page">
         <div className="admin-unified-loading">
           <div className="admin-unified-spinner"></div>
-          <p>Cargando líneas de investigación...</p>
+          <p>Cargando líneas de extensión...</p>
         </div>
       </div>
     )
@@ -137,25 +135,17 @@ const AdminLineasInvestigacion = () => {
 
   return (
     <div className={`admin-unified-page ${isModalOpen ? 'admin-page-blurred' : ''}`}>
-      <div className="admin-unified-decorations">
-        <div className="admin-floating-element admin-floating-element-1"></div>
-        <div className="admin-floating-element admin-floating-element-2"></div>
-        <div className="admin-floating-element admin-floating-element-3"></div>
-      </div>
-
       <div className="admin-unified-header">
         <h1 className="admin-unified-title">
-          <ExperimentOutlined />
-          Líneas de Investigación
+          <ProjectOutlined />
+          Líneas de Extensión
         </h1>
         <p className="admin-unified-subtitle">
-          Gestiona las líneas de investigación del grupo GILIA. Aquí puedes crear, editar y organizar las diferentes
-          áreas de investigación.
+          Gestiona las líneas de extensión del grupo GILIA. Aquí puedes crear, editar y organizar las diferentes áreas de extensión.
         </p>
-
         <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
           <PlusOutlined />
-          Nueva Línea de Investigación
+          Nueva Línea de Extensión
         </button>
       </div>
 
@@ -164,7 +154,7 @@ const AdminLineasInvestigacion = () => {
           <SearchOutlined className="admin-unified-search-icon" />
           <input
             type="text"
-            placeholder="Buscar líneas de investigación..."
+            placeholder="Buscar líneas de extensión..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -173,12 +163,12 @@ const AdminLineasInvestigacion = () => {
 
       {filteredLineas.length === 0 ? (
         <div className="admin-unified-empty">
-          <ExperimentOutlined className="admin-unified-empty-icon" />
-          <h3 className="admin-unified-empty-title">No hay líneas de investigación</h3>
+          <ProjectOutlined className="admin-unified-empty-icon" />
+          <h3 className="admin-unified-empty-title">No hay líneas de extensión</h3>
           <p className="admin-unified-empty-description">
             {searchTerm
               ? "No se encontraron resultados para tu búsqueda."
-              : "Comienza creando tu primera línea de investigación."}
+              : "Comienza creando tu primera línea de extensión."}
           </p>
           {!searchTerm && (
             <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
@@ -242,7 +232,7 @@ const FormModal = ({ linea, onSave, onClose, isSaving }) => {
 
   return (
     <Modal
-      title={<h2>{linea ? 'Editar' : 'Nueva'} Línea de Investigación</h2>}
+      title={<h2>{linea ? "Editar" : "Nueva"} Línea de Extensión</h2>}
       open={isModalOpen}
       onCancel={onClose}
       footer={null}
@@ -280,4 +270,4 @@ const FormModal = ({ linea, onSave, onClose, isSaving }) => {
   );
 };
 
-export default AdminLineasInvestigacion
+export default AdminLineasExtension;

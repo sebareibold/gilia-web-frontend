@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { marked } from "marked"
-import { dataService } from "../../../services/dataService"
+import { dataService } from "/src/services/dataService.js";
 import { FolderOutlined, BankOutlined, BranchesOutlined } from "@ant-design/icons"
 import SimpleCarousel from "../DetallesLineaDeInvestigación/SimpleCarousel"
 
@@ -17,18 +17,13 @@ const LineaExtensionDetail = () => {
   useEffect(() => {
     const fetchLineaExtensionDetail = async () => {
       try {
-        const response = await dataService.getExtensionLine(id)
-        // Buscar los proyectos asociados por id
-        let proyectos = []
-        if (response.data.proyectos && Array.isArray(response.data.proyectos)) {
-          const allProjects = (await dataService.getProjects()).data
-          proyectos = response.data.proyectos.map(pid => allProjects.find(p => p.id === pid)).filter(Boolean)
-        }
-        setLinea({ ...response.data, proyectos })
-      } catch {
-        setLinea(null)
+                const response = await dataService.getLineaExtensionById(id);
+        setLinea(response.data);
+      } catch (error) {
+        console.error("Error fetching extension line details:", error);
+        setLinea(null);
       }
-    }
+    };
     fetchLineaExtensionDetail()
   }, [id])
 
@@ -82,7 +77,7 @@ const LineaExtensionDetail = () => {
             <BranchesOutlined />
             <span>Línea de Extensión</span>
           </div>
-          <h2 className="section-title">{linea.nombre}</h2>
+          <h2 className="section-title">{linea.titulo}</h2>
           <p className="section-description">
             Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la comunidad.
           </p>

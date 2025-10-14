@@ -4,7 +4,7 @@ import { useTheme } from "../../../contexts/ThemeContext";
 import { CalendarOutlined, TagOutlined } from "@ant-design/icons";
 import { marked } from "marked";
 import Loader from "../Loader/Loader";
-import { dataService } from "../../../services/dataService";
+import { dataService } from "/src/services/dataService.js";
 import "../../shared/FuturisticStyles.css";
 import "./ProyectoDetail.css";
 
@@ -17,7 +17,7 @@ const ProyectoDetail = () => {
   useEffect(() => {
     const fetchProyecto = async () => {
       try {
-        const response = await dataService.getProject(id);
+                const response = await dataService.getLineaInvestigacionById(id);
         setProyecto(response.data);
       } catch {
         setProyecto(null);
