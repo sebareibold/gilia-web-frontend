@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import PropTypes from "prop-types"
 import {
@@ -18,7 +16,7 @@ import {
 import { useTheme } from "../../../contexts/ThemeContext"
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
-import { dataService } from "../../../services/dataService"
+import { getResearchLines } from "../../services"
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -27,12 +25,16 @@ const Navbar = () => {
   const location = useLocation()
 
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  // Nombre del método de servicios utilizado desde services/index.js
+  const RESEARCH_LINES_SERVICE_METHOD = "getResearchLines"
 
   useEffect(() => {
     const fetchLines = async () => {
       try {
-                const res = await dataService.getLineasInvestigacion();
-        setResearchLines(res.data)
+        const res = await getResearchLines()
+        // res can be array or {data: array} depending on implementation; support both
+        const lines = Array.isArray(res) ? res : (res?.data || [])
+        setResearchLines(lines)
       } catch (error) {
         console.error("Error al obtener las líneas:", error)
       }
@@ -75,9 +77,9 @@ const Navbar = () => {
       label: "Investigación",
       icon: <ExperimentOutlined />,
       active: location.pathname.startsWith("/research-lines"),
-      dropdown: researchLines.map((linea) => ({
-        label: linea.nombre,
-        path: `/research-lines/${linea.id}`,
+      dropdown: researchLines.map((line) => ({
+        label: line.title || line.nombre,
+        path: `/research-lines/${line.id}`,
       })),
     },
     {

@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
@@ -19,6 +17,7 @@ import {
 } from "@ant-design/icons"
 import "../styles/admin-theme.css"
 
+// Items del menu, con sus iconos y etiquetas correspondientes
 const MENU_ITEMS = [
   {
     key: "",
@@ -62,6 +61,7 @@ const MENU_ITEMS = [
   },
 ]
 
+// Utilizada para usar el menu del movil 
 const useMobileMenu = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
@@ -73,6 +73,7 @@ const useMobileMenu = () => {
   return { mobileMenuOpen, setMobileMenuOpen }
 }
 
+// Funcion para utilizar los styles termiandos en el body
 const useBodyStyles = () => {
   useEffect(() => {
     const originalPadding = document.body.style.paddingTop
@@ -91,6 +92,8 @@ const useBodyStyles = () => {
   }, [])
 }
 
+
+// Navbar mobile
 const MobileAppBar = ({ user, isMenuOpen, onToggleMenu }) => (
   <div className="mobile-appbar">
     <div className="mobile-appbar-content">

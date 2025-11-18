@@ -1,7 +1,6 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect } from "react"
-import { dataService } from "../services/dataService"
 import { logger } from "../config/environment"
 
 const AuthContext = createContext()
@@ -48,26 +47,16 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setLoading(true)
-      logger.log("AuthContext - Login attempt:", email)
+      logger.log("AuthContext - Login attempt (no simulator):", email)
 
-      const response = await dataService.login(email, password)
+      // Sin simulador ni API: aceptar login local mínimo para no romper la app
+      const userData = { email, name: email?.split("@")[0] || "User" }
+      setUser(userData)
+      setIsAuthenticated(true)
+      localStorage.setItem("gilia_user", JSON.stringify(userData))
 
-      if (response.success) {
-        const userData = response.user
-        setUser(userData)
-        setIsAuthenticated(true)
-
-        // Guardar en localStorage
-        localStorage.setItem("gilia_user", JSON.stringify(userData))
-        if (response.token) {
-          localStorage.setItem("gilia_token", response.token)
-        }
-
-        logger.log("AuthContext - Login successful:", userData.email)
-        return true
-      } else {
-        throw new Error("Login failed")
-      }
+      logger.log("AuthContext - Login successful (local)", userData.email)
+      return true
     } catch (error) {
       logger.error("AuthContext - Login error:", error)
       setUser(null)
