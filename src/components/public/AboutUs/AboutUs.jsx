@@ -14,7 +14,7 @@ import {
 import { useTheme } from "../../../contexts/ThemeContext"
 import Loader from "../common/Loader/Loader"
 import "./AboutUs.css"
-import { getAboutInfo, getObjectives, getTeamMembers } from "../../services"
+import { getAboutInfo, getObjectives, getTeamMembers } from "../../../services"
 
 const iconMap = {
   BulbOutlined: BulbOutlined,

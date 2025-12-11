@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getProjects } from "../../services"
+import { getProjects } from "../../../services"
 import Loader from "../Loader/Loader"
 
 export default function ProyectosPorLineaInvestigacion({ researchLineId }) {

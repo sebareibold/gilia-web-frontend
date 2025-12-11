@@ -13,7 +13,7 @@ import {
   TeamOutlined,
   ProjectOutlined,
 } from "@ant-design/icons"
-import "../../../styles/admin-unified.css"
+import "./AdminResearchLines.css"
 
 // Minimal adapter: map read ops to services/index.js and stub write ops
 const dataService = {

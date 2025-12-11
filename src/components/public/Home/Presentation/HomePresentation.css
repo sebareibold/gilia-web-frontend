@@ -128,6 +128,10 @@
   margin-bottom: var(--space-8);
 }
 
+/* Background Genericos para botones
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+*/
+
 .hero-btn-primary {
   display: flex;
   align-items: center;
@@ -354,8 +358,9 @@
     0 2px 8px rgba(0, 0, 0, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 140px;
-  max-width: 340px;
+  
+  min-width: 120px;
+  max-width: 320px;
   width: auto;
   position: relative;
   overflow: hidden;

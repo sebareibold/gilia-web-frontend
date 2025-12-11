@@ -1,0 +1,243 @@
+/* Login Page Styles */
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.admin-login-card {
+  /* Fondo futurista con gradiente sutil */
+  background: rgba(255, 255, 255, 0.15);          /* Fondo blanco semitransparente */
+  border: 1px solid rgba(255, 255, 255, 0.2);     /* Borde también semitransparente */
+  backdrop-filter: blur(20px) saturate(1.5);      /* Desenfoque del fondo */
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),               /* Sombras suaves que dan profundidad */
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  /* Padding y dimensiones */
+  padding: 3rem;
+  width: 25%;
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;   /* apila los hijos en columna */
+  align-items: center;      /* centra horizontalmente cada hijo */
+}
+
+
+.admin-login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Estilos de Card de Admin (Conteiner) */
+.admin-logo {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin: 0 auto 1.5rem auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-logo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.admin-logo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: clamp(0.5rem, 1.5vw, 0.75rem);
+  pointer-events: none;
+}
+
+.admin-logo:hover {
+  transform:  translateZ(10px) scale(1.02);
+  box-shadow: 
+    0 15px 35px rgba(37, 99, 235, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.admin-logo:hover::before {
+  left: 100%;
+}
+
+.admin-login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.admin-login-subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.admin-error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.admin-login-form {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;   /* apila los hijos en columna */
+  align-items: center;      /* centra horizontalmente cada hijo */
+  width: 100%;
+}
+
+.admin-input-group {
+  margin-bottom: 1.5rem;
+  width: 80%;
+}
+
+.admin-input-label {
+  display: block;
+  color: #1e293b;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.admin-input-container {
+  position: relative;
+}
+
+.admin-input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.admin-input-field {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 2.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  color: #1e293b;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.admin-input-field:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.admin-password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.admin-password-toggle:hover {
+  color: #667eea;
+}
+
+/*  --------- Boton para poder iniciar sesion --------------- */
+
+.admin-login-button {
+  width: 80%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+  border: none;
+  border-radius: 16px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-top: 2%;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  align-self: center;
+}
+
+.admin-login-button::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(8, 6, 6, 0.1), transparent);
+  border-radius: clamp(0.5rem, 1.5vw, 0.75rem);
+  pointer-events: none;
+}
+
+.admin-login-button:hover {
+  transform: translateZ(10px) scale(1.02);
+  box-shadow: 
+    0 10px 25px rgba(37, 99, 235, 0.4),
+    0 8px 10px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/*  ---------------------------------------------- */
+
+
+.hero-btn-primary:hover::before {
+  left: 100%;
+}
+
+.admin-back-button {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.admin-back-button:hover {
+  color: #5a67d8;
+}

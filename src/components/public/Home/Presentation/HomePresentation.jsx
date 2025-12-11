@@ -8,7 +8,7 @@ import {
 import { useTheme } from "../../../../contexts/ThemeContext"
 import "./HomePresentation.css"
 import { useState, useEffect } from "react"
-import { getResearchLines, getExtensionLines } from "../../../services"
+import { getResearchLines, getExtensionLines } from "../../../../services"
 
 function shuffleArray(array) {
   // Algoritmo de Fisher-Yates
@@ -40,8 +40,6 @@ export default function HomePresentation() {
   const [researchLines, setResearchLines] = useState([])
   const [extensionLines, setExtensionLines] = useState([])
   // Nombres de métodos utilizados desde services/index.js
-  const RESEARCH_LINES_SERVICE_METHOD = "getResearchLines"
-  const EXTENSION_LINES_SERVICE_METHOD = "getExtensionLines"
 
   useEffect(() => {
     const timeout = setTimeout(() => setShowFloating(true), 1200)

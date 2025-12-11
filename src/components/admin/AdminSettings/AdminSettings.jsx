@@ -12,7 +12,7 @@ import {
   DatabaseOutlined,
   UserOutlined, // Importar el nuevo ícono
 } from "@ant-design/icons"
-import "../../../styles/admin-unified.css"
+import "./AdminSettings.css"
 
 const AdminConfiguracion = () => {
   // Estado para la configuración general

@@ -4,7 +4,7 @@ import { useTheme } from "../../../contexts/ThemeContext";
 import { CalendarOutlined, TagOutlined } from "@ant-design/icons";
 import { marked } from "marked";
 import Loader from "../common/Loader/Loader";
-import { getResearchLineById } from "../../services";
+import { getResearchLineById } from "../../../services";
 import "../../../styles/FuturisticStyles.css";
 import "./ProjectDetail.css";
 

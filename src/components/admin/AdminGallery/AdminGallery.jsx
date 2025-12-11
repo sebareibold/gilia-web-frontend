@@ -15,7 +15,7 @@ import {
   FileImageOutlined,
   UserOutlined,
 } from "@ant-design/icons"
-import "../../../styles/admin-unified.css"
+import "./AdminGallery.css"
 
 const AdminGaleria = () => {
   const [imagenes, setImagenes] = useState([])

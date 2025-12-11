@@ -11,6 +11,13 @@
   margin-bottom: 3rem;
 }
 
+.post-section-description {
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  font-weight: 400;
+}
+
 .publications-title {
   font-size: 3rem;
   font-weight: 700;

@@ -137,11 +137,13 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
+/* EN EL BODY DAMOS AL FONDO DEGRADO GLOBALMENTE*/
 body {
   font-family: var(--font-primary);
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--color-text-primary);
+
   /* FONDO DEGRADADO APLICADO GLOBALMENTE */
   background: radial-gradient(
       circle at 20% 80%,
@@ -757,9 +759,7 @@ body {
     transform: scale(1);
   }
 }
-.animate-fade-inUp {
-animation: fadeInUp 0.8s ease-out;
-}
+
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out;
 }

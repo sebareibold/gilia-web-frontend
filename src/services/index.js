@@ -13,7 +13,8 @@ import {
   getExtensionLines as mockGetExtensionLines, 
   getExtensionLine as mockGetExtensionLine, 
   getNews as mockGetNews, 
-  getNewsItem as mockGetNewsItem 
+  getNewsItem as mockGetNewsItem ,
+  accessToTheBackoffice as mockAccessToTheBackoffice
 } from "./mock";
 
 // Exportamos SIEMPRE desde mock para que la app funcione ahora sin errores de export faltantes
@@ -31,6 +32,7 @@ export const getResearchLineById = async (...args) => {
   return { data: res }
 };
 
+// Reatrasnformamos, esto puede estar medio mal implementado pero bueno dps vemos como mejorarlo :)
 export const getPublications = mockGetPublications;
 export const getPublicationById = mockGetPublication;
 export const getGalleryItems = mockGetGalleryItems;
@@ -39,6 +41,8 @@ export const getExtensionLines = mockGetExtensionLines;
 export const getExtensionLineById = mockGetExtensionLine;
 export const getNews = mockGetNews;
 export const getNewsItem = mockGetNewsItem;
+export const accessToTheBackoffice = mockAccessToTheBackoffice;
+
 
 // Adicionales usados en componentes públicos
 export { getAboutInfo as getAboutInfo } from "./mock";

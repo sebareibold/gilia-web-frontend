@@ -15,7 +15,8 @@ import {
   ProjectOutlined,
   SettingOutlined,
 } from "@ant-design/icons"
-import "../styles/admin-theme.css"
+import "./AdminLayout.css";
+import "../styles/AdminCommon.css";
 
 // Items del menu, con sus iconos y etiquetas correspondientes
 const MENU_ITEMS = [
@@ -132,6 +133,7 @@ const MobileAppBar = ({ user, isMenuOpen, onToggleMenu }) => (
   </div>
 )
 
+/* 
 const MobileMenuButton = ({ isOpen, onToggle }) => (
   <button className="mobile-hamburger-button" onClick={onToggle} aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}>
     <div className={`hamburger-lines ${isOpen ? "open" : ""}`}>
@@ -140,10 +142,11 @@ const MobileMenuButton = ({ isOpen, onToggle }) => (
       <span></span>
     </div>
   </button>
-)
+) */
 
 const UserHeader = ({ user, sidebarOpen, onToggleSidebar }) => (
   <div className="admin-user-header">
+    {/* Esto se muestra si esta expandida la sidebar */}
     <div className={`admin-user-info-inline ${sidebarOpen ? "expanded" : "collapsed"}`}>
       {sidebarOpen && (
         <div className="admin-user-details">
@@ -153,6 +156,7 @@ const UserHeader = ({ user, sidebarOpen, onToggleSidebar }) => (
       )}
     </div>
 
+    {/* Boton para poder expantir o contraer*/}
     <button
       className="admin-sidebar-toggle"
       onClick={onToggleSidebar}
@@ -231,11 +235,11 @@ const AdminLayout = () => {
 
   return (
     <div className="admin-layout-gradient admin-theme">
-      <div className="mobile-only">
-        <MobileAppBar user={user} isMenuOpen={mobileMenuOpen} onToggleMenu={toggleMobileMenu} />
-      </div>
+      {/*  <div className="mobile-only">
+          <MobileAppBar user={user} isMenuOpen={mobileMenuOpen} onToggleMenu={toggleMobileMenu} />
+        </div>
 
-      {mobileMenuOpen && <div className="mobile-simple-overlay" onClick={() => setMobileMenuOpen(false)} />}
+        {mobileMenuOpen && <div className="mobile-simple-overlay" onClick={() => setMobileMenuOpen(false)} />} */}
 
       <aside className={`admin-sidebar-transparent ${mobileMenuOpen ? 'mobile-open' : ''} ${!sidebarOpen ? 'collapsed' : ''}`}>
         <div className="admin-sidebar-content">

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { BranchesOutlined, ArrowRightOutlined, BankOutlined } from "@ant-design/icons"
-import { getExtensionLines } from "../../services"
+import { getExtensionLines } from "../../../services"
 
 const LineaExtensionList = () => {
   const [extensionLines, setExtensionLines] = useState([])

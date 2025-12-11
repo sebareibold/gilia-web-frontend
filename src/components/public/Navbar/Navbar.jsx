@@ -16,7 +16,7 @@ import {
 import { useTheme } from "../../../contexts/ThemeContext"
 import { Link, useLocation } from "react-router-dom"
 import "./Navbar.css"
-import { getResearchLines } from "../../services"
+import { getResearchLines } from "../../../services"
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -90,9 +90,9 @@ const Navbar = () => {
     },
     {
       label: "Extensión",
-      path: "/research-lines",
+      path: "/extentions-lines",
       icon: <BranchesOutlined />,
-      active: isActive("/research-lines"),
+      active: isActive("/extentions-lines"),
     },
     {
       label: "Equipo",
@@ -100,12 +100,12 @@ const Navbar = () => {
       icon: <TeamOutlined />,
       active: isActive("/about"),
     },
-    {
+    {/*
       label: "Galería",
       path: "/gallery",
       icon: <PictureOutlined />,
       active: isActive("/gallery"),
-    },
+    */},
   ]
 
   return (

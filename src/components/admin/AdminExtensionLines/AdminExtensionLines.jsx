@@ -11,7 +11,7 @@ import {
   EyeOutlined,
   SearchOutlined,
 } from "@ant-design/icons"
-import "../../../styles/admin-unified.css"
+import "./AdminExtensionLines.css"
 
 const AdminLineasExtension = () => {
   const [lineas, setLineas] = useState([])

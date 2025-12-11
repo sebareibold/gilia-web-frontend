@@ -56,7 +56,7 @@ function App() {
               <Route path="posts" element={<PostList />} />
               <Route path="projects" element={<Projects />} />
               <Route path="projects/:id" element={<ProjectDetail />} />
-              <Route path="research-lines" element={<ExtensionList />} />
+              <Route path="extentions-lines" element={<ExtensionList />} />
               <Route path="research-lines/:id" element={<ResearchLineDetails />} />
               <Route path="extension/:id" element={<ExtensionDetails />} />
             </Route>

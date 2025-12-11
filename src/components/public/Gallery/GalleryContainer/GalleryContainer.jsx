@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react"
 import { useTheme } from "../../../../contexts/ThemeContext"
 import { PictureOutlined, EyeOutlined, CameraOutlined, ExpandOutlined, CloseOutlined } from "@ant-design/icons"
-import { API_BASE_URL } from "../../../../config/apiConfig"
 import Loader from "../../common/Loader/Loader"
 import "../../../../styles/FuturisticStyles.css"
 import "../../Home/News/HomeExploration.css"
 import "./GalleryContainer.css"
-import { getGalleryItems } from "../../../services"
+import { getGalleryItems } from "../../../../services"
 
 const Galery = () => {
   const [gallerySections, setGallerySections] = useState([])

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTheme } from "../../../contexts/ThemeContext";
-import { getResearchLineById } from "../../services";
+import { getResearchLineById } from "../../../services";
 import { marked } from "marked";
 import SimpleCarousel from "./SimpleCarousel";
 import {

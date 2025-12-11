@@ -11,7 +11,7 @@ import {
   EyeOutlined,
   SearchOutlined,
 } from "@ant-design/icons"
-import "../../../styles/admin-unified.css"
+import "./AdminPublications.css"
 
 const AdminPublicaciones = () => {
   const [publicaciones, setPublicaciones] = useState([])

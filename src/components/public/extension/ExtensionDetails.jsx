@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { marked } from "marked"
-import { getExtensionLineById } from "../../services"
+import { getExtensionLineById } from "../../../services"
 import { FolderOutlined, BankOutlined, BranchesOutlined } from "@ant-design/icons"
 import SimpleCarousel from "../ResearchLineDetails/SimpleCarousel"
 

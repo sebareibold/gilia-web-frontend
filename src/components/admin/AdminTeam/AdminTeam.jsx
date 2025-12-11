@@ -12,7 +12,7 @@ import {
   SearchOutlined,
   TeamOutlined,
 } from "@ant-design/icons"
-import "../../../styles/admin-unified.css"
+import "./AdminTeam.css"
 
 const AdminEquipo = () => {
   const [teamMembers, setTeamMembers] = useState([])

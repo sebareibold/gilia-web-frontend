@@ -15,7 +15,7 @@ import {
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
 import "./HomeExploration.css"
-import { getNews } from "../../../services"
+import { getNews } from "../../../../services"
 
 // Array de iconos para rotar con más variedad
 const newsIcons = [
