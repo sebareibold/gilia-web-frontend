@@ -21,8 +21,10 @@
   --admin-header-height: 64px;
 
   --admin-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
-  --admin-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
-  --admin-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05);
+  --admin-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -1px rgb(0 0 0 / 0.06);
+  --admin-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -2px rgb(0 0 0 / 0.05);
 
   --admin-radius-sm: 0.375rem;
   --admin-radius-md: 0.5rem;
@@ -43,9 +45,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(102, 126, 234, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(118, 75, 162, 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(6, 182, 212, 0.04) 0%,
+      transparent 50%
+    );
   pointer-events: none;
 }
 
@@ -86,13 +100,17 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Sidebar Toggle */
+/* =======  Estilo del boton de la seccion de de la cuenta, boton para comprimir y expandir ======*/
 .admin-sidebar-toggle {
   position: relative;
   top: auto;
   right: auto;
   transform: none;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1),
+    rgba(118, 75, 162, 0.1)
+  );
   border: 1px solid rgba(102, 126, 234, 0.3);
   border-radius: 12px;
   width: 40px;
@@ -105,10 +123,16 @@
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
   flex-shrink: 0;
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .admin-sidebar-toggle:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.2),
+    rgba(118, 75, 162, 0.2)
+  );
   border-color: rgba(102, 126, 234, 0.4);
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
@@ -117,16 +141,24 @@
 .admin-sidebar-toggle svg {
   color: #667eea;
   font-size: 16px;
-  transition: all 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* User Info */
+.admin-sidebar-toggle.collapsed {
+  position: absolute; /* Para usar right/left */
+  width: 45px;
+  left: 20%;
+  min-height: 48px;
+}
+
+/* ========= Informacion de cuenta ==========  */
 .admin-user-header {
   display: flex;
-  align-items: center;
+  align-items: center; /* los items en los extremos */
   justify-content: space-between;
   padding: 1.5rem 1rem;
-  min-height: 80px;
+  min-height: 40px;
+  max-height: 80px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   margin-left: 5%;
 }
@@ -134,18 +166,7 @@
 .admin-user-info-inline {
   flex: 1;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.admin-user-info-inline.expanded {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.admin-user-info-inline.collapsed {
-  opacity: 0;
-  transform: translateX(-10px);
-  width: 0;
-  overflow: hidden;
+  min-height: 40px;
 }
 
 .admin-user-details {
@@ -166,6 +187,23 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+.admin-user-info-inline.expanded {
+  opacity: 1;
+  transform: translateX(0);
+  
+  /* Si la transición dura 0.4s, un retraso de 0.2s o 0.3s es bueno. */
+  transition-delay: 0.2s; 
+}
+
+/* El estado colapsado debe volver a no tener retraso o tener el valor '0s' */
+.admin-user-info-inline.collapsed {
+  opacity: 0;
+  transform: translateX(-10px);
+  width: 80px;
+  align-items: center;
+  /* El retraso no debe estar aquí, o debe ser 0s */
+  transition-delay: 0s; 
 }
 
 .admin-user-email {
@@ -190,28 +228,36 @@
   align-items: center;
 }
 
+/* ================= Items de navegacion ================= */
+
 .admin-nav-item {
+  /* Posicionamiento y disposicion interior */
   display: flex;
   align-items: center;
+  position: relative;
+
+  /* Relacinados al tamaño y sus alteraciones fisicas */
   gap: 0.875rem;
   padding: 0.875rem 1.5rem;
+  min-height: 48px;
+  border-radius: 14px;
+  margin: 0.4rem 0.5rem;
+
+  /* Magia de los colores */
   color: #64748b;
   text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 14px;
-  margin: 0.25rem 0.5rem;
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(59, 130, 246, 0.1);
   backdrop-filter: blur(10px);
-  position: relative;
   overflow: hidden;
-  min-height: 48px;
+
+  /* Movimientos */
 }
 
 .admin-sidebar-transparent.collapsed .admin-nav-item {
   padding: 1rem;
   justify-content: center;
-  margin: 0rem;
+  margin: 0.5rem 0.5rem;
   background: rgba(255, 255, 255, 0.8);
   border: 2px solid rgba(59, 130, 246, 0.15);
   backdrop-filter: blur(15px);
@@ -239,23 +285,6 @@
   align-items: center;
 }
 
-.admin-nav-item::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.05) 0%,
-    rgba(139, 92, 234, 0.03) 50%,
-    rgba(6, 182, 212, 0.05) 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 14px;
-}
 
 .admin-nav-item:hover {
   background: linear-gradient(
@@ -267,8 +296,10 @@
   );
   color: #3b82f6;
   border-color: rgba(59, 130, 246, 0.35);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(59, 130, 246, 0.15), 0 6px 20px rgba(139, 92, 234, 0.1), 0 0 30px rgba(59, 130, 246, 0.2);
+  box-shadow:
+    0 6px 15px rgba(59, 130, 246, 0.15),
+    0 3px 10px rgba(139, 92, 234, 0.1),
+    0 0 10px rgba(59, 130, 246, 0.2);
 }
 
 .admin-nav-item:hover::before {
@@ -282,8 +313,10 @@
     rgba(59, 130, 246, 0.2) 50%,
     rgba(255, 255, 255, 0.98) 100%
   );
-  transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(59, 130, 246, 0.25), 0 6px 10px rgba(139, 92, 234, 0.2), 0 0 20px rgba(59, 130, 246, 0.3);
+  box-shadow:
+    0 2px 5px rgba(59, 130, 246, 0.25),
+    0 6px 10px rgba(139, 92, 234, 0.2),
+    0 0 20px rgba(59, 130, 246, 0.3);
   color: #2563eb;
 }
 
@@ -296,7 +329,9 @@
   );
   color: #3b82f6;
   border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 6px 20px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .admin-nav-icon {
@@ -329,11 +364,17 @@
   transform: translateX(-10px);
 }
 
-/* Logout Section */
+/* ========= Seccion Cierre de Sesion (logout) =========*/
 .admin-logout-section {
   padding: 1rem;
   border-top: 2px solid;
-  border-image: linear-gradient(90deg, transparent 0%, rgba(239, 68, 68, 0.3) 50%, transparent 100%) 1;
+  border-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(239, 68, 68, 0.3) 50%,
+      transparent 100%
+    )
+    1;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -382,7 +423,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.1) 0%,
+    rgba(220, 38, 38, 0.05) 100%
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 14px;
@@ -397,8 +442,10 @@
   );
   color: #dc2626;
   border-color: rgba(239, 68, 68, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.2), 0 4px 12px rgba(220, 38, 38, 0.15);
+  /* transform: translateY(-2px); */
+  box-shadow:
+    0 8px 25px rgba(239, 68, 68, 0.2),
+    0 4px 12px rgba(220, 38, 38, 0.15);
 }
 
 .admin-logout-button:hover::before {
@@ -413,8 +460,9 @@
     rgba(255, 255, 255, 0.95) 100%
   );
   border-color: rgba(239, 68, 68, 0.5);
-  transform:  translateY(-2px);
-  box-shadow: 0 5px 10px rgba(239, 68, 68, 0.25), 0 5px 15px rgba(220, 38, 38, 0.2);
+  box-shadow:
+    0 5px 10px rgba(239, 68, 68, 0.25),
+    0 5px 15px rgba(220, 38, 38, 0.2);
 }
 
 /* Main Content */
@@ -444,9 +492,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(34, 197, 94, 0.02) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(59, 130, 246, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(147, 51, 234, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(34, 197, 94, 0.02) 0%,
+      transparent 50%
+    );
   pointer-events: none;
   z-index: 0;
 }
@@ -457,7 +517,6 @@
   z-index: 1;
   max-width: 1600px;
   margin: 0 auto;
-  padding: 1.5rem 2rem;
 }
 
 .admin-content-wrapper {

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { getResearchLines } from "../../services"
+import { getResearchLines } from "../../../services"
 import { notification, Modal } from "antd"
 import {
   ExperimentOutlined,
