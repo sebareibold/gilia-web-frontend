@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import {
   TeamOutlined,
   ProjectOutlined,
@@ -8,7 +8,7 @@ import {
   ExperimentOutlined,
   NotificationOutlined,
   ReadOutlined,
-  ProfileOutlined
+  ProfileOutlined,
 } from "@ant-design/icons";
 import "./AdminHome.css";
 
@@ -60,34 +60,38 @@ const AdminHome = () => {
 
   return (
     <div className="admin-home">
-      <div className="admin-home-decorations">
-        <div className="floating-element floating-element-1"></div>
-        <div className="floating-element floating-element-2"></div>
-        <div className="floating-element floating-element-3"></div>
-      </div>
-
+      {/* Seccion de Header (Bienvenida y contexto) */}
       <div className="admin-home-header">
         <div className="admin-welcome-text">
           <div className="admin-welcome-badge">
             <span>Panel de Control</span>
           </div>
           <h1 className="admin-welcome-title">Bienvenido, Administrador</h1>
-          <p className="admin-welcome-subtitle">Sistema de Gestión del Grupo de Investigación G.I.L.I.A</p>
+          <p className="admin-welcome-subtitle">
+            Sistema de Gestión del Grupo de Investigación G.I.L.I.A
+          </p>
         </div>
       </div>
 
+      {/* Seccion de accesos directos */}
       <div className="admin-quick-actions-section">
         <h2 className="admin-section-title">
           <span>Accesos Directos</span>
         </h2>
         <div className="admin-quick-actions-grid">
           {quickAccessCards.map((card, index) => (
-            <Link to={card.path} key={index} className={`admin-quick-action-card ${card.color}`}>
+            <Link
+              to={card.path}
+              key={index}
+              className={`admin-quick-action-card ${card.color}`}
+            >
               <div className="admin-quick-action-header">
                 <div className={`admin-quick-action-icon`}>{card.icon}</div>
               </div>
               <h3 className="admin-quick-action-title">{card.title}</h3>
-              <p className="admin-quick-action-description">{card.description}</p>
+              <p className="admin-quick-action-description">
+                {card.description}
+              </p>
             </Link>
           ))}
         </div>

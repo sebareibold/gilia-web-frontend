@@ -1,79 +1,21 @@
-/* Diseño futurista completo basado en tonos claros y la imagen de referencia */
+/* ======== Contendor Padre de la seccion Admin Home ======== */
 .admin-home {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   min-height: 100vh;
   position: relative;
-  /* Fondo futurista con gradientes suaves en tonos claros */
-  background: transparent;
   overflow: hidden;
-}
-
-/* Elementos decorativos flotantes inspirados en la imagen */
-.admin-home-decorations {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.floating-element {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.4;
-  animation: float 8s ease-in-out infinite;
-}
-
-.floating-element-1 {
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15));
-  top: 10%;
-  right: 10%;
-  animation-delay: 0s;
-}
-
-.floating-element-2 {
-  width: 150px;
-  height: 150px;
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.1));
-  bottom: 20%;
-  left: 15%;
-  animation-delay: 2s;
-}
-
-.floating-element-3 {
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.08));
-  top: 60%;
-  right: 20%;
-  animation-delay: 4s;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  33% {
-    transform: translateY(-20px) rotate(120deg);
-  }
-  66% {
-    transform: translateY(10px) rotate(240deg);
-  }
-}
+  display: flex;
+  flex-direction: column; /*  cambia el eje principal de fila (por defecto) a columna */
+  align-items: center; /* Centra los ítems en el eje secundario (que ahora es el horizontal/X) */
+} 
 
 .admin-home > * {
   position: relative;
   z-index: 1;
 }
 
-/* Header Section - Estilo futurista inspirado en la imagen */
+/* ========= Seccion del Header de Bienvenida ======= */
 .admin-home-header {
   margin-bottom: 3rem;
   text-align: center;
@@ -126,7 +68,7 @@
   filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.2));
 }
 
-/* Section Titles - Estilo futurista */
+/* ============ Seccion netas de Admin Home =========== */
 .admin-section-title {
   font-size: 1.8rem;
   font-weight: 700;
@@ -155,14 +97,15 @@
   margin-left: 1rem;
 }
 
-/* Quick Actions Section - Inspirado en las tarjetas de la imagen */
+/*  =========== Cards de Accesso Rapido =========*/
 .admin-quick-actions-section {
   margin-bottom: 4rem;
+  width: 80%;
 }
 
 .admin-quick-actions-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
 }
 
@@ -177,6 +120,7 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  text-decoration: none;
 }
 
 .admin-quick-action-card::before {
@@ -203,6 +147,7 @@
   pointer-events: none;
 }
 
+/* Se utilizan estilos de coloreo diferentes para cada uno de los cards */
 .admin-quick-action-card.blue {
   color: #3b82f6;
 }
@@ -264,7 +209,6 @@
 .admin-quick-action-description {
   color: #64748b;
   margin: 0 0 1.5rem 0;
-  line-height: 1.6;
   font-size: 0.9rem;
   font-weight: 500;
 }

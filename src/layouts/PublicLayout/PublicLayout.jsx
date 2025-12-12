@@ -2,7 +2,7 @@
 
 import { Outlet } from "react-router-dom"
 import { useState } from "react"
-import Navbar from "../components/public/Navbar/Navbar"
+import Navbar from "../../components/public/Navbar/Navbar"
 
 const PublicLayout = () => {
   const [activeSection, setActiveSection] = useState("home")

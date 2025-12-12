@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   HomeOutlined,
   LogoutOutlined,
@@ -16,7 +16,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import "./AdminLayout.css";
-import "../styles/AdminCommon.css";
+import "../../styles/AdminCommon.css";
 
 // Items del menu, con sus iconos y etiquetas correspondientes
 const MENU_ITEMS = [
@@ -261,7 +261,7 @@ const AdminLayout = () => {
         {mobileMenuOpen && <div className="mobile-simple-overlay" onClick={() => setMobileMenuOpen(false)} />} */}
 
       <aside
-        className={`admin-sidebar-transparent ${mobileMenuOpen ? "mobile-open" : ""} ${!sidebarOpen ? "collapsed" : ""}`}
+        className={`admin-sidebar-transparent ${mobileMenuOpen ? "mobile-open" : ""} ${!sidebarOpen ? "collapsed" : "stable"}`}
       >
         <div className="admin-sidebar-content">
           <UserHeader
