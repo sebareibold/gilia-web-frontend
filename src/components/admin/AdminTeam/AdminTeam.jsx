@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { dataService } from "../../../services/dataService"
+import { getTeamMembers } from "../../../services"
 import { notification, Modal } from "antd"
 import {
   MailOutlined,
@@ -30,10 +30,11 @@ const AdminEquipo = () => {
   const fetchMembers = async () => {
     setLoading(true);
     try {
-      const response = await dataService.getPersonas();
+      const response = await getTeamMembers();
       // Adaptación de datos: el backend devuelve `nombre` y `apellido`
-      const adaptedMembers = response.data.map(p => ({ ...p, name: `${p.nombre} ${p.apellido}` }));
+      const adaptedMembers = response.data;
       setTeamMembers(adaptedMembers);
+      console.log(adaptedMembers);
     } catch (error) {
       console.error("Error al obtener los miembros del equipo:", error);
       notification.error({
@@ -58,7 +59,7 @@ const AdminEquipo = () => {
   const handleSave = async (formData) => {
     const isUpdating = currentMember && currentMember.id;
     setIsSaving(true);
-    try {
+   /*  try {
       if (isUpdating) {
         await dataService.updatePersona(currentMember.id, formData);
       } else {
@@ -78,7 +79,7 @@ const AdminEquipo = () => {
       });
     } finally {
       setIsSaving(false);
-    }
+    } */
   };
 
   const handleDelete = (id) => {
@@ -88,7 +89,7 @@ const AdminEquipo = () => {
       okText: 'Eliminar',
       okType: 'danger',
       cancelText: 'Cancelar',
-      onOk: async () => {
+      /* onOk: async () => {
         try {
           await dataService.deletePersona(id);
           setTeamMembers((prev) => prev.filter((member) => member.id !== id));
@@ -103,18 +104,11 @@ const AdminEquipo = () => {
             description: 'No se pudo eliminar el miembro del equipo.',
           });
         }
-      },
+      }, */
     });
   };
 
-  const filteredMembers = teamMembers.filter((member) => {
-    const matchesSearch =
-      (member.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-      (member.email?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-      (member.lugar_trabajo?.toLowerCase() || '').includes(searchTerm.toLowerCase())
-        const matchesRole = filterRole === "all" || member.especialidad === filterRole // Asumiendo que 'especialidad' es el rol
-    return matchesSearch && matchesRole
-  })
+  const filteredMembers = teamMembers;
 
     // Extraer roles únicos de los miembros del equipo, usando 'especialidad'
   const roles = ["all", ...new Set(teamMembers.map(member => member.especialidad).filter(Boolean))];
@@ -188,12 +182,9 @@ const AdminEquipo = () => {
             <thead>
               <tr>
                 <th>Nombre</th>
-                <th>Rol</th>
-                <th>Departamento</th>
                 <th>Email</th>
                 <th>Teléfono</th>
-                <th>Proyectos</th>
-                <th>Publicaciones</th>
+
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -201,14 +192,9 @@ const AdminEquipo = () => {
               {filteredMembers.map((member) => (
                 <tr key={member.id}>
                   <td>
-                    <strong>{member.name}</strong>
-                    <br />
-                    <small style={{ color: "#64748b" }}>{member.education}</small>
+                    <strong>{member.name}</strong> {" "}
+                    <strong>{member.lastname}</strong>
                   </td>
-                  <td>
-                    <span className={`admin-unified-badge admin-unified-badge-active`}>{member.role}</span>
-                  </td>
-                  <td>{member.lugar_trabajo}</td>
                   <td>
                     <MailOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
                     {member.email}
@@ -217,8 +203,7 @@ const AdminEquipo = () => {
                     <PhoneOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
                     {member.phone}
                   </td>
-                  <td>{member.projects}</td>
-                  <td>{member.publications}</td>
+
                   <td>
                     <div className="admin-table-actions">
                       <button className="admin-table-btn admin-table-btn-edit" title="Editar" onClick={() => handleOpenModal(member)}>

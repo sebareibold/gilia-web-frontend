@@ -852,7 +852,7 @@ export async function getTeamMembers() {
 export async function getTeamMemberById(id) {
   await delay(500);
   const member = mockData.teamMembers.find((m) => m.id === parseInt(id));
-  return member ? mapTeamMember(member) : undefined;
+  return member;
 }
 
 // ===== PROYECTOS =====

@@ -55,7 +55,7 @@ const AdminPublicaciones = () => {
 
   const handleSave = async (formData) => {
     const isUpdating = currentPublicacion && currentPublicacion.id;
-    setIsSaving(true);/* 
+    setIsSaving(true); /* 
     try {
       if (isUpdating) {
         await dataService.updatePublicacion(currentPublicacion.id, formData);
@@ -87,7 +87,7 @@ const AdminPublicaciones = () => {
       okType: "danger",
       cancelText: "Cancelar",
       onOk: async () => {
-       /*  try {
+        /*  try {
           await dataService.deletePublicacion(id);
           setPublicaciones((prev) => prev.filter((pub) => pub.id !== id));
           notification.success({
@@ -174,17 +174,11 @@ const AdminPublicaciones = () => {
         </div>
       ) : (
         <div className="admin-card-table">
-          {filteredPublicaciones.map((linea) => (
-            <div key={linea.id} className="admin-item-card">
+          {filteredPublicaciones.map((post) => (
+            <div key={post.id} className="admin-item-card">
               {/* Informacion de la Linea */}
               <div className="admin-item-information">
-                <div className="admin-item-card-title"> {linea.title} </div>
-                <div
-                  className={`admin-unified-badge`}
-                >
-                  {" "}
-                  {linea.status}{" "}
-                </div>
+                <div className="admin-item-card-title "> {post.title} </div>
               </div>
 
               {/* Botones de accion*/}
@@ -192,21 +186,21 @@ const AdminPublicaciones = () => {
                 <button
                   className="admin-table-btn admin-table-btn-view"
                   title="Editar"
-                  onClick={() => handleOpenModal(linea)}
+                  onClick={() => handleOpenModal(post)}
                 >
                   <EyeOutlined /> Ver
                 </button>
                 <button
                   className="admin-table-btn admin-table-btn-edit"
                   title="Editar"
-                  onClick={() => handleOpenModal(linea)}
+                  onClick={() => handleOpenModal(post)}
                 >
                   <EditOutlined /> Modificar
                 </button>
                 <button
                   className="admin-table-btn admin-table-btn-delete"
                   title="Eliminar"
-                  onClick={() => handleDelete(linea.id)}
+                  onClick={() => handleDelete(post.id)}
                 >
                   <DeleteOutlined /> Eliminar
                 </button>
