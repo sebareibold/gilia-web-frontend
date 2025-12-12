@@ -114,23 +114,30 @@ const AdminProyectos = () => {
 
   const filteredProyectos = projects;
 
-
-  /*   const getEstadoBadgeClass = (estado) => {
+  // Funcion que permite asignarle un estilo segun el estado
+  const getEstadoBadgeClass = (estado) => {
+    let stateClass = "";
     switch (estado) {
       case "Completado":
-        return "admin-unified-badge-active";
+        stateClass = "admin-unified-badge-active";
+        break;
       case "En progreso":
-        return "admin-unified-badge-active";
+        stateClass = "admin-unified-badge-active";
+        break;
       case "Planificado":
-        return "admin-unified-badge-pending";
+        stateClass = "admin-unified-badge-pending";
+        break;
       case "Pausado":
-        return "admin-unified-badge-inactive";
+        stateClass = "admin-unified-badge-inactive";
+        break;
       case "Cancelado":
-        return "admin-unified-badge-inactive";
+        stateClass = "admin-unified-badge-inactive";
+        break;
       default:
-        return "admin-unified-badge-pending";
+        stateClass = "admin-unified-badge-pending";
     }
-  }; */
+    return stateClass;
+  };
 
   /* const formatCurrency = (amount) => {
     return new Intl.NumberFormat("es-ES", {
@@ -219,40 +226,55 @@ const AdminProyectos = () => {
           )}
         </div>
       ) : (
-        <div className="admin-card-table">
-          {filteredProyectos.map((proy) => (
-            <div key={proy.id} className="admin-item-card">
-              {/* Informacion de la Linea */}
-              <div className="admin-item-information">
-                <div className="admin-item-card-title "> {proy.name} </div>
-              </div>
-
-              {/* Botones de accion*/}
-              <div className="admin-card-btns">
-                <button
-                  className="admin-table-btn admin-table-btn-view"
-                  title="Editar"
-                  onClick={() => handleOpenModal(proy)}
-                >
-                  <EyeOutlined /> Ver
-                </button>
-                <button
-                  className="admin-table-btn admin-table-btn-edit"
-                  title="Editar"
-                  onClick={() => handleOpenModal(proy)}
-                >
-                  <EditOutlined /> Modificar
-                </button>
-                <button
-                  className="admin-table-btn admin-table-btn-delete"
-                  title="Eliminar"
-                  onClick={() => handleDelete(proy.id)}
-                >
-                  <DeleteOutlined /> Eliminar
-                </button>
-              </div>
-            </div>
-          ))}
+        <div className="admin-unified-table-container">
+          <table className="admin-unified-table">
+            <thead>
+              <tr>
+                <th>Nombre del Proyecto</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProyectos.map((proy) => (
+                <tr key={proy.id}>
+                  <td>
+                    <strong>{proy.name}</strong>{" "}
+                  </td>
+                  <td>
+                    <strong className={`admin-unified-badge  ${getEstadoBadgeClass(proy.status)}`}>
+                      {proy.status}
+                    </strong>{" "}
+                  </td>
+                  <td>
+                    <div className="admin-table-actions">
+                      <button
+                        className="admin-table-btn admin-table-btn-view"
+                        title="Editar"
+                        onClick={() => handleOpenModal(proy)}
+                      >
+                        <EyeOutlined /> Ver
+                      </button>{" "}
+                      <button
+                        className="admin-table-btn admin-table-btn-edit"
+                        title="Editar"
+                        onClick={() => handleOpenModal(proy)}
+                      >
+                        <EditOutlined /> Modificar
+                      </button>
+                      <button
+                        className="admin-table-btn admin-table-btn-delete"
+                        title="Eliminar"
+                        onClick={() => handleDelete(proy.id)}
+                      >
+                        <DeleteOutlined /> Eliminar
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 

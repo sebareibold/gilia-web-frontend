@@ -25,9 +25,7 @@ const Navbar = () => {
   const location = useLocation()
 
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
-  // Nombre del método de servicios utilizado desde services/index.js
-  const RESEARCH_LINES_SERVICE_METHOD = "getResearchLines"
-
+  
   useEffect(() => {
     const fetchLines = async () => {
       try {
