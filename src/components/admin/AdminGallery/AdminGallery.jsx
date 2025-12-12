@@ -11,9 +11,6 @@ import {
   SearchOutlined,
   UploadOutlined,
   DownloadOutlined,
-  CalendarOutlined,
-  FileImageOutlined,
-  UserOutlined,
 } from "@ant-design/icons"
 import "./AdminGallery.css"
 

@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { dataService } from "../../../services/dataService"
-import { notification, Modal } from "antd"
+import { useState, useEffect } from "react";
+import { getPublications } from "../../../services";
+import { notification, Modal } from "antd";
 import {
   BookOutlined,
   PlusOutlined,
@@ -10,17 +10,17 @@ import {
   DeleteOutlined,
   EyeOutlined,
   SearchOutlined,
-} from "@ant-design/icons"
-import "./AdminPublications.css"
+} from "@ant-design/icons";
+import "./AdminPublications.css";
 
 const AdminPublicaciones = () => {
-  const [publicaciones, setPublicaciones] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filterType, setFilterType] = useState("all")
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [currentPublicacion, setCurrentPublicacion] = useState(null)
-  const [isSaving, setIsSaving] = useState(false)
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPublicacion, setCurrentPublicacion] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     fetchPublicaciones();
@@ -29,13 +29,14 @@ const AdminPublicaciones = () => {
   const fetchPublicaciones = async () => {
     setLoading(true);
     try {
-      const response = await dataService.getPublicaciones();
-      setPublicaciones(response.data);
+      const response = await getPublications();
+      setPosts(response.data);
     } catch (error) {
       console.error("Error al obtener las publicaciones:", error);
       notification.error({
-        message: 'Error de Carga',
-        description: 'No se pudieron cargar las publicaciones. Por favor, intente de nuevo más tarde.',
+        message: "Error de Carga",
+        description:
+          "No se pudieron cargar las publicaciones. Por favor, intente de nuevo más tarde.",
       });
     } finally {
       setLoading(false);
@@ -54,7 +55,7 @@ const AdminPublicaciones = () => {
 
   const handleSave = async (formData) => {
     const isUpdating = currentPublicacion && currentPublicacion.id;
-    setIsSaving(true);
+    setIsSaving(true);/* 
     try {
       if (isUpdating) {
         await dataService.updatePublicacion(currentPublicacion.id, formData);
@@ -62,73 +63,49 @@ const AdminPublicaciones = () => {
         await dataService.createPublicacion(formData);
       }
       notification.success({
-        message: `Publicación ${isUpdating ? 'Actualizada' : 'Creada'}`,
-        description: `La publicación se ha ${isUpdating ? 'actualizado' : 'creado'} correctamente.`,
+        message: `Publicación ${isUpdating ? "Actualizada" : "Creada"}`,
+        description: `La publicación se ha ${isUpdating ? "actualizado" : "creado"} correctamente.`,
       });
       fetchPublicaciones();
       handleCloseModal();
     } catch (error) {
       console.error("Error al guardar la publicación:", error);
       notification.error({
-        message: 'Error al Guardar',
-        description: `No se pudo ${isUpdating ? 'actualizar' : 'crear'} la publicación.`,
+        message: "Error al Guardar",
+        description: `No se pudo ${isUpdating ? "actualizar" : "crear"} la publicación.`,
       });
     } finally {
       setIsSaving(false);
-    }
+    } */
   };
 
   const handleDelete = (id) => {
     Modal.confirm({
-      title: '¿Estás seguro de que deseas eliminar esta publicación?',
-      content: 'Esta acción no se puede deshacer.',
-      okText: 'Eliminar',
-      okType: 'danger',
-      cancelText: 'Cancelar',
+      title: "¿Estás seguro de que deseas eliminar esta publicación?",
+      content: "Esta acción no se puede deshacer.",
+      okText: "Eliminar",
+      okType: "danger",
+      cancelText: "Cancelar",
       onOk: async () => {
-        try {
+       /*  try {
           await dataService.deletePublicacion(id);
           setPublicaciones((prev) => prev.filter((pub) => pub.id !== id));
           notification.success({
-            message: 'Publicación Eliminada',
-            description: 'La publicación ha sido eliminada correctamente.',
+            message: "Publicación Eliminada",
+            description: "La publicación ha sido eliminada correctamente.",
           });
         } catch (error) {
           console.error("Error al eliminar la publicación:", error);
           notification.error({
-            message: 'Error al Eliminar',
-            description: 'No se pudo eliminar la publicación.',
+            message: "Error al Eliminar",
+            description: "No se pudo eliminar la publicación.",
           });
-        }
+        } */
       },
     });
   };
 
-  const filteredPublicaciones = publicaciones.filter((pub) => {
-    const matchesSearch =
-      (pub.titulo?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-      (pub.descripcion?.toLowerCase() || '').includes(searchTerm.toLowerCase());
-
-    // El filtro por tipo se elimina temporalmente hasta que el campo exista en el backend
-    const matchesFilter = true; // filterType === "all" || pub.tipo === filterType
-
-    return matchesSearch && matchesFilter
-  })
-
-  const getEstadoBadgeClass = (estado) => {
-    switch (estado) {
-      case "Publicado":
-        return "admin-unified-badge-active"
-      case "Aceptado":
-        return "admin-unified-badge-active"
-      case "En revisión":
-        return "admin-unified-badge-pending"
-      case "Rechazado":
-        return "admin-unified-badge-inactive"
-      default:
-        return "admin-unified-badge-pending"
-    }
-  }
+  const filteredPublicaciones = posts;
 
   if (loading) {
     return (
@@ -138,28 +115,28 @@ const AdminPublicaciones = () => {
           <p>Cargando publicaciones...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className={`admin-unified-page ${isModalOpen ? 'admin-page-blurred' : ''}`}>
-      <div className="admin-unified-decorations">
-        <div className="admin-floating-element admin-floating-element-1"></div>
-        <div className="admin-floating-element admin-floating-element-2"></div>
-        <div className="admin-floating-element admin-floating-element-3"></div>
-      </div>
-
+    <div
+      className={`admin-unified-page ${isModalOpen ? "admin-page-blurred" : ""}`}
+    >
       <div className="admin-unified-header">
         <h1 className="admin-unified-title">
           <BookOutlined />
           Publicaciones
         </h1>
         <p className="admin-unified-subtitle">
-          Gestiona las publicaciones científicas del grupo GILIA. Administra artículos, papers, capítulos de libros y
-          otras contribuciones académicas.
+          Gestiona las publicaciones científicas del grupo GILIA. Administra
+          artículos, papers, capítulos de libros y otras contribuciones
+          académicas.
         </p>
 
-        <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
+        <button
+          className="admin-unified-primary-btn"
+          onClick={() => handleOpenModal()}
+        >
           <PlusOutlined />
           Nueva Publicación
         </button>
@@ -196,36 +173,61 @@ const AdminPublicaciones = () => {
           )}
         </div>
       ) : (
-        <div className="admin-card-grid">
-          {filteredPublicaciones.map((pub) => (
-            <div key={pub.id} className="admin-item-card">
-              <div className="admin-item-card-body">
-                <h3 className="admin-item-card-title">{pub.titulo}</h3>
-                <p className="admin-item-card-description">
-                  {pub.descripcion?.substring(0, 150)}...
-                </p>
-              </div>
-              <div className="admin-item-card-footer">
-                <a href={pub.link} target="_blank" rel="noopener noreferrer" className="admin-table-btn">Ver Link</a>
-                <div className="admin-item-card-actions">
-                  <button className="admin-table-btn admin-table-btn-edit" title="Editar" onClick={() => handleOpenModal(pub)}>
-                    <EditOutlined />
-                  </button>
-                  <button className="admin-table-btn admin-table-btn-delete" title="Eliminar" onClick={() => handleDelete(pub.id)}>
-                    <DeleteOutlined />
-                  </button>
+        <div className="admin-card-table">
+          {filteredPublicaciones.map((linea) => (
+            <div key={linea.id} className="admin-item-card">
+              {/* Informacion de la Linea */}
+              <div className="admin-item-information">
+                <div className="admin-item-card-title"> {linea.title} </div>
+                <div
+                  className={`admin-unified-badge`}
+                >
+                  {" "}
+                  {linea.status}{" "}
                 </div>
+              </div>
+
+              {/* Botones de accion*/}
+              <div className="admin-card-btns">
+                <button
+                  className="admin-table-btn admin-table-btn-view"
+                  title="Editar"
+                  onClick={() => handleOpenModal(linea)}
+                >
+                  <EyeOutlined /> Ver
+                </button>
+                <button
+                  className="admin-table-btn admin-table-btn-edit"
+                  title="Editar"
+                  onClick={() => handleOpenModal(linea)}
+                >
+                  <EditOutlined /> Modificar
+                </button>
+                <button
+                  className="admin-table-btn admin-table-btn-delete"
+                  title="Eliminar"
+                  onClick={() => handleDelete(linea.id)}
+                >
+                  <DeleteOutlined /> Eliminar
+                </button>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {isModalOpen && <FormModal publicacion={currentPublicacion} onSave={handleSave} onClose={handleCloseModal} isSaving={isSaving} />}
+      {/* {isModalOpen && (
+        <FormModal
+          publicacion={currentPublicacion}
+          onSave={handleSave}
+          onClose={handleCloseModal}
+          isSaving={isSaving}
+        />
+      )} */}
     </div>
-  )
-}
-
+  );
+};
+/* 
 const FormModal = ({ publicacion, onSave, onClose, isSaving }) => {
   const [formData, setFormData] = useState(
     publicacion || {
@@ -254,28 +256,75 @@ const FormModal = ({ publicacion, onSave, onClose, isSaving }) => {
       footer={null}
       centered
     >
-      <form onSubmit={handleSubmit} className="admin-card-body" style={{ padding: '1rem 0' }}>
-        <div className="form-group" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+      <form
+        onSubmit={handleSubmit}
+        className="admin-card-body"
+        style={{ padding: "1rem 0" }}
+      >
+        <div
+          className="form-group"
+          style={{ flexDirection: "column", alignItems: "stretch" }}
+        >
           <label className="form-label">Título</label>
-          <input type="text" name="titulo" value={formData.titulo} onChange={handleChange} required className="form-input" />
+          <input
+            type="text"
+            name="titulo"
+            value={formData.titulo}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
         </div>
-        <div className="form-group" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+        <div
+          className="form-group"
+          style={{ flexDirection: "column", alignItems: "stretch" }}
+        >
           <label className="form-label">Descripción</label>
-          <textarea name="descripcion" value={formData.descripcion} onChange={handleChange} required className="form-input" rows={4}></textarea>
+          <textarea
+            name="descripcion"
+            value={formData.descripcion}
+            onChange={handleChange}
+            required
+            className="form-input"
+            rows={4}
+          ></textarea>
         </div>
-        <div className="form-group" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+        <div
+          className="form-group"
+          style={{ flexDirection: "column", alignItems: "stretch" }}
+        >
           <label className="form-label">Link a la Publicación</label>
-          <input type="url" name="link" value={formData.link} onChange={handleChange} className="form-input" />
+          <input
+            type="url"
+            name="link"
+            value={formData.link}
+            onChange={handleChange}
+            className="form-input"
+          />
         </div>
-        <div className="admin-card-footer" style={{ textAlign: 'right', paddingTop: '1.5rem' }}>
-          <button type="button" className="admin-table-btn" onClick={onClose} style={{ marginRight: '0.5rem' }}>Cancelar</button>
-          <button type="submit" className="admin-unified-primary-btn" disabled={isSaving}>
-            {isSaving ? 'Guardando...' : 'Guardar'}
+        <div
+          className="admin-card-footer"
+          style={{ textAlign: "right", paddingTop: "1.5rem" }}
+        >
+          <button
+            type="button"
+            className="admin-table-btn"
+            onClick={onClose}
+            style={{ marginRight: "0.5rem" }}
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            className="admin-unified-primary-btn"
+            disabled={isSaving}
+          >
+            {isSaving ? "Guardando..." : "Guardar"}
           </button>
         </div>
       </form>
     </Modal>
   );
-};
+}; */
 
-export default AdminPublicaciones
+export default AdminPublicaciones;

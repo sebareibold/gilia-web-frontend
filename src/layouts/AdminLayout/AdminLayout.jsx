@@ -26,37 +26,37 @@ const MENU_ITEMS = [
     label: "Inicio",
   },
   {
-    key: "lineas",
+    key: "lines",
     icon: <ExperimentOutlined />,
     label: "Líneas de Investigación",
   },
   {
-    key: "lineas-extension",
+    key: "extentions-lines",
     icon: <ProjectOutlined />,
     label: "Líneas de Extensión",
   },
   {
-    key: "publicaciones",
+    key: "posts",
     icon: <BookOutlined />,
     label: "Publicaciones",
   },
   {
-    key: "proyectos",
+    key: "projects",
     icon: <BranchesOutlined />,
     label: "Proyectos",
   },
   {
-    key: "equipo",
+    key: "team",
     icon: <UserOutlined />,
     label: "Equipo",
   },
   {
-    key: "galeria",
+    key: "gallery",
     icon: <AppstoreOutlined />,
     label: "Galería",
   },
   {
-    key: "configuracion",
+    key: "configuration",
     icon: <SettingOutlined />,
     label: "Configuración",
   },
@@ -200,6 +200,7 @@ const Navigation = ({ currentPath }) => {
   return (
     <nav className="admin-navigation">
       {MENU_ITEMS.map((item) => {
+
         const itemPath = item.key === "" ? "/admin" : `/admin/${item.key}`;
         const isItemActive = isActive(item.key);
 

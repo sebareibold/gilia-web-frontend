@@ -342,23 +342,6 @@
   cursor: pointer;
 }
 
-/* Botón principal */
-.admin-unified-primary-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(139, 92, 246, 0.8));
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-}
 
 .admin-unified-primary-btn:hover {
   transform: translateY(-2px);

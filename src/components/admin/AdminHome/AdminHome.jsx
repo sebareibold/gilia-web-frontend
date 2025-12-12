@@ -15,25 +15,11 @@ import "./AdminHome.css";
 const AdminHome = () => {
   const quickAccessCards = [
     {
-      title: "Usuarios",
-      description: "Gestionar cuentas y roles de usuario.",
-      icon: <TeamOutlined />,
-      path: "/admin/usuarios",
-      color: "blue",
-    },
-    {
       title: "Novedades",
       description: "Crear y administrar noticias y eventos.",
       icon: <NotificationOutlined />,
       path: "/admin/novedades",
       color: "orange",
-    },
-    {
-      title: "Publicaciones",
-      description: "Administrar artículos y publicaciones.",
-      icon: <FileTextOutlined />,
-      path: "/admin/publicaciones",
-      color: "green",
     },
     {
       title: "Líneas de Investigación",
@@ -50,12 +36,41 @@ const AdminHome = () => {
       color: "cyan",
     },
     {
-      title: "Contenido del Sitio",
+      title: "Publicaciones",
+      description: "Administrar artículos y publicaciones.",
+      icon: <FileTextOutlined />,
+      path: "/admin/publicaciones",
+      color: "green",
+    },
+    {
+      title: "Proyectos",
+      description: "Administrar artículos y publicaciones.",
+      icon: <FileTextOutlined />,
+      path: "/admin/publicaciones",
+      color: "green",
+    },
+    {
+      title: "Equipo",
+      description: "Gestionar cuentas y roles de usuario.",
+      icon: <TeamOutlined />,
+      path: "/admin/usuarios",
+      color: "blue",
+    },
+    {
+      title: "Galeria",
       description: "Editar secciones como 'Nosotros' u 'Objetivos'.",
       icon: <ReadOutlined />,
       path: "/admin/contenido",
       color: "red",
     },
+    {
+      title: "Contenido del Sitio",
+      description: "Editar secciones como 'Nosotros' u 'Objetivos'.",
+      icon: <ReadOutlined />,
+      path: "/admin/contenido",
+      color: "orange",
+    },
+    
   ];
 
   return (
