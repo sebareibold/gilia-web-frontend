@@ -12,7 +12,7 @@ import {
   StarOutlined,
 } from "@ant-design/icons"
 import { useTheme } from "../../../contexts/ThemeContext"
-import Loader from "../common/Loader/Loader"
+import Loader from "../../common/Loader/Loader"
 import "./AboutUs.css"
 import { getAboutInfo, getObjectives, getTeamMembers } from "../../../services"
 
@@ -33,10 +33,8 @@ export default function AboutUs() {
   const [error, setError] = useState(null)
   const { theme } = useTheme()
   const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
-  // Nombres de métodos utilizados desde services/index.js
-  const ABOUT_SERVICE_METHOD = "getAboutInfo"
-  const OBJECTIVES_SERVICE_METHOD = "getObjectives"
-  const TEAM_SERVICE_METHOD = "getTeamMembers"
+
+  // Nombres de métodos utilizados desde services/index.j
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,9 +85,9 @@ export default function AboutUs() {
 
   if (loading) {
     return (
-      <section className="about-us-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <section className="about-us-section h-screen" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="about-container">
-          <Loader />
+          
         </div>
       </section>
     )
@@ -97,7 +95,7 @@ export default function AboutUs() {
 
   if (error || !aboutData) {
     return (
-      <section className="about-us-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <section className="about-us-section min-h-screen" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="about-container">
           <div className="about-header">
             <h2 className="about-title">Error al cargar información</h2>
@@ -127,34 +125,16 @@ export default function AboutUs() {
               <div className="card-header-section">
                 <div className="member-avatar-container">
                   <div className="avatar-background">
-                    <img src={member.image || member.imagen || "/placeholder.svg"} alt={member.name || member.nombre} className="member-avatar" />
+                    <img src={member.profilePicture} alt={member.name} className="member-avatar" />
                   </div>
-                  {(member.active || member.activo) && <div className="member-status" />}
                 </div>
                 
                 <div className="member-basic-info">
-                  <h3 className="member-name">{member.name || member.nombre}</h3>
-                  <div className="member-role">{member.role || member.cargo}</div>
+                  <h3 className="member-name">{member.name}{" "}{member.lastname}</h3>
                 </div>
               </div>
 
-              {/* Contenido principal */}
-              <div className="card-content-section">
-                <div className="member-description-container">
-                  <p className="member-description">{member.description || member.descripcion}</p>
-                </div>
-
-                <div className="member-specialties-container">
-                  <h4 className="specialties-title">Especialidades</h4>
-                  <div className="member-specialties">
-                    {(member.specialties || member.especialidades || []).map((specialty, index) => (
-                      <span key={index} className="specialty-tag">
-                        {specialty}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+             
 
               {/* Footer con contactos */}
               <div className="card-footer-section">
@@ -163,9 +143,9 @@ export default function AboutUs() {
                     <MailOutlined />
                     <span>Email</span>
                   </a>
-                  {member.linkedin && (
+                  {member.linkedinLink && (
                     <a
-                      href={member.linkedin}
+                      href={member.linkedinLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="contact-btn primary-contact"

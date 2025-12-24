@@ -1,13 +1,6 @@
-"use client"
-
 // Context and hooks
 import { useTheme } from "../../context/ThemeContext"
 
-/**
- * Returns the appropriate Tailwind classes based on publication type
- * @param {string} tipo - The type of publication
- * @returns {string} Tailwind classes for the publication type badge
- */
 const getTypeClasses = (tipo) => {
   const typeMap = {
     "Artículo": "bg-pink-600",
@@ -20,12 +13,6 @@ const getTypeClasses = (tipo) => {
   return typeMap[tipo] || "bg-gray-500"
 }
 
-/**
- * PostItem Component - Displays a single publication item
- * 
- * @param {Object} props - Component props
- * @param {Object} props.publicacion - Publication data to display
- */
 const PostItem = ({ publicacion }) => {
   const { theme } = useTheme()
   const isDark = theme?.token?.backgroundColor === "#0a0a0a"

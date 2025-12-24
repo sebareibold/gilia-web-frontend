@@ -50,11 +50,11 @@ const MENU_ITEMS = [
     icon: <UserOutlined />,
     label: "Equipo",
   },
-  {
+  /* {
     key: "gallery",
     icon: <AppstoreOutlined />,
     label: "Galería",
-  },
+  }, */
   {
     key: "configuration",
     icon: <SettingOutlined />,

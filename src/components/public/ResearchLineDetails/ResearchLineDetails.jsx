@@ -39,7 +39,7 @@ const ResearchLineDetails = () => {
   if (!researchLine) {
     return (
       <section
-        className="exploration-section"
+        className="exploration-section h-screen"
         data-theme={isDarkTheme ? "dark" : "light"}
       >
         <div className="exploration-container">
@@ -71,10 +71,6 @@ const ResearchLineDetails = () => {
     if (end && today > end) return "Finalizó";
     return "En curso";
   };
-
-  const descripcionHTML = marked(
-    researchLine.description || researchLine.descripcion || ""
-  );
 
   // Render para cada proyecto
   const renderProyecto = (proyecto) => (
@@ -204,7 +200,7 @@ const ResearchLineDetails = () => {
 
   return (
     <section
-      className="exploration-section"
+      className="exploration-section min-h-screen"
       data-theme={isDarkTheme ? "dark" : "light"}
     >
       <div className="exploration-container max-w-[1400px] mx-auto">

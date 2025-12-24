@@ -34,7 +34,7 @@ const LineaExtensionList = () => {
 
   if (loading) {
     return (
-      <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <section className="exploration-section h-screen" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="exploration-container">
           <div className="carousel-loading">
             <div className="loading-spinner" />
@@ -46,7 +46,7 @@ const LineaExtensionList = () => {
   }
 
   return (
-    <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+    <section className="exploration-section min-h-screen" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="exploration-container">
         {/* Header */}
         <div className="section-header">

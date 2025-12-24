@@ -8,6 +8,7 @@ const mockData = {
       name: "Laura",
       lastname: "Cecchi",
       email: "laura.cecchi@gilia.com",
+      title: "",
       phone: "+54 9 2944 123456",
       isAuthor: true,
       profilePicture: "/perfil_person.png",

@@ -23,7 +23,7 @@ export default function PublicationFilters({ filtro, onChange, onClear }) {
             className="publication-filter-input"
           />
         </div>
-        {/*<div className="publication-filter-item">
+        <div className="publication-filter-item">
           <label>
             <TagOutlined /> Tipo
           </label>
@@ -42,7 +42,7 @@ export default function PublicationFilters({ filtro, onChange, onClear }) {
             <option value="Tesis">Tesis</option>
           </select>
         </div>
-        */}
+       
       </div>
       <div className="publication-filter-group">
         <div className="publication-filter-item">

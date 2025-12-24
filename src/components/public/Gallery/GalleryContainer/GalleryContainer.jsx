@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useTheme } from "../../../../contexts/ThemeContext"
 import { PictureOutlined, EyeOutlined, CameraOutlined, ExpandOutlined, CloseOutlined } from "@ant-design/icons"
-import Loader from "../../common/Loader/Loader"
+import Loader from "../../../common/Loader/Loader"
 import "../../../../styles/FuturisticStyles.css"
 import "../../Home/News/HomeExploration.css"
 import "./GalleryContainer.css"

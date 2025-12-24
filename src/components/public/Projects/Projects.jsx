@@ -1,11 +1,9 @@
-"use client"
-
 import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { ProjectOutlined, CalendarOutlined, TeamOutlined, TagOutlined } from "@ant-design/icons"
 import { marked } from "marked"
-import Loader from "../common/Loader/Loader"
+import Loader from "../../common/Loader/Loader"
 import "../../../styles/FuturisticStyles.css"
 import { getProjectById } from "../../../services"
 

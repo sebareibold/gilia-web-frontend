@@ -8,7 +8,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
-import ProtectedRoute from "./components/common/ProtectedRoute";
+import ProtectedRoute from "./components/common/ProtectedRouter/ProtectedRoute";
 import { useEffect, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 

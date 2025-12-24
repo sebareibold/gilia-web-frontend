@@ -1,28 +1,27 @@
-import { Link } from 'react-router-dom';
-import { FacebookOutlined, LinkedinOutlined
- } from '@ant-design/icons';
-import './Footer.css';
+import { Link } from "react-router-dom";
+import { FacebookOutlined, LinkedinOutlined } from "@ant-design/icons";
+import "./Footer.css";
 
 const Footer = () => {
   /* Secciones de acceso rapido */
   const sections = {
-    'GILIA': [
-      { name: 'Inicio', path: '/' },
-      { name: 'Investigación', path: '/investigacion' },
-      { name: 'Publicaciones', path: '/publicaciones' },
-      { name: 'Extensión', path: '/extension' },
+    GILIA: [
+      { name: "Inicio", path: "/" },
+      { name: "Investigación", path: "/investigacion" },
+      { name: "Publicaciones", path: "/publicaciones" },
+      { name: "Extensión", path: "/extension" },
     ],
-    'Recursos': [
-      { name: 'Sobre Nosotros', path: '/about' },
-      { name: 'Contacto', path: '/contact' },
-      { name: 'FAQs', path: '/faqs' },
+    Recursos: [
+      { name: "Equipo", path: "/about" },
+      { name: "Contacto", path: "/contact" },
+      {name: "Galeria", path: "/galery"},
     ],
   };
 
   /* Redes sociales */
   const socialLinks = [
-    { icon: <FacebookOutlined />, url: 'https://facebook.com' },
-    { icon: <LinkedinOutlined />, url: 'https://linkedin.com' },
+    { icon: <FacebookOutlined />, url: "https://facebook.com" },
+    { icon: <LinkedinOutlined />, url: "https://linkedin.com" },
   ];
 
   return (
@@ -31,8 +30,10 @@ const Footer = () => {
         {/* Contenido del footer */}
         <div className="footer-main">
           <div className="footer-about">
-            <h3 className="footer-title-gilia">G.I.L.I.A</h3>
-            <p className="footer-description">
+            <h1 className="hero-titile">
+              <span className="hero-title-highlight footer-title-gilia">G.I.L.I.A</span>
+            </h1>
+            <p className="footer-description hero-title-highlight">
               Grupo de Investigación en Lenguajes e Inteligencia Artificial.
               Universidad Nacional del Comahue
             </p>
@@ -55,15 +56,21 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="footer-separator" />
-        
+        {/* Pie de pagina */}
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {new Date().getFullYear()} G.I.L.I.A. Todos los derechos reservados.
+            © {new Date().getFullYear()} G.I.L.I.A. Todos los derechos
+            reservados.
           </p>
           <div className="footer-socials">
             {socialLinks.map((social, index) => (
-              <a href={social.url} key={index} className="social-link" target="_blank" rel="noopener noreferrer">
+              <a
+                href={social.url}
+                key={index}
+                className="social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {social.icon}
               </a>
             ))}
