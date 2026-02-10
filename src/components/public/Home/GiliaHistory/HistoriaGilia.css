@@ -403,16 +403,38 @@
   .timeline-dot {
     left: 20px;
   }
-  .timeline-label {
+  
+  /* Fix labels positioning using specific selectors to override global styles */
+  .timeline-item.left .timeline-label,
+  .timeline-item.right .timeline-label {
     left: 50px;
+    right: auto;
     transform: translateX(0);
+    text-align: left;
   }
-  .timeline-content {
+
+  /* Fix content margins and correct specificities */
+  .timeline-item.left .timeline-content,
+  .timeline-item.right .timeline-content {
     width: auto;
     padding: 1rem;
     margin-left: 50px;
     margin-right: 0;
     min-width: 0;
+    text-align: left;
+  }
+
+  /* Force all triangles to point left (towards the line) */
+  .timeline-item.left .timeline-content::before,
+  .timeline-item.right .timeline-content::before {
+    left: -18px;
+    right: auto;
+    border-left: none;
+    border-right: 18px solid #3e6fd8;
+    
+    /* Ensure shape */
+    border-top: calc(var(--triangle-height) / 2) solid transparent;
+    border-bottom: calc(var(--triangle-height) / 2) solid transparent;
   }
 }
 
@@ -585,4 +607,104 @@
   border-bottom: calc(var(--triangle-height) / 2) solid transparent;
   border-right: 18px solid #3e6fd8;
   filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.1));
+}
+
+/* Responsive adjustment for triangles - Must be at the end to override global styles */
+/* Responsive adjustment for triangles - Must be at the end to override global styles */
+@media (max-width: 600px) {
+  .historia-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* 1. Fix Timeline Line Alignment */
+  .historia-timeline::before {
+    left: 24px; /* Fixed distance from left edge */
+    transform: translateX(-50%);
+  }
+
+  /* 2. Reset Item Layout to left-aligned */
+  .timeline-item, 
+  .timeline-item.left, 
+  .timeline-item.right {
+    flex-direction: column; /* Stack label on top or simplify layout */
+    margin-bottom: 2rem;
+    min-height: auto;
+    padding-left: 60px; /* Space for dot and line */
+    align-items: flex-start;
+  }
+
+  /* 3. Fix Dot Position */
+  .timeline-dot {
+    left: 24px;
+    top: 50px; /* Consistent top alignment relative to content */
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18); /* Smaller shadow for mobile */
+  }
+
+  /* 4. Fix Label Position - HIDDEN ON MOBILE */
+  .timeline-label,
+  .timeline-item.left .timeline-label,
+  .timeline-item.right .timeline-label {
+    display: none;
+  }
+
+  /* 5. Fix Content Box */
+  .timeline-content,
+  .timeline-item.left .timeline-content,
+  .timeline-item.right .timeline-content {
+    background: linear-gradient(135deg, #3e6fd8 0%, #5bc7da 100%); /* Dark Blue to Cyan */
+    width: 100%;
+    margin: 0; /* Margins handled by container padding */
+    padding: 1.5rem;
+    text-align: left;
+    min-width: 0;
+  }
+
+  /* 6. Triangle Alignment */
+  .timeline-item.left .timeline-content::before,
+  .timeline-item.right .timeline-content::before {
+    left: -18px;
+    right: auto;
+    top: 38px; /* Match dot top (50px) minus half triangle */
+    border-left: none;
+    border-right: 18px solid #3e6fd8; /* Ensure color match */
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+  }
+
+  /* 7. Typography & Hierarchy Fixes */
+  .timeline-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.85); /* Better contrast */
+  }
+
+  /* 8. Subcards Integration (Achievements) */
+  .timeline-achievements {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .achievements-title {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  .achievement-item {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.05); /* Lighter background */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: none; /* remove button-like shadow */
+  }
 } 

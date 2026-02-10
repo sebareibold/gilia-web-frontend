@@ -8,6 +8,8 @@ import { getExtensionLineById } from "../../../services"
 import { FolderOutlined, BankOutlined, BranchesOutlined } from "@ant-design/icons"
 import SimpleCarousel from "../ResearchLineDetails/SimpleCarousel"
 
+import "./ExtensionDetails.css"
+
 const LineaExtensionDetail = () => {
   const { id } = useParams()
   const [extensionLine, setExtensionLine] = useState(null)
@@ -74,23 +76,26 @@ const LineaExtensionDetail = () => {
   return (
     <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="exploration-container" style={{ maxWidth: 1400, margin: "0 auto" }}>
-        {/* Header */}
-        <div className="section-header">
-          <div className="section-badge">
-            <BranchesOutlined />
-            <span>Línea de Extensión</span>
+        {/* Full Screen Hero Section */}
+        <div className="extension-hero">
+          {/* Header */}
+          <div className="section-header">
+            <div className="section-badge">
+              <BranchesOutlined />
+              <span>Línea de Extensión</span>
+            </div>
+            <h2 className="section-title">{extensionLine.title || extensionLine.titulo}</h2>
+            <p className="section-description">
+              Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la comunidad.
+            </p>
           </div>
-          <h2 className="section-title">{extensionLine.title || extensionLine.titulo}</h2>
-          <p className="section-description">
-            Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la comunidad.
-          </p>
-        </div>
-        {/* Descripción */}
-        <div className="carousel-container" style={{ marginBottom: "2rem" }}>
-          <div
-            style={{ fontSize: "1rem", lineHeight: "1.6", color: "var(--color-text-secondary)" }}
-            dangerouslySetInnerHTML={{ __html: descriptionHTML }}
-          />
+          {/* Descripción */}
+          <div className="carousel-container extension-description-content" style={{ marginBottom: "2rem" }}>
+            <div
+              style={{ fontSize: "1.1rem", lineHeight: "1.8", color: "var(--color-text-secondary)" }}
+              dangerouslySetInnerHTML={{ __html: descriptionHTML }}
+            />
+          </div>
         </div>
         {/* Instituciones */}
         {extensionLine.institutions || extensionLine.instituciones ? (

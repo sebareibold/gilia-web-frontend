@@ -56,9 +56,7 @@ const Navbar = () => {
     setMobileMenuOpen(false)
   }
 
-  const handleBackofficeAccess = () => {
-    window.location.href = "/admin/login"
-  }
+
 
   const isActive = (path) => {
     return location.pathname === path
@@ -155,9 +153,7 @@ const Navbar = () => {
 
           {/* Acciones - Desktop */}
           <div className="navbar-actions">
-            <button onClick={handleBackofficeAccess} className="navbar-action-btn" title="Panel de administración">
-              <SettingOutlined />
-            </button>
+
             <button onClick={toggleTheme} className="navbar-action-btn" title="Cambiar tema">
               {isDarkTheme ? <BulbOutlined /> : <MoonOutlined />}
             </button>
@@ -221,10 +217,7 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-mobile-actions">
-          <button onClick={handleBackofficeAccess} className="btn btn-secondary btn-sm">
-            <SettingOutlined />
-            Admin
-          </button>
+
           <button onClick={toggleTheme} className="btn btn-secondary btn-sm">
             {isDarkTheme ? <BulbOutlined /> : <MoonOutlined />}
             Tema

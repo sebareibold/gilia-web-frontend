@@ -10,6 +10,7 @@ import {
   EyeOutlined,
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
+import { motion } from "framer-motion";
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({
@@ -50,8 +51,15 @@ const AdminLogin = () => {
     if (error) setError("");
   };
 
+
   return (
-    <div className="admin-login-page">
+    <motion.div 
+      className="admin-login-page"
+      initial={{ opacity: 0, scale: 0.9, y: 50 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: -20 }}
+      transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
+    >
       <div className="admin-login-card">
 
         {/* Seccion  de Logo y descripcion */}
@@ -127,7 +135,7 @@ const AdminLogin = () => {
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

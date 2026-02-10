@@ -131,6 +131,7 @@ export default function AboutUs() {
                 
                 <div className="member-basic-info">
                   <h3 className="member-name">{member.name}{" "}{member.lastname}</h3>
+                  <p className="member-role">{member.category || member.categoria || "Investigador"}</p>
                 </div>
               </div>
 

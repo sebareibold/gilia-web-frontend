@@ -1,0 +1,28 @@
+.extension-hero {
+  min-height: 90vh; /* Almost full screen, leave a bit for scroll hint/footer peek if needed */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 0;
+  width: 100%;
+}
+
+.extension-hero .section-header {
+  margin-bottom: 2rem;
+  max-width: 800px;
+}
+
+.extension-hero .section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem); /* Larger title for hero */
+  margin-bottom: 1.5rem;
+}
+
+.extension-description-content {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+}

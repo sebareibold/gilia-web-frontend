@@ -16,6 +16,9 @@ const Footer = () => {
       { name: "Contacto", path: "/contact" },
       {name: "Galeria", path: "/galery"},
     ],
+    Acceso: [
+      { name: "Panel Admin", path: "/admin/login" }
+    ]
   };
 
   /* Redes sociales */
