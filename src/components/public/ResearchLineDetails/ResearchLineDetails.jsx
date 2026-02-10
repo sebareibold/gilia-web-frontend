@@ -88,9 +88,10 @@ const ResearchLineDetails = () => {
       {/* Seccionde Informacion, nombre, descripcion, fecha inicio, fecha fin, estado */}
       <div className="news-content flex-1 flex flex-col justify-between">
         <h3 className="news-title text-lg font-bold mb-2">{proyecto.name}</h3>
-        <p className="news-description text-[0.98rem] text-[#bdbdbd] mb-0">
-          {proyecto.description}
-        </p>
+        <div 
+          className="news-description text-[0.98rem] text-[#bdbdbd] mb-0 markdown-content"
+          dangerouslySetInnerHTML={{ __html: marked.parse(proyecto.description || "") }}
+        />
         <div className="mt-3 text-[0.9rem] text-[#bdbdbd] leading-[1.3]">
           {/* Rango de fechas */}
           <div>
@@ -135,7 +136,7 @@ const ResearchLineDetails = () => {
         )}
         <div className="news-description text-[0.98rem] text-[#bdbdbd] mb-0">
           <div
-            dangerouslySetInnerHTML={{ __html: pub.summary || pub.resumen }}
+            dangerouslySetInnerHTML={{ __html: marked.parse(pub.summary || pub.resumen || "") }}
           />
         </div>
         <div className="news-actions mt-4.5 flex gap-3 items-center">
@@ -209,9 +210,10 @@ const ResearchLineDetails = () => {
           <h2 className="section-title animate-fade-inUp-0-8 ">{researchLine.title}</h2>
         </div>
         {/* Descripción */}
-        <div className="carousel-container mb-8 animate-fade-inUp-1  ">
-          {researchLine.description}
-        </div>
+        <div 
+          className="carousel-container mb-8 animate-fade-inUp-1 markdown-content"
+          dangerouslySetInnerHTML={{ __html: marked.parse(researchLine.description || "") }}
+        />
 
         {/* Proyectos */}
         <div className="multi-card-carousel">

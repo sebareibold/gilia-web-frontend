@@ -404,13 +404,14 @@
     left: 20px;
   }
   .timeline-label {
-    left: 20px;
+    left: 50px;
     transform: translateX(0);
   }
   .timeline-content {
-    width: 100%;
+    width: auto;
     padding: 1rem;
-    margin-left: 40px;
+    margin-left: 50px;
+    margin-right: 0;
     min-width: 0;
   }
 }

@@ -40,7 +40,8 @@
 
 .home-container {
   width: 100%;
-  max-width: 100vw;
+  /* max-width: 100vw; ->Changed to Avoid Overflow */
+  max-width: 100%;
   margin: 0;
   padding: 0 var(--space-4);
   position: relative;
@@ -54,7 +55,7 @@
 /* Contenido principal centrado responsive */
 .hero-content-centered {
   text-align: center;
-  z-index: 10;
+  z-index: 20;
   position: relative;
   max-width: clamp(300px, 90vw, 900px);
   margin: 0 auto;
@@ -276,7 +277,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   pointer-events: none;
   z-index: 5;
@@ -394,19 +395,20 @@
 
 .floating-card:hover {
   transform: translateY(-6px) scale(1.05);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: #2F6BFF;
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.15),
-    0 8px 16px rgba(0, 0, 0, 0.1),
+    0 20px 40px rgba(47, 107, 255, 0.25),
+    0 8px 16px rgba(34, 193, 214, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.25);
 }
 
 [data-theme="dark"] .floating-card:hover {
   background: rgba(30, 41, 59, 0.4);
+  border-color: #2F6BFF;
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 8px 16px rgba(0, 0, 0, 0.2),
+    0 20px 40px rgba(47, 107, 255, 0.25),
+    0 8px 16px rgba(34, 193, 214, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -617,12 +619,13 @@
   }
 
   .floating-element-1 {
-    top: 8%;
+    top: 12%;
     left: 4%;
   }
 
   .floating-element-2 {
-    top: 8%;
+    top: auto;
+    bottom: 15%;
     right: 4%;
   }
 
@@ -656,8 +659,12 @@
 
 /* Tablets (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
+  .floating-element-3,
+  .floating-element-4,
   .floating-element-5,
-  .floating-element-6 {
+  .floating-element-6,
+  .floating-element-7,
+  .floating-element-8 {
     display: none;
   }
 
@@ -668,10 +675,18 @@
   }
 }
 
-/* Laptops (1024px - 1279px) */
-@media (min-width: 1024px) and (max-width: 1279px) {
+/* Laptops (1024px - 1440px) - Hide middle/bottom cards that overlap */
+@media (min-width: 1024px) and (max-width: 1440px) {
   .hero-content-centered {
     max-width: 800px;
+  }
+
+  /* Hide elements that might overlap central text */
+  .floating-element-3,
+  .floating-element-4,
+  .floating-element-7,
+  .floating-element-8 {
+    display: none;
   }
 
   .floating-card {

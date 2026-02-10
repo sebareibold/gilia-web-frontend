@@ -30,10 +30,8 @@ const Footer = () => {
         {/* Contenido del footer */}
         <div className="footer-main">
           <div className="footer-about">
-            <h1 className="hero-titile">
-              <span className="hero-title-highlight footer-title-gilia">G.I.L.I.A</span>
-            </h1>
-            <p className="footer-description hero-title-highlight">
+            <h1 className="footer-title-gilia">G.I.L.I.A</h1>
+            <p className="footer-description">
               Grupo de Investigación en Lenguajes e Inteligencia Artificial.
               Universidad Nacional del Comahue
             </p>
@@ -56,6 +54,7 @@ const Footer = () => {
           </div>
         </div>
 
+        <hr className="footer-separator" />
         {/* Pie de pagina */}
         <div className="footer-bottom">
           <p className="footer-copyright">

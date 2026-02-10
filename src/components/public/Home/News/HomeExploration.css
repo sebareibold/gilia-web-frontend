@@ -105,7 +105,7 @@
 
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
   padding: 1rem 0;
   animation: slideInFromRight 0.8s ease-out 1.6s both;
