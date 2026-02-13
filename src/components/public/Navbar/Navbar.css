@@ -258,7 +258,7 @@
 }
 
 [data-theme="dark"] .navbar-dropdown-content {
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(25, 30, 48, 0.948);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
@@ -306,7 +306,7 @@
 .navbar-dropdown-item:hover {
   color: #000;
   background: rgba(255, 255, 255, 0.1);
-  transform: translateX(8px);
+  transform: translateX(4px);
 }
 
 [data-theme="dark"] .navbar-dropdown-item:hover {
@@ -623,4 +623,11 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+
+[data-theme="dark"] .navbar-logo span {
+  background: linear-gradient(90deg, #38bdf8 0%, #7dd3fc 60%, #bae6fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

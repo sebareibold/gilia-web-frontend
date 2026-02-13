@@ -1,5 +1,5 @@
 // Context and hooks
-import { useTheme } from "../../context/ThemeContext"
+import { useTheme } from "../../../contexts/ThemeContext"
 
 const getTypeClasses = (tipo) => {
   const typeMap = {
@@ -14,8 +14,8 @@ const getTypeClasses = (tipo) => {
 }
 
 const PostItem = ({ publicacion }) => {
-  const { theme } = useTheme()
-  const isDark = theme?.token?.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
+  const isDark = isDarkTheme
 
   return (
     <div className={`rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg ${
@@ -28,7 +28,7 @@ const PostItem = ({ publicacion }) => {
             <h3 className={`text-xl font-bold mb-2 ${
               isDark ? 'text-white' : 'text-gray-800'
             }`}>
-              {publicacion.title}s
+              {publicacion.title}
             </h3>
             <p className={`text-sm ${
               isDark ? 'text-gray-300' : 'text-gray-600'
@@ -56,7 +56,7 @@ const PostItem = ({ publicacion }) => {
           {/* Publication Link */}
           {publicacion.enlace && (
             <div className="flex flex-wrap items-center text-sm">
-              <span className="font-semibold mr-2">Enlace:</span>
+              <span className={`font-semibold mr-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Enlace:</span>
               <a 
                 href={publicacion.enlace} 
                 target="_blank" 
@@ -71,7 +71,7 @@ const PostItem = ({ publicacion }) => {
           {/* Editor */}
           {publicacion.editor && (
             <div className="text-sm">
-              <span className="font-semibold">Editor:</span>{" "}
+              <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Editor:</span>{" "}
               <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{publicacion.editor}</span>
             </div>
           )}
@@ -79,7 +79,7 @@ const PostItem = ({ publicacion }) => {
           {/* Book Page */}
           {publicacion.pagina_libro && (
             <div className="text-sm">
-              <span className="font-semibold">Página del Libro:</span>{" "}
+              <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Página del Libro:</span>{" "}
               <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{publicacion.pagina_libro}</span>
             </div>
           )}
@@ -87,7 +87,7 @@ const PostItem = ({ publicacion }) => {
           {/* Summary */}
           {publicacion.resumen && (
             <div className="text-sm">
-              <p className="font-semibold mb-1">Resumen:</p>
+              <p className={`font-semibold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>Resumen:</p>
               <p className={isDark ? 'text-gray-300' : 'text-gray-700'}>{publicacion.resumen}</p>
             </div>
           )}
@@ -95,7 +95,7 @@ const PostItem = ({ publicacion }) => {
           {/* Research Line */}
           {publicacion.linea_investigacions && (
             <div className="text-sm">
-              <span className="font-semibold">Línea de Investigación:</span>{" "}
+              <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Línea de Investigación:</span>{" "}
               <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{publicacion.linea_investigacions}</span>
             </div>
           )}
@@ -103,7 +103,7 @@ const PostItem = ({ publicacion }) => {
           {/* Extension Line */}
           {publicacion.linea_extensions && (
             <div className="text-sm">
-              <span className="font-semibold">Línea de Extensión:</span>{" "}
+              <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Línea de Extensión:</span>{" "}
               <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{publicacion.linea_extensions}</span>
             </div>
           )}

@@ -9,8 +9,7 @@ import { getExtensionLines } from "../../../services"
 const LineaExtensionList = () => {
   const [extensionLines, setExtensionLines] = useState([])
   const [loading, setLoading] = useState(true)
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
   const [visibleCount, setVisibleCount] = useState(6)
   // Nombre del método de servicios utilizado desde services/index.js
   const EXTENSION_LINES_SERVICE_METHOD = "getExtensionLines"

@@ -11,8 +11,8 @@ import "./ProjectDetail.css";
 const ProyectoDetail = () => {
   const { id } = useParams();
   const [researchLine, setResearchLine] = useState(null);
-  const { theme } = useTheme();
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a";
+  const { theme, isDarkTheme } = useTheme();
+;
   // Nombre del método de servicios utilizado desde services/index.js
   const RESEARCH_LINE_SERVICE_METHOD = "getResearchLineById";
 
@@ -57,7 +57,7 @@ const ProyectoDetail = () => {
     "Sin línea";
 
   return (
-    <div className="project-detail-bg">
+    <div className="project-detail-bg" data-theme={isDarkTheme ? "dark" : "light"}>
       <div style={{ maxWidth: "950px", margin: "0 auto", padding: "2rem 0" }}>
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
@@ -80,9 +80,7 @@ const ProyectoDetail = () => {
               <CalendarOutlined />
             </div>
             <div className="project-info-title">Inicio</div>
-            <div
-              style={{ fontSize: "1rem", color: "#334155", fontWeight: 400 }}
-            >
+            <div className="project-info-value">
               {fechaInicio}
             </div>
           </div>
@@ -92,9 +90,7 @@ const ProyectoDetail = () => {
               <CalendarOutlined />
             </div>
             <div className="project-info-title">Finalización</div>
-            <div
-              style={{ fontSize: "1rem", color: "#334155", fontWeight: 400 }}
-            >
+            <div className="project-info-value">
               {fechaFin}
             </div>
           </div>
@@ -110,13 +106,7 @@ const ProyectoDetail = () => {
         {/* Content */}
         <div style={{ padding: "2.2rem 2rem", marginBottom: 0 }}>
           <div
-            style={{
-              fontSize: "1.13rem",
-              lineHeight: 1.8,
-              color: "#334155",
-              fontFamily: "Josefin Sans, Inter, sans-serif",
-              textAlign: "center",
-            }}
+            className="project-description-text"
             dangerouslySetInnerHTML={{ __html: descripcionHTML }}
           />
         </div>

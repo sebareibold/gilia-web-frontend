@@ -26,3 +26,15 @@
   line-height: 1.8;
   color: var(--color-text-secondary);
 }
+
+/* ===== DARK MODE ===== */
+[data-theme="dark"] .extension-description-content {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .extension-hero .section-title {
+  background: linear-gradient(135deg, #38bdf8, #7dd3fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

@@ -21,10 +21,10 @@ import { getResearchLines } from "../../../services"
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [researchLines, setResearchLines] = useState([])
-  const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme, isDarkTheme } = useTheme()
   const location = useLocation()
 
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+
   
   useEffect(() => {
     const fetchLines = async () => {

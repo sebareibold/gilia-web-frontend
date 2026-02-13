@@ -10,8 +10,7 @@ import { getProjectById } from "../../../services"
 const ProyectoDetail = () => {
   const { id } = useParams()
   const [project, setProject] = useState(null)
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   // Nombre del método de servicios utilizado desde services/index.js

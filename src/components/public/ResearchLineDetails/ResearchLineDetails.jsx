@@ -17,8 +17,8 @@ const ResearchLineDetails = () => {
   const [projects, setProjects] = useState([]);
   const [publications, setPublications] = useState([]);
   const { id } = useParams();
-  const { theme } = useTheme();
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a";
+  const { theme, isDarkTheme } = useTheme();
+;
   // Nombre del método de servicios utilizado desde services/index.js
 
   useEffect(() => {
@@ -89,10 +89,10 @@ const ResearchLineDetails = () => {
       <div className="news-content flex-1 flex flex-col justify-between">
         <h3 className="news-title text-lg font-bold mb-2">{proyecto.name}</h3>
         <div 
-          className="news-description text-[0.98rem] text-[#bdbdbd] mb-0 markdown-content"
+          className="news-description markdown-content mb-0"
           dangerouslySetInnerHTML={{ __html: marked.parse(proyecto.description || "") }}
         />
-        <div className="mt-3 text-[0.9rem] text-[#bdbdbd] leading-[1.3]">
+        <div className="mt-3 text-[0.9rem] news-meta-text leading-[1.3]">
           {/* Rango de fechas */}
           <div>
             {formatDate(proyecto.startDate)} —{" "}
@@ -134,7 +134,7 @@ const ResearchLineDetails = () => {
             Publicado en: {pub.journal || pub.publicacion}
           </div>
         )}
-        <div className="news-description text-[0.98rem] text-[#bdbdbd] mb-0">
+        <div className="news-description markdown-content mb-0">
           <div
             dangerouslySetInnerHTML={{ __html: marked.parse(pub.summary || pub.resumen || "") }}
           />
@@ -183,14 +183,14 @@ const ResearchLineDetails = () => {
         </div>
       </div>
       <div className="news-content w-full text-center">
-        <span className="news-category bg-[#4CAF50] text-white mb-2 text-[0.95rem] rounded-lg px-3 py-0.5 inline-block">
+        <span className="research-line-category mb-2 text-[0.95rem] inline-block">
           {integrante.specialty || integrante.especialidad}
         </span>
         <h3 className="news-title text-lg font-bold mb-2">
           {integrante.full_name ||
             `${integrante.nombre || ""} ${integrante.apellido || ""}`}
         </h3>
-        <p className="news-description text-[0.98rem] text-[#bdbdbd] mb-0">
+        <p className="news-description news-meta-text mb-0">
           {integrante.workplace ||
             integrante.lugarDeTrabajo ||
             "Miembro del equipo de investigación."}
@@ -228,7 +228,7 @@ const ResearchLineDetails = () => {
                 itemsPerPage={3}
               />
             ) : (
-              <div className="text-[#aaa] text-center animate-fade-inUp-1">
+              <div className="news-meta-text text-center animate-fade-inUp-1">
                 No hay proyectos registrados.
               </div>
             )}
@@ -249,7 +249,7 @@ const ResearchLineDetails = () => {
                 itemsPerPage={3}
               />
             ) : (
-              <div className="text-[#aaa] text-center animate-fade-inUp-1">
+              <div className="news-meta-text text-center animate-fade-inUp-1">
                 No hay publicaciones registradas.
               </div>
             )}
@@ -269,7 +269,7 @@ const ResearchLineDetails = () => {
                   renderIntegrante
                 )
               ) : (
-                <div className="text-[#aab] text-center animate-fade-inUp-1">
+                <div className="news-meta-text text-center animate-fade-inUp-1">
                   No hay integrantes registrados.
                 </div>
               )}

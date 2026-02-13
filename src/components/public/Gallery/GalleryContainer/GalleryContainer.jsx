@@ -13,8 +13,7 @@ const Galery = () => {
   const [gallerySections, setGallerySections] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(null)
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
 
   useEffect(() => {
     const fetchGallery = async () => {

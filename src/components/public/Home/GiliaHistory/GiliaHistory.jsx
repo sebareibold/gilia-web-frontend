@@ -15,8 +15,8 @@ import "./HistoriaGilia.css"
 export default function HistoriaGilia() {
   const [isVisible, setIsVisible] = useState(false)
   const [animatedItems, setAnimatedItems] = useState(new Set())
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
+
   const timelineRefs = useRef([])
 
   useEffect(() => {

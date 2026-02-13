@@ -31,8 +31,8 @@ export default function AboutUs() {
   const [team, setTeam] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
+
 
   // Nombres de métodos utilizados desde services/index.j
 

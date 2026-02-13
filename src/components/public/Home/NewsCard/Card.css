@@ -128,3 +128,41 @@
     font-size: 0.9rem;
   }
 }
+
+/* ===== DARK MODE ===== */
+[data-theme="dark"] .research-card {
+  background: rgba(17, 29, 50, 0.5);
+  border-color: rgba(56, 189, 248, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(56, 189, 248, 0.05);
+}
+
+[data-theme="dark"] .research-card:hover {
+  border-color: rgba(56, 189, 248, 0.2);
+  box-shadow: 0 16px 40px rgba(14, 165, 233, 0.15);
+}
+
+[data-theme="dark"] .card-title {
+  color: #e0f2fe;
+}
+
+[data-theme="dark"] .card-subtitle {
+  color: #7dd3fc;
+}
+
+[data-theme="dark"] .card-description {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .card-btn {
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  color: #0f172a;
+}
+
+[data-theme="dark"] .card-btn:hover {
+  background: linear-gradient(135deg, #38bdf8, #7dd3fc);
+  color: #0f172a;
+}
+
+[data-theme="dark"] .card-meta {
+  color: #7dd3fc;
+}

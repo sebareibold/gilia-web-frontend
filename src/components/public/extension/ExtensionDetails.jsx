@@ -13,8 +13,7 @@ import "./ExtensionDetails.css"
 const LineaExtensionDetail = () => {
   const { id } = useParams()
   const [extensionLine, setExtensionLine] = useState(null)
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
   // Nombre del método de servicios utilizado desde services/index.js
   const EXTENSION_LINE_SERVICE_METHOD = "getExtensionLineById"
 
@@ -62,7 +61,7 @@ const LineaExtensionDetail = () => {
         </div>
         <div className="news-content" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <h3 className="news-title" style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 700 }}>{name}</h3>
-          <p className="news-description" style={{ fontSize: "0.95rem", color: "#bdbdbd", marginBottom: 0 }}>{descripcionCorta}</p>
+          <p className="news-description news-meta-text" style={{ fontSize: "0.95rem", marginBottom: 0 }}>{descripcionCorta}</p>
           <div className="news-actions" style={{ marginTop: 16 }}>
             <Link to={`/projects/${project.id}`} className="news-btn-primary" style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
               <span>Ver proyecto</span>
@@ -90,9 +89,9 @@ const LineaExtensionDetail = () => {
             </p>
           </div>
           {/* Descripción */}
-          <div className="carousel-container extension-description-content" style={{ marginBottom: "2rem" }}>
+          <div className="carousel-container extension-description-content markdown-content" style={{ marginBottom: "2rem" }}>
             <div
-              style={{ fontSize: "1.1rem", lineHeight: "1.8", color: "var(--color-text-secondary)" }}
+              style={{ fontSize: "1.1rem", lineHeight: "1.8" }}
               dangerouslySetInnerHTML={{ __html: descriptionHTML }}
             />
           </div>

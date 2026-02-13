@@ -1,8 +1,9 @@
 import { API_BASE_URL } from "../../config/apiConfig"
 import { UserOutlined } from "@ant-design/icons"
+import { useTheme } from "../../../contexts/ThemeContext"
 
-const PeopleCard = ({ person, theme }) => {
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+const PeopleCard = ({ person }) => {
+  const { isDarkTheme } = useTheme()
 
   const getRoleColor = (role) => {
     const colors = {

@@ -32,8 +32,8 @@ function useIsMobile(breakpoint = 768) {
 }
 
 export default function HomePresentation() {
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
+
 
   const isMobile = useIsMobile();
   const [showFloating, setShowFloating] = useState(false)

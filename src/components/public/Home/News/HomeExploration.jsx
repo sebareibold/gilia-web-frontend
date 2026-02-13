@@ -36,8 +36,8 @@ export default function HomeExploration() {
   const [error, setError] = useState(null)
   const [visibleCount, setVisibleCount] = useState(3) // Show 3 news initially (1 row)
   const [loadingMore, setLoadingMore] = useState(false)
-  const { theme } = useTheme()
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a"
+  const { theme, isDarkTheme } = useTheme()
+
 
   // Appear animation
   const [animatedCards, setAnimatedCards] = useState(new Set())

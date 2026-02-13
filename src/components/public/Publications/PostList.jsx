@@ -20,8 +20,8 @@ const PostList = () => {
   const [loading, setLoading] = useState(true);
   const [pagina, setPagina] = useState(1);
   const [filtro, setFiltro] = useState({ anio: "", tipo: "", linea: linea });
-  const { theme } = useTheme();
-  const isDarkTheme = theme.token.backgroundColor === "#0a0a0a";
+  const { theme, isDarkTheme } = useTheme();
+
   const [visibleCount, setVisibleCount] = useState(6);
   const [animatedIndexes, setAnimatedIndexes] = useState(new Set());
   const cardRefs = useRef([]);

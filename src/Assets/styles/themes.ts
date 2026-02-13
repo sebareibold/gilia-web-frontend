@@ -1,39 +1,39 @@
 export const darkTheme = {
   token: {
-    // Primary colors - monochromatic
-    colorPrimario: "#ffffff",
-    backgroundColor: "#0a0a0a", // Deep black
-    backgroundColorSecondary: "#1a1a1a", // Dark gray
-    backgroundColorTertiary: "#2a2a2a", // Medium gray
+    // Primary colors - deep blue / sky blue
+    colorPrimario: "#38bdf8",
+    backgroundColor: "#0b1222", // Deep navy
+    backgroundColorSecondary: "#111d32", // Dark blue-gray
+    backgroundColorTertiary: "#1a2844", // Medium navy
 
-    // Text colors
-    colorTextBase: "#ffffff",
-    colorTextSecondary: "#b3b3b3", // Light gray
-    colorTextMuted: "#666666", // Medium gray
-    colorTextBaseHover: "#e6e6e6",
+    // Text colors - light / sky blue
+    colorTextBase: "#e0f2fe", // Very light sky
+    colorTextSecondary: "#7dd3fc", // Sky blue
+    colorTextMuted: "#38bdf8", // Vivid sky blue
+    colorTextBaseHover: "#bae6fd",
 
     // Interactive elements
-    efectColorHover: "#333333",
-    borderColor: "#333333",
-    borderColorLight: "#1a1a1a",
+    efectColorHover: "#1e3a5f",
+    borderColor: "#1e3a5f",
+    borderColorLight: "#152440",
 
     // Shadows and effects
-    shadowPrimary: "0 4px 20px rgba(0, 0, 0, 0.3)",
-    shadowSecondary: "0 2px 10px rgba(0, 0, 0, 0.2)",
-    shadowHover: "0 8px 30px rgba(0, 0, 0, 0.4)",
+    shadowPrimary: "0 4px 20px rgba(56, 189, 248, 0.15)",
+    shadowSecondary: "0 2px 10px rgba(14, 165, 233, 0.1)",
+    shadowHover: "0 8px 30px rgba(56, 189, 248, 0.2)",
 
-    // Status colors in grayscale
-    statusSuccess: "#ffffff",
-    statusWarning: "#cccccc",
-    statusError: "#999999",
-    statusInfo: "#666666",
+    // Status colors
+    statusSuccess: "#34d399",
+    statusWarning: "#fbbf24",
+    statusError: "#f87171",
+    statusInfo: "#38bdf8",
 
     // Special elements
-    cardBackground: "#1a1a1a",
-    cardBorder: "#333333",
-    inputBackground: "#2a2a2a",
-    buttonPrimary: "#ffffff",
-    buttonSecondary: "#333333",
+    cardBackground: "#111d32",
+    cardBorder: "#1e3a5f",
+    inputBackground: "#1a2844",
+    buttonPrimary: "#0ea5e9",
+    buttonSecondary: "#1e3a5f",
   },
 }
 
