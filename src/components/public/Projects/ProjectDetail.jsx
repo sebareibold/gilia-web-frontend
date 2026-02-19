@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { CalendarOutlined, TagOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 import { marked } from "marked";
 import Loader from "../../common/Loader/Loader";
 import { getResearchLineById } from "../../../services";
@@ -12,6 +13,7 @@ const ProyectoDetail = () => {
   const { id } = useParams();
   const [researchLine, setResearchLine] = useState(null);
   const { theme, isDarkTheme } = useTheme();
+  const { t } = useTranslation();
 ;
   // Nombre del método de servicios utilizado desde services/index.js
   const RESEARCH_LINE_SERVICE_METHOD = "getResearchLineById";
@@ -41,20 +43,20 @@ const ProyectoDetail = () => {
     );
   }
 
-  const nombre = researchLine.title || researchLine.nombre || "Proyecto sin nombre";
+  const nombre = researchLine.title || researchLine.nombre || t('projects.noName');
   const descripcionHTML = marked(
-    researchLine.description || researchLine.descripcion || "Sin descripción disponible"
+    researchLine.description || researchLine.descripcion || t('projects.noDescription')
   );
-  const estado = researchLine.status || researchLine.estado || "Sin dato";
-  const fechaInicio = researchLine.startDate || researchLine.fechaInicio || "Sin dato";
-  const fechaFin = researchLine.endDate || researchLine.fechaFin || "Sin dato";
+  const estado = researchLine.status || researchLine.estado || t('projects.noData');
+  const fechaInicio = researchLine.startDate || researchLine.fechaInicio || t('projects.noData');
+  const fechaFin = researchLine.endDate || researchLine.fechaFin || t('projects.noData');
   const lineaExtension =
     researchLine.line ||
     researchLine.linea ||
     researchLine.lineaNombre ||
     researchLine.linea_extension ||
     researchLine.lineaExtension ||
-    "Sin línea";
+    t('projects.noLine');
 
   return (
     <div className="project-detail-bg" data-theme={isDarkTheme ? "dark" : "light"}>
@@ -79,7 +81,7 @@ const ProyectoDetail = () => {
             <div className="project-info-icon">
               <CalendarOutlined />
             </div>
-            <div className="project-info-title">Inicio</div>
+            <div className="project-info-title">{t('projects.start')}</div>
             <div className="project-info-value">
               {fechaInicio}
             </div>
@@ -89,7 +91,7 @@ const ProyectoDetail = () => {
             <div className="project-info-icon">
               <CalendarOutlined />
             </div>
-            <div className="project-info-title">Finalización</div>
+            <div className="project-info-title">{t('projects.end')}</div>
             <div className="project-info-value">
               {fechaFin}
             </div>
@@ -99,7 +101,7 @@ const ProyectoDetail = () => {
             <div className="project-info-icon">
               <TagOutlined />
             </div>
-            <div className="project-info-title">Estado</div>
+            <div className="project-info-title">{t('projects.status')}</div>
             <div className="project-status-pill">{estado}</div>
           </div>
         </div>

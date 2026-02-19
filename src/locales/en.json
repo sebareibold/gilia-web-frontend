@@ -1,0 +1,175 @@
+{
+  "navbar": {
+    "home": "Home",
+    "research": "Research",
+    "publications": "Publications",
+    "extension": "Extension",
+    "team": "Team",
+    "gallery": "Gallery",
+    "changeTheme": "Change theme",
+    "language": "Language",
+    "theme": "Theme"
+  },
+  "home": {
+    "heroTitlePart1": "Research Group in ",
+    "heroTitleHighlight1": "Languages",
+    "heroTitleConnector": " and ",
+    "heroTitleHighlight2": "Artificial Intelligence",
+    "heroDescription": "We develop innovative solutions in artificial intelligence and natural language processing.",
+    "exploreResearch": "Explore Research",
+    "viewPublications": "View Publications",
+    "research": "Research",
+    "extensionLabel": "Extension"
+  },
+  "news": {
+    "badge": "Latest News",
+    "title": "Discover Our Latest Advances",
+    "description": "Stay up to date with our latest research, featured publications, and breakthroughs in AI, NLP, and emerging technologies.",
+    "readMore": "Read more",
+    "shareNews": "Share news",
+    "loading": "Loading the latest news...",
+    "loadingMore": "Loading...",
+    "seeMoreNews": "See more news",
+    "noNewsAvailable": "No news available",
+    "noNewsDescription": "Please check back later to see the latest updates from our research team.",
+    "newsBadge": "News"
+  },
+  "history": {
+    "badge": "Our History",
+    "title": "The History of GILIA",
+    "description": "Learn about the journey of the Research Group in Languages and Artificial Intelligence at the Faculty of Computer Science, National University of Comahue.",
+    "mainAchievements": "Main Achievements",
+    "timeline": {
+      "2010": {
+        "title": "Foundation of GILIA",
+        "description": "Creation of the Research Group in Languages and Artificial Intelligence at the Faculty of Computer Science of UNCo, through Resolution CD FAIF No. 052/10.",
+        "achievements": ["Formation of the founding team", "Definition of research lines", "First projects accredited by the University"]
+      },
+      "2012": {
+        "title": "First Publications",
+        "description": "Beginning of the group's scientific output with active participation in national reference conferences.",
+        "achievements": ["Publications in JAIIO and WICC", "Presentations at national conferences", "Training of the first thesis students"]
+      },
+      "2015": {
+        "title": "Academic Consolidation",
+        "description": "Strengthening of research lines in Intelligent Agents, Semantic Web, Formal Models, and Knowledge Representation.",
+        "achievements": ["Consolidated research lines", "Supervision of undergraduate and master's theses", "Inter-institutional collaborations"]
+      },
+      "2018": {
+        "title": "Team Expansion",
+        "description": "Significant growth of the group with the incorporation of new research faculty and active human resource training.",
+        "achievements": ["Expansion of the research staff", "New lines in Computer Science Education", "Participation of advanced students"]
+      },
+      "2021": {
+        "title": "Outreach and Extension",
+        "description": "Development of university extension projects and creation of digital educational resources oriented to the community.",
+        "achievements": ["Digital educational resources", "University extension projects", "Links with UNCo institutional projects"]
+      },
+      "2024": {
+        "title": "Projection and Networks",
+        "description": "Participation in national academic networks and sustained growth with presence in multiple conferences and scientific publications.",
+        "achievements": ["Participation in national academic networks", "Continuous scientific output", "Training of new generations of researchers"]
+      }
+    }
+  },
+  "about": {
+    "title": "Meet GILIA",
+    "errorTitle": "Error loading information",
+    "errorDescription": "Could not load team information. Please try again later.",
+    "objectivesTitle": "Our Objectives",
+    "objectivesDescription": "The fundamental pillars that guide our research and development in artificial intelligence.",
+    "email": "Email",
+    "linkedin": "LinkedIn"
+  },
+  "footer": {
+    "description": "Research Group in Languages and Artificial Intelligence. National University of Comahue",
+    "home": "Home",
+    "research": "Research",
+    "publications": "Publications",
+    "extension": "Extension",
+    "team": "Team",
+    "contact": "Contact",
+    "gallery": "Gallery",
+    "adminPanel": "Admin Panel",
+    "resources": "Resources",
+    "access": "Access",
+    "copyright": "G.I.L.I.A. All rights reserved."
+  },
+  "publications": {
+    "title": "Scientific Publications",
+    "description": "Explore our research, articles, and academic contributions in the field of artificial intelligence, natural language processing, and emerging technologies.",
+    "loading": "Loading publications...",
+    "noPublications": "No publications",
+    "noPublicationsDescription": "No publications found with the applied filters.",
+    "viewPublication": "View publication",
+    "notAvailable": "Not available",
+    "sharePublication": "Share publication",
+    "loadMore": "View more publications",
+    "publishedIn": "Published in:",
+    "year": "Year",
+    "type": "Type",
+    "author": "Author",
+    "allTypes": "All types",
+    "article": "Article",
+    "bookChapter": "Book Chapter",
+    "paper": "Paper",
+    "book": "Book",
+    "technicalReport": "Technical Report",
+    "thesis": "Thesis",
+    "yearPlaceholder": "e.g. 2024",
+    "searchByAuthor": "Search by author",
+    "clearFilters": "Clear"
+  },
+  "projects": {
+    "researchProject": "Research Project",
+    "start": "Start",
+    "end": "End",
+    "responsible": "Responsible",
+    "status": "Status",
+    "inProgress": "In Progress",
+    "errorFetching": "Error fetching project",
+    "noName": "Unnamed project",
+    "noDescription": "No description available",
+    "noData": "No data",
+    "noLine": "No line",
+    "viewProject": "View project"
+  },
+  "extensionLines": {
+    "title": "Extension Lines",
+    "description": "Projects connecting the university with the community, applying computer science knowledge to solve social problems and promote inclusive technological development.",
+    "loading": "Loading extension lines...",
+    "extension": "Extension",
+    "active": "Active",
+    "noDescription": "No description available",
+    "viewMore": "View more",
+    "loadMore": "View more extension lines"
+  },
+  "extensionDetails": {
+    "badge": "Extension Line",
+    "description": "Learn about the details of this extension line, its objectives, methodology, and the impact it generates in the community.",
+    "loading": "Loading extension line...",
+    "institutions": "Participating Schools and Institutions",
+    "projects": "Projects",
+    "viewProject": "View project",
+    "noName": "Unnamed project",
+    "noDescription": "No description available"
+  },
+  "researchLine": {
+    "loading": "Loading research line...",
+    "projects": "Projects",
+    "publications": "Publications",
+    "members": "Members",
+    "noProjects": "No registered projects.",
+    "noPublications": "No registered publications.",
+    "noMembers": "No registered members.",
+    "viewPublication": "View publication",
+    "notAvailable": "Not available",
+    "sharePublication": "Share publication",
+    "publishedIn": "Published in:",
+    "present": "Present",
+    "future": "Future",
+    "finished": "Finished",
+    "ongoing": "Ongoing",
+    "teamMember": "Research team member."
+  }
+}

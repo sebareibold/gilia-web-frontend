@@ -14,6 +14,8 @@ import {
   DownOutlined,
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
+import { useTranslation } from "react-i18next"
+import TranslatedText from "../../../../components/common/TranslatedText/TranslatedText"
 import "./HomeExploration.css"
 import { getNews } from "../../../../services"
 
@@ -37,6 +39,7 @@ export default function HomeExploration() {
   const [visibleCount, setVisibleCount] = useState(3) // Show 3 news initially (1 row)
   const [loadingMore, setLoadingMore] = useState(false)
   const { theme, isDarkTheme } = useTheme()
+  const { t } = useTranslation()
 
 
   // Appear animation
@@ -115,7 +118,7 @@ export default function HomeExploration() {
         <div className="exploration-container">
           <div className="carousel-loading">
             <div className="loading-spinner" />
-            <span className="loading-text">Cargando las últimas novedades...</span>
+            <span className="loading-text">{t('news.loading')}</span>
           </div>
         </div>
       </section>
@@ -129,11 +132,11 @@ export default function HomeExploration() {
           <div className="section-header">
             <div className="section-badge">
               <ExperimentOutlined />
-              <span>News</span>
+              <span>{t('news.newsBadge')}</span>
             </div>
-            <h2 className="section-title">No news available</h2>
+            <h2 className="section-title">{t('news.noNewsAvailable')}</h2>
             <p className="section-description">
-              Please check back later to see the latest updates from our research team.
+              {t('news.noNewsDescription')}
             </p>
           </div>
         </div>
@@ -150,11 +153,11 @@ export default function HomeExploration() {
         <div className="section-header">
           <div className="section-badge">
             <StarOutlined />
-            <span>Latest News</span>
+            <span>{t('news.badge')}</span>
           </div>
-          <h2 className="section-title">Discover Our Latest Advances</h2>
+          <h2 className="section-title">{t('news.title')}</h2>
           <p className="section-description">
-            Stay up to date with our latest research, featured publications, and breakthroughs in AI, NLP, and emerging technologies.
+            {t('news.description')}
           </p>
         </div>
 
@@ -192,9 +195,9 @@ export default function HomeExploration() {
                     <div className="news-meta">
                     </div>
 
-                    <h3 className="news-title">{item.title}</h3>
+                    <h3 className="news-title"><TranslatedText>{item.title}</TranslatedText></h3>
 
-                    <p className="news-description">{item.description}</p>
+                    <p className="news-description"><TranslatedText>{item.description}</TranslatedText></p>
 
                     <div className="news-actions">
                       <a
@@ -203,10 +206,10 @@ export default function HomeExploration() {
                         rel="noopener noreferrer"
                         className="news-btn-primary"
                       >
-                        <span>Read more</span>
+                        <span>{t('news.readMore')}</span>
                         <ArrowRightOutlined />
                       </a>
-                      <button className="news-btn-secondary" aria-label="Share news">
+                      <button className="news-btn-secondary" aria-label={t('news.shareNews')}>
                         <ShareAltOutlined />
                       </button>
                     </div>
@@ -228,11 +231,11 @@ export default function HomeExploration() {
                 {loadingMore ? (
                   <>
                     <div className="loading-spinner-small" />
-                    <span>Loading...</span>
+                    <span>{t('news.loadingMore')}</span>
                   </>
                 ) : (
                   <>
-                    <span>See more news</span>
+                    <span>{t('news.seeMoreNews')}</span>
                     <DownOutlined />
                   </>
                 )}

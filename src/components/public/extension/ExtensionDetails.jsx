@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom"
 import { useTheme } from "../../../contexts/ThemeContext"
+import { useTranslation } from "react-i18next"
 import { marked } from "marked"
 import { getExtensionLineById } from "../../../services"
 import { FolderOutlined, BankOutlined, BranchesOutlined } from "@ant-design/icons"
+import TranslatedText from "../../common/TranslatedText/TranslatedText"
+import { useLanguageNavigation } from "../../../hooks/useLanguageNavigation"
 import SimpleCarousel from "../ResearchLineDetails/SimpleCarousel"
 
 import "./ExtensionDetails.css"
@@ -14,6 +17,8 @@ const LineaExtensionDetail = () => {
   const { id } = useParams()
   const [extensionLine, setExtensionLine] = useState(null)
   const { theme, isDarkTheme } = useTheme()
+  const { t } = useTranslation()
+  const { langPath } = useLanguageNavigation()
   // Nombre del método de servicios utilizado desde services/index.js
   const EXTENSION_LINE_SERVICE_METHOD = "getExtensionLineById"
 
@@ -37,7 +42,7 @@ const LineaExtensionDetail = () => {
         <div className="exploration-container">
           <div className="carousel-loading">
             <div className="loading-spinner" />
-            <span className="loading-text">Cargando línea de extensión...</span>
+            <span className="loading-text">{t('extensionDetails.loading')}</span>
           </div>
         </div>
       </section>
@@ -48,8 +53,8 @@ const LineaExtensionDetail = () => {
 
   // Render para cada proyecto (igual que en detalles de investigación)
   const renderProject = (project) => {
-    const name = project.title || project.nombre || "Proyecto sin nombre"
-    const description = project.description || project.descripcion || "Sin descripción disponible"
+    const name = project.title || project.nombre || t('extensionDetails.noName')
+    const description = project.description || project.descripcion || t('extensionDetails.noDescription')
     // Truncar la descripción a 20 palabras
     const palabras = description.split(" ")
     const descripcionCorta = palabras.length > 20 ? palabras.slice(0, 20).join(" ") + " ..." : description
@@ -60,11 +65,11 @@ const LineaExtensionDetail = () => {
           <div className="news-image-overlay" />
         </div>
         <div className="news-content" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <h3 className="news-title" style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 700 }}>{name}</h3>
-          <p className="news-description news-meta-text" style={{ fontSize: "0.95rem", marginBottom: 0 }}>{descripcionCorta}</p>
+          <h3 className="news-title" style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 700 }}><TranslatedText>{name}</TranslatedText></h3>
+          <p className="news-description news-meta-text" style={{ fontSize: "0.95rem", marginBottom: 0 }}><TranslatedText>{descripcionCorta}</TranslatedText></p>
           <div className="news-actions" style={{ marginTop: 16 }}>
-            <Link to={`/projects/${project.id}`} className="news-btn-primary" style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-              <span>Ver proyecto</span>
+            <Link to={langPath(`/projects/${project.id}`)} className="news-btn-primary" style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+              <span>{t('extensionDetails.viewProject')}</span>
             </Link>
           </div>
         </div>
@@ -81,11 +86,11 @@ const LineaExtensionDetail = () => {
           <div className="section-header">
             <div className="section-badge">
               <BranchesOutlined />
-              <span>Línea de Extensión</span>
+              <span>{t('extensionDetails.badge')}</span>
             </div>
-            <h2 className="section-title">{extensionLine.title || extensionLine.titulo}</h2>
+            <h2 className="section-title"><TranslatedText>{extensionLine.title || extensionLine.titulo}</TranslatedText></h2>
             <p className="section-description">
-              Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la comunidad.
+              {t('extensionDetails.description')}
             </p>
           </div>
           {/* Descripción */}
@@ -100,7 +105,7 @@ const LineaExtensionDetail = () => {
         {extensionLine.institutions || extensionLine.instituciones ? (
           <div className="carousel-container" style={{ marginBottom: "2rem" }}>
             <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "1.35rem", padding: "0.5em 0" }}>
-              <BankOutlined style={{ marginRight: 8 }} />Escuelas e Instituciones Participantes
+              <BankOutlined style={{ marginRight: 8 }} />{t('extensionDetails.institutions')}
             </h3>
             <div className="news-card">
               <div className="news-content">
@@ -116,7 +121,7 @@ const LineaExtensionDetail = () => {
           <div className="multi-card-carousel">
             <div className="carousel-container">
               <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "2rem", padding: "0.5em 0" }}>
-                <FolderOutlined style={{ marginRight: 8 }} />Proyectos
+                <FolderOutlined style={{ marginRight: 8 }} />{t('extensionDetails.projects')}
               </h3>
               <SimpleCarousel items={extensionLine.projects} renderItem={renderProject} itemsPerPage={3} />
             </div>

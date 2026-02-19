@@ -9,10 +9,11 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
 import ProtectedRoute from "./components/common/ProtectedRouter/ProtectedRoute";
+import LanguageWrapper from "./components/common/LanguageWrapper/LanguageWrapper";
 import { useEffect, lazy, Suspense } from "react";
 import { useLocation } from "react-router-dom";
 
-// Public Components
+// Componentes publicos
 import HomeContainer from "./components/public/Home/HomeContainer/HomeContainer";
 import AboutUs from "./components/public/AboutUs/AboutUs";
 import GalleryContainer from "./components/public/Gallery/GalleryContainer/GalleryContainer";
@@ -23,7 +24,7 @@ import ResearchLineDetails from "./components/public/ResearchLineDetails/Researc
 import ExtensionDetails from "./components/public/extension/ExtensionDetails";
 import ProjectDetail from "./components/public/Projects/ProjectDetail";
 
-// Admin Components
+// Componentes admin (lazy loading)
 const AdminLogin = lazy(
   () => import("./components/admin/AdminLogin/AdminLogin")
 );
@@ -50,13 +51,23 @@ const AdminExtensionLines = lazy(
 
 import "./App.css";
 
-// ScrollToTop component
+// Componente para scroll al inicio al cambiar de pagina
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
   return null;
+}
+
+/**
+ * Componente para redirigir la raiz "/" al idioma guardado.
+ * Si el usuario tiene un idioma guardado en localStorage, redirige a /:lang/
+ * Si no, redirige a /es/ por defecto
+ */
+function RedirectToLanguage() {
+  const savedLang = localStorage.getItem('language') || 'es';
+  return <Navigate to={`/${savedLang}/`} replace />;
 }
 
 function App() {
@@ -67,26 +78,31 @@ function App() {
           <ScrollToTop />
           <Suspense fallback={<div />}>
             <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<PublicLayout />}>
-                <Route index element={<HomeContainer />} />
-                <Route path="about" element={<AboutUs />} />
-                <Route path="gallery" element={<GalleryContainer />} />
-                <Route path="posts" element={<PostList />} />
-                <Route path="projects" element={<Projects />} />
-                <Route path="projects/:id" element={<ProjectDetail />} />
-                <Route path="extentions-lines" element={<ExtensionList />} />
-                <Route
-                  path="research-lines/:id"
-                  element={<ResearchLineDetails />}
-                />
-                <Route path="extension/:id" element={<ExtensionDetails />} />
+              {/* Redireccion raiz al idioma guardado */}
+              <Route path="/" element={<RedirectToLanguage />} />
+
+              {/* Rutas publicas con prefijo de idioma /:lang/ */}
+              <Route path="/:lang" element={<LanguageWrapper />}>
+                <Route element={<PublicLayout />}>
+                  <Route index element={<HomeContainer />} />
+                  <Route path="about" element={<AboutUs />} />
+                  <Route path="gallery" element={<GalleryContainer />} />
+                  <Route path="posts" element={<PostList />} />
+                  <Route path="projects" element={<Projects />} />
+                  <Route path="projects/:id" element={<ProjectDetail />} />
+                  <Route path="extentions-lines" element={<ExtensionList />} />
+                  <Route
+                    path="research-lines/:id"
+                    element={<ResearchLineDetails />}
+                  />
+                  <Route path="extension/:id" element={<ExtensionDetails />} />
+                </Route>
               </Route>
 
-              {/* Admin Login */}
+              {/* Login admin (sin prefijo de idioma) */}
               <Route path="/admin/login" element={<AdminLogin />} />
 
-              {/* Protected Admin Routes */}
+              {/* Rutas admin protegidas */}
               <Route
                 path="/admin"
                 element={
@@ -108,7 +124,7 @@ function App() {
                 <Route path="configuration" element={<AdminSettings />} />
               </Route>
 
-              {/* Catch all route */}
+              {/* Ruta catch-all: redirige a raiz */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

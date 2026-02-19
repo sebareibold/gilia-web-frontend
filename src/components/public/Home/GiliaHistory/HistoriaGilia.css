@@ -118,6 +118,7 @@
   overflow: visible;
   padding-bottom: 4rem;
   padding-top: 0px;
+  margin-top: 5rem;
 }
 
 .historia-timeline::before {
@@ -616,6 +617,11 @@
   .historia-container {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+  }
+
+  /* Push timeline down to avoid overlapping with title */
+  .historia-timeline {
+    margin-top: 7rem;
   }
 
   /* 1. Fix Timeline Line Alignment */

@@ -10,6 +10,8 @@ import {
 } from "@ant-design/icons";
 import { getPublications } from "../../../services";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import TranslatedText from "../../common/TranslatedText/TranslatedText";
 import PublicationFilters from "./PublicationFilters";
 import "./Post.css";
 
@@ -21,6 +23,7 @@ const PostList = () => {
   const [pagina, setPagina] = useState(1);
   const [filtro, setFiltro] = useState({ anio: "", tipo: "", linea: linea });
   const { theme, isDarkTheme } = useTheme();
+  const { t } = useTranslation();
 
   const [visibleCount, setVisibleCount] = useState(6);
   const [animatedIndexes, setAnimatedIndexes] = useState(new Set());
@@ -116,11 +119,9 @@ const PostList = () => {
           ref={headerRef}
           data-index="header"
         >
-          <h2 className="section-title">Publicaciones Científicas</h2>
+          <h2 className="section-title">{t('publications.title')}</h2>
           <p className="post-section-description">
-            Explora nuestras investigaciones, artículos y contribuciones
-            académicas en el campo de la inteligencia artificial, procesamiento
-            de lenguaje natural y tecnologías emergentes.
+            {t('publications.description')}
           </p>
         </div>
 
@@ -142,7 +143,7 @@ const PostList = () => {
         {loading ? (
           <div className="carousel-loading">
             <div className="loading-spinner" />
-            <span className="loading-text">Cargando publicaciones...</span>
+            <span className="loading-text">{t('publications.loading')}</span>
           </div>
         ) : publicaciones.length === 0 ? (
           <div
@@ -162,10 +163,10 @@ const PostList = () => {
                 marginBottom: "0.5rem",
               }}
             >
-              No hay publicaciones
+               {t('publications.noPublications')}
             </h3>
             <p style={{ color: "var(--color-text-secondary)" }}>
-              No se encontraron publicaciones con los filtros aplicados.
+              {t('publications.noPublicationsDescription')}
             </p>
           </div>
         ) : (
@@ -204,7 +205,7 @@ const PostList = () => {
                         </div>
                       </div>
 
-                      <h3 className="news-title">{pub.title}</h3>
+                      <h3 className="news-title"><TranslatedText>{pub.title}</TranslatedText></h3>
 
                       <div
                         style={{
@@ -214,7 +215,7 @@ const PostList = () => {
                           fontWeight: "500",
                         }}
                       >
-                        {pub.description} <div />
+                        <TranslatedText>{pub.description}</TranslatedText> <div />
                       </div>
 
                       {pub.publicacion && (
@@ -238,7 +239,7 @@ const PostList = () => {
                             rel="noopener noreferrer"
                             className="news-btn-primary"
                           >
-                            <span>Ver publicación</span>
+                            <span>{t('publications.viewPublication')}</span>
                             <ArrowRightOutlined />
                           </a>
                         ) : (
@@ -246,12 +247,12 @@ const PostList = () => {
                             className="news-btn-primary"
                             style={{ opacity: 0.5, cursor: "not-allowed" }}
                           >
-                            <span>No disponible</span>
+                            <span>{t('publications.notAvailable')}</span>
                           </div>
                         )}
                         <button
                           className="news-btn-secondary"
-                          aria-label="Compartir publicación"
+                          aria-label={t('publications.sharePublication')}
                         >
                           <ShareAltOutlined />
                         </button>
@@ -276,7 +277,7 @@ const PostList = () => {
                   onClick={() => setVisibleCount((prev) => prev + 6)}
                   aria-label="Cargar más publicaciones"
                 >
-                  <span>Ver más publicaciones</span>
+                  <span>{t('publications.loadMore')}</span>
                 </button>
               </div>
             )}

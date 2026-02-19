@@ -4,12 +4,17 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { BranchesOutlined, ArrowRightOutlined, BankOutlined } from "@ant-design/icons"
+import { useTranslation } from "react-i18next"
+import TranslatedText from "../../common/TranslatedText/TranslatedText"
+import { useLanguageNavigation } from "../../../hooks/useLanguageNavigation"
 import { getExtensionLines } from "../../../services"
 
 const LineaExtensionList = () => {
   const [extensionLines, setExtensionLines] = useState([])
   const [loading, setLoading] = useState(true)
   const { theme, isDarkTheme } = useTheme()
+  const { t } = useTranslation()
+  const { langPath } = useLanguageNavigation()
   const [visibleCount, setVisibleCount] = useState(6)
   // Nombre del método de servicios utilizado desde services/index.js
   const EXTENSION_LINES_SERVICE_METHOD = "getExtensionLines"
@@ -37,7 +42,7 @@ const LineaExtensionList = () => {
         <div className="exploration-container">
           <div className="carousel-loading">
             <div className="loading-spinner" />
-            <span className="loading-text">Cargando líneas de extensión...</span>
+            <span className="loading-text">{t('extensionLines.loading')}</span>
           </div>
         </div>
       </section>
@@ -50,10 +55,9 @@ const LineaExtensionList = () => {
         {/* Header */}
         <div className="section-header">
 
-          <h2 className="section-title">Líneas de Extensión</h2>
+          <h2 className="section-title">{t('extensionLines.title')}</h2>
           <p className="section-description">
-            Proyectos que conectan la universidad con la comunidad, aplicando conocimientos de ciencias de la
-            computación para resolver problemas sociales y promover el desarrollo tecnológico inclusivo.
+            {t('extensionLines.description')}
           </p>
         </div>
 
@@ -82,24 +86,26 @@ const LineaExtensionList = () => {
 
                   <div className="news-content">
                     <div className="news-meta">
-                      <span className="news-category">Extensión</span>
+                      <span className="news-category">{t('extensionLines.extension')}</span>
                       <div className="news-views">
                         <BankOutlined />
-                        <span>Activa</span>
+                        <span>{t('extensionLines.active')}</span>
                       </div>
                     </div>
 
-                    <h3 className="news-title">{item.title || item.titulo}</h3>
+                    <h3 className="news-title"><TranslatedText>{item.title || item.titulo}</TranslatedText></h3>
 
                     <p className="news-description">
+                      <TranslatedText>
                       {typeof (item.description || item.descripcion) === "string" && (item.description || item.descripcion).length > 150
                         ? `${(item.description || item.descripcion).slice(0, 150)}...`
-                        : item.description || item.descripcion || "Sin descripción disponible"}
+                        : item.description || item.descripcion || t('extensionLines.noDescription')}
+                      </TranslatedText>
                     </p>
 
                     <div className="news-actions">
-                      <Link to={`/extension/${item.id || item.idLineaExtension}`} className="news-btn-primary">
-                        <span>Ver más</span>
+                      <Link to={langPath(`/extension/${item.id || item.idLineaExtension}`)} className="news-btn-primary">
+                        <span>{t('extensionLines.viewMore')}</span>
                         <ArrowRightOutlined />
                       </Link>
                     </div>
@@ -116,7 +122,7 @@ const LineaExtensionList = () => {
                 onClick={() => setVisibleCount((prev) => prev + 6)}
                 aria-label="Cargar más líneas de extensión"
               >
-                <span>Ver más líneas de extensión</span>
+                <span>{t('extensionLines.loadMore')}</span>
               </button>
             </div>
           )}

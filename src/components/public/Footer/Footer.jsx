@@ -1,23 +1,28 @@
 import { Link } from "react-router-dom";
 import { FacebookOutlined, LinkedinOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
+import { useLanguageNavigation } from "../../../hooks/useLanguageNavigation";
 import "./Footer.css";
 
 const Footer = () => {
+  const { t } = useTranslation();
+  const { langPath } = useLanguageNavigation();
+
   /* Secciones de acceso rapido */
   const sections = {
     GILIA: [
-      { name: "Inicio", path: "/" },
-      { name: "Investigación", path: "/investigacion" },
-      { name: "Publicaciones", path: "/publicaciones" },
-      { name: "Extensión", path: "/extension" },
+      { name: t("footer.home"), path: langPath("/") },
+      { name: t("footer.research"), path: langPath("/research-lines/1") },
+      { name: t("footer.publications"), path: langPath("/posts") },
+      { name: t("footer.extension"), path: langPath("/extentions-lines") },
     ],
-    Recursos: [
-      { name: "Equipo", path: "/about" },
-      { name: "Contacto", path: "/contact" },
-      {name: "Galeria", path: "/galery"},
+    [t("footer.resources")]: [
+      { name: t("footer.team"), path: langPath("/about") },
+      { name: t("footer.contact"), path: langPath("/about") },
+      { name: t("footer.gallery"), path: langPath("/gallery") },
     ],
-    Acceso: [
-      { name: "Panel Admin", path: "/admin/login" }
+    [t("footer.access")]: [
+      { name: t("footer.adminPanel"), path: "/admin/login" }
     ]
   };
 
@@ -35,8 +40,7 @@ const Footer = () => {
           <div className="footer-about">
             <h1 className="footer-title-gilia">G.I.L.I.A</h1>
             <p className="footer-description">
-              Grupo de Investigación en Lenguajes e Inteligencia Artificial.
-              Universidad Nacional del Comahue
+              {t("footer.description")}
             </p>
           </div>
           <div className="footer-links-container">
@@ -61,8 +65,7 @@ const Footer = () => {
         {/* Pie de pagina */}
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {new Date().getFullYear()} G.I.L.I.A. Todos los derechos
-            reservados.
+            &copy; {new Date().getFullYear()} {t("footer.copyright")}
           </p>
           <div className="footer-socials">
             {socialLinks.map((social, index) => (

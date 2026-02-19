@@ -15,6 +15,9 @@ import {
 } from "@ant-design/icons"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { Link, useLocation } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useLanguageNavigation } from "../../../hooks/useLanguageNavigation"
+import TranslatedText from "../../../components/common/TranslatedText/TranslatedText"
 import "./Navbar.css"
 import { getResearchLines } from "../../../services"
 
@@ -23,18 +26,18 @@ const Navbar = () => {
   const [researchLines, setResearchLines] = useState([])
   const { theme, toggleTheme, isDarkTheme } = useTheme()
   const location = useLocation()
+  const { t, i18n } = useTranslation()
+  const { langPath, toggleLanguage, currentLang } = useLanguageNavigation()
 
-
-  
   useEffect(() => {
     const fetchLines = async () => {
       try {
         const res = await getResearchLines()
-        // res can be array or {data: array} depending on implementation; support both
+        // res puede ser array o {data: array} segun la implementacion; soportamos ambos
         const lines = Array.isArray(res) ? res : (res?.data || [])
         setResearchLines(lines)
       } catch (error) {
-        console.error("Error al obtener las líneas:", error)
+        console.error("Error al obtener las lineas:", error)
       }
     }
     fetchLines()
@@ -56,49 +59,47 @@ const Navbar = () => {
     setMobileMenuOpen(false)
   }
 
-
-
   const isActive = (path) => {
-    return location.pathname === path
+    return location.pathname === path || location.pathname === langPath(path)
   }
 
   const navigationItems = [
     {
-      label: "Inicio",
-      path: "/",
+      label: t("navbar.home"),
+      path: langPath("/"),
       icon: <HomeOutlined />,
       active: isActive("/"),
     },
     {
-      label: "Investigación",
+      label: t("navbar.research"),
       icon: <ExperimentOutlined />,
-      active: location.pathname.startsWith("/research-lines"),
+      active: location.pathname.includes("/research-lines"),
       dropdown: researchLines.map((line) => ({
         label: line.title || line.nombre,
-        path: `/research-lines/${line.id}`,
+        path: langPath(`/research-lines/${line.id}`),
       })),
     },
     {
-      label: "Publicaciones",
-      path: "/posts",
+      label: t("navbar.publications"),
+      path: langPath("/posts"),
       icon: <BookOutlined />,
       active: isActive("/posts"),
     },
     {
-      label: "Extensión",
-      path: "/extentions-lines",
+      label: t("navbar.extension"),
+      path: langPath("/extentions-lines"),
       icon: <BranchesOutlined />,
       active: isActive("/extentions-lines"),
     },
     {
-      label: "Equipo",
-      path: "/about",
+      label: t("navbar.team"),
+      path: langPath("/about"),
       icon: <TeamOutlined />,
       active: isActive("/about"),
     },
     {/*
-      label: "Galería",
-      path: "/gallery",
+      label: t("navbar.gallery"),
+      path: langPath("/gallery"),
       icon: <PictureOutlined />,
       active: isActive("/gallery"),
     */},
@@ -109,11 +110,11 @@ const Navbar = () => {
       <nav className="navbar" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="navbar-container">
           {/* Logo */}
-          <Link to="/" className="navbar-logo" onClick={() => handleMenuItemClick()}>
+          <Link to={langPath("/")} className="navbar-logo" onClick={() => handleMenuItemClick()}>
             <span>GILIA</span>
           </Link>
 
-          {/* Navegación principal - Desktop */}
+          {/* Navegacion principal - Desktop */}
           <ul className="navbar-nav">
             {navigationItems.map((item, index) => (
               <li key={index} className="navbar-nav-item">
@@ -132,7 +133,7 @@ const Navbar = () => {
                           className="navbar-dropdown-item"
                           onClick={() => handleMenuItemClick()}
                         >
-                          {dropdownItem.label}
+                          <TranslatedText>{dropdownItem.label}</TranslatedText>
                         </Link>
                       ))}
                     </div>
@@ -154,15 +155,18 @@ const Navbar = () => {
           {/* Acciones - Desktop */}
           <div className="navbar-actions">
 
-            <button onClick={toggleTheme} className="navbar-action-btn" title="Cambiar tema">
+            <button onClick={toggleTheme} className="navbar-action-btn" title={t("navbar.changeTheme")}>
               {isDarkTheme ? <BulbOutlined /> : <MoonOutlined />}
             </button>
-            <button className="navbar-action-btn" title="Idioma">
+            <button onClick={toggleLanguage} className="navbar-action-btn" title={t("navbar.language")}>
               <TranslationOutlined />
+              <span style={{ fontSize: "0.7rem", marginLeft: "4px", fontWeight: "600", textTransform: "uppercase" }}>
+                {currentLang === 'es' ? 'EN' : 'ES'}
+              </span>
             </button>
           </div>
 
-          {/* Botón menú móvil */}
+          {/* Boton menu movil */}
           <button
             className={`navbar-mobile-toggle ${mobileMenuOpen ? "active" : ""}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -175,7 +179,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Menú móvil */}
+      {/* Menu movil */}
       <div
         className={`navbar-mobile-menu ${mobileMenuOpen ? "active" : ""}`}
         data-theme={isDarkTheme ? "dark" : "light"}
@@ -197,7 +201,7 @@ const Navbar = () => {
                         className="navbar-mobile-dropdown-item"
                         onClick={() => handleMenuItemClick()}
                       >
-                        {dropdownItem.label}
+                        <TranslatedText>{dropdownItem.label}</TranslatedText>
                       </Link>
                     ))}
                   </div>
@@ -220,16 +224,16 @@ const Navbar = () => {
 
           <button onClick={toggleTheme} className="btn btn-secondary btn-sm">
             {isDarkTheme ? <BulbOutlined /> : <MoonOutlined />}
-            Tema
+            {t("navbar.theme")}
           </button>
-          <button className="btn btn-secondary btn-sm">
+          <button onClick={toggleLanguage} className="btn btn-secondary btn-sm">
             <TranslationOutlined />
-            Idioma
+            {currentLang === 'es' ? 'English' : 'Espanol'}
           </button>
         </div>
       </div>
 
-      {/* Overlay para cerrar menú móvil */}
+      {/* Overlay para cerrar menu movil */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-[998]" onClick={() => setMobileMenuOpen(false)} />
       )}

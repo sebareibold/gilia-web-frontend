@@ -4,20 +4,23 @@ import {
   UserOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 import "./PublicationFilters.css";
 
 export default function PublicationFilters({ filtro, onChange, onClear }) {
+  const { t } = useTranslation();
+
   return (
     <div className="publication-filters-container">
       <div className="publication-filter-group">
         <div className="publication-filter-item">
           <label>
-            <CalendarOutlined /> Año
+            <CalendarOutlined /> {t("publications.year")}
           </label>
           <input
             type="number"
             name="anio"
-            placeholder="Ej: 2024"
+            placeholder={t("publications.yearPlaceholder")}
             value={filtro.anio || ""}
             onChange={onChange}
             className="publication-filter-input"
@@ -25,7 +28,7 @@ export default function PublicationFilters({ filtro, onChange, onClear }) {
         </div>
         <div className="publication-filter-item">
           <label>
-            <TagOutlined /> Tipo
+            <TagOutlined /> {t("publications.type")}
           </label>
           <select
             name="tipo"
@@ -33,13 +36,13 @@ export default function PublicationFilters({ filtro, onChange, onClear }) {
             onChange={onChange}
             className="publication-filter-input"
           >
-            <option value="">Todos los tipos</option>
-            <option value="Artículo">Artículo</option>
-            <option value="Capítulo de Libro">Capítulo de Libro</option>
-            <option value="Paper">Paper</option>
-            <option value="Libro">Libro</option>
-            <option value="Informe Técnico">Informe Técnico</option>
-            <option value="Tesis">Tesis</option>
+            <option value="">{t("publications.allTypes")}</option>
+            <option value="Artículo">{t("publications.article")}</option>
+            <option value="Capítulo de Libro">{t("publications.bookChapter")}</option>
+            <option value="Paper">{t("publications.paper")}</option>
+            <option value="Libro">{t("publications.book")}</option>
+            <option value="Informe Técnico">{t("publications.technicalReport")}</option>
+            <option value="Tesis">{t("publications.thesis")}</option>
           </select>
         </div>
        
@@ -47,12 +50,12 @@ export default function PublicationFilters({ filtro, onChange, onClear }) {
       <div className="publication-filter-group">
         <div className="publication-filter-item">
           <label>
-            <UserOutlined /> Autor
+            <UserOutlined /> {t("publications.author")}
           </label>
           <input
             type="text"
             name="autores"
-            placeholder="Buscar por autor"
+            placeholder={t("publications.searchByAuthor")}
             value={filtro.autores || ""}
             onChange={onChange}
             className="publication-filter-input"
@@ -62,9 +65,9 @@ export default function PublicationFilters({ filtro, onChange, onClear }) {
       <button
         className="publication-filter-clear"
         onClick={onClear}
-        title="Limpiar filtros"
+        title={t("publications.clearFilters")}
       >
-        <CloseCircleOutlined /> Limpiar
+        <CloseCircleOutlined /> {t("publications.clearFilters")}
       </button>
     </div>
   );

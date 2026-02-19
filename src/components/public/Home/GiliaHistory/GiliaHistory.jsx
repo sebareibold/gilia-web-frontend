@@ -10,12 +10,14 @@ import {
   GlobalOutlined,
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
+import { useTranslation } from "react-i18next"
 import "./HistoriaGilia.css"
 
 export default function HistoriaGilia() {
   const [isVisible, setIsVisible] = useState(false)
   const [animatedItems, setAnimatedItems] = useState(new Set())
   const { theme, isDarkTheme } = useTheme()
+  const { t } = useTranslation()
 
   const timelineRefs = useRef([])
 
@@ -74,46 +76,46 @@ export default function HistoriaGilia() {
 
   const historiaData = [
     {
-      year: "2018",
-      title: "Fundación de Gilia",
-      description: "Nacimiento del grupo de investigación con la visión de revolucionar la inteligencia artificial y el procesamiento de lenguaje natural.",
+      year: "2010",
+      title: t('history.timeline.2010.title'),
+      description: t('history.timeline.2010.description'),
       icon: RocketOutlined,
-      achievements: ["Primer equipo de investigadores", "Establecimiento de líneas de investigación", "Colaboraciones iniciales"]
+      achievements: t('history.timeline.2010.achievements', { returnObjects: true })
     },
     {
-      year: "2019",
-      title: "Primeros Avances",
-      description: "Desarrollo de proyectos pioneros en NLP y establecimiento de metodologías de investigación innovadoras.",
+      year: "2012",
+      title: t('history.timeline.2012.title'),
+      description: t('history.timeline.2012.description'),
       icon: BulbOutlined,
-      achievements: ["Primeras publicaciones científicas", "Proyectos de investigación activos", "Red de colaboradores"]
+      achievements: t('history.timeline.2012.achievements', { returnObjects: true })
     },
     {
-      year: "2020",
-      title: "Expansión y Crecimiento",
-      description: "Ampliación del equipo y diversificación de líneas de investigación con enfoque en tecnologías emergentes.",
+      year: "2015",
+      title: t('history.timeline.2015.title'),
+      description: t('history.timeline.2015.description'),
       icon: TeamOutlined,
-      achievements: ["Crecimiento del equipo", "Nuevas líneas de investigación", "Reconocimientos académicos"]
+      achievements: t('history.timeline.2015.achievements', { returnObjects: true })
+    },
+    {
+      year: "2018",
+      title: t('history.timeline.2018.title'),
+      description: t('history.timeline.2018.description'),
+      icon: ExperimentOutlined,
+      achievements: t('history.timeline.2018.achievements', { returnObjects: true })
     },
     {
       year: "2021",
-      title: "Innovación Tecnológica",
-      description: "Desarrollo de soluciones innovadoras en IA y establecimiento como referente en la comunidad científica.",
-      icon: ExperimentOutlined,
-      achievements: ["Patentes y desarrollos tecnológicos", "Colaboraciones internacionales", "Premios y reconocimientos"]
-    },
-    {
-      year: "2022",
-      title: "Liderazgo en IA",
-      description: "Consolidación como grupo líder en investigación de inteligencia artificial y procesamiento de lenguaje natural.",
+      title: t('history.timeline.2021.title'),
+      description: t('history.timeline.2021.description'),
       icon: TrophyOutlined,
-      achievements: ["Liderazgo en proyectos nacionales", "Publicaciones de alto impacto", "Formación de investigadores"]
+      achievements: t('history.timeline.2021.achievements', { returnObjects: true })
     },
     {
-      year: "2023",
-      title: "Impacto Global",
-      description: "Expansión internacional y contribución significativa al avance de las tecnologías de IA a nivel mundial.",
+      year: "2024",
+      title: t('history.timeline.2024.title'),
+      description: t('history.timeline.2024.description'),
       icon: GlobalOutlined,
-      achievements: ["Colaboraciones globales", "Impacto en la industria", "Innovación continua"]
+      achievements: t('history.timeline.2024.achievements', { returnObjects: true })
     }
   ]
 
@@ -124,12 +126,11 @@ export default function HistoriaGilia() {
         <div className="section-header">
           <div className="section-badge">
             <BookOutlined />
-            <span>Nuestra Historia</span>
+            <span>{t('history.badge')}</span>
           </div>
-          <h2 className="section-title">La Historia de Gilia</h2>
+          <h2 className="section-title">{t('history.title')}</h2>
           <p className="section-description">
-            Descubre el viaje de transformación e innovación que ha llevado a Gilia a convertirse en un referente 
-            mundial en inteligencia artificial y procesamiento de lenguaje natural.
+            {t('history.description')}
           </p>
         </div>
 
@@ -158,7 +159,7 @@ export default function HistoriaGilia() {
                     <div className={`timeline-achievements ${isAnimated ? 'achievements-animated' : ''}`}>
                       <h4 className="achievements-title">
                         <TrophyOutlined />
-                        <span>Logros Principales</span>
+                        <span>{t('history.mainAchievements')}</span>
                       </h4>
                       <ul className="achievements-list">
                         {item.achievements.map((achievement, achievementIndex) => (

@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { useTheme } from "../../../contexts/ThemeContext"
 import { ProjectOutlined, CalendarOutlined, TeamOutlined, TagOutlined } from "@ant-design/icons"
+import { useTranslation } from "react-i18next"
 import { marked } from "marked"
 import Loader from "../../common/Loader/Loader"
 import "../../../styles/FuturisticStyles.css"
@@ -11,6 +12,7 @@ const ProyectoDetail = () => {
   const { id } = useParams()
   const [project, setProject] = useState(null)
   const { theme, isDarkTheme } = useTheme()
+  const { t } = useTranslation()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   // Nombre del método de servicios utilizado desde services/index.js
@@ -24,7 +26,7 @@ const ProyectoDetail = () => {
         const res = await getProjectById(id)
         setProject(res.data)
       } catch (err) {
-        setError("Error al obtener el proyecto")
+        setError(t('projects.errorFetching'))
       } finally {
         setLoading(false)
       }
@@ -51,7 +53,7 @@ const ProyectoDetail = () => {
         <div className="futuristic-card" style={{ textAlign: "center", marginBottom: "2rem" }}>
           <div className="futuristic-badge" style={{ marginBottom: "1rem" }}>
             <ProjectOutlined style={{ marginRight: "0.5rem" }} />
-            Proyecto de Investigación
+            {t('projects.researchProject')}
           </div>
 
           <h1 className="futuristic-title">{project.title || project.nombre}</h1>
@@ -64,7 +66,7 @@ const ProyectoDetail = () => {
               <CalendarOutlined
                 style={{ fontSize: "1.5rem", color: "var(--colorTextSecondary)", marginBottom: "0.5rem" }}
               />
-              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>Inicio</div>
+              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>{t('projects.start')}</div>
               <div style={{ fontSize: "0.8rem", color: "var(--colorTextSecondary)" }}>
                 {project.startDate || project.fechaInicio || "Marzo 2024"}
               </div>
@@ -74,7 +76,7 @@ const ProyectoDetail = () => {
               <CalendarOutlined
                 style={{ fontSize: "1.5rem", color: "var(--colorTextSecondary)", marginBottom: "0.5rem" }}
               />
-              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>Finalización</div>
+              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>{t('projects.end')}</div>
               <div style={{ fontSize: "0.8rem", color: "var(--colorTextSecondary)" }}>
                 {project.endDate || project.fechaFin || "Agosto 2025"}
               </div>
@@ -84,7 +86,7 @@ const ProyectoDetail = () => {
               <TeamOutlined
                 style={{ fontSize: "1.5rem", color: "var(--colorTextSecondary)", marginBottom: "0.5rem" }}
               />
-              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>Responsable</div>
+              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>{t('projects.responsible')}</div>
               <div style={{ fontSize: "0.8rem", color: "var(--colorTextSecondary)" }}>
                 {project.responsable || project.owner || "Dr. María García"}
               </div>
@@ -92,7 +94,7 @@ const ProyectoDetail = () => {
 
             <div className="futuristic-list-item" style={{ textAlign: "center" }}>
               <TagOutlined style={{ fontSize: "1.5rem", color: "var(--colorTextSecondary)", marginBottom: "0.5rem" }} />
-              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>Estado</div>
+              <div style={{ fontSize: "0.9rem", color: "var(--colorTextBase)", fontWeight: "600" }}>{t('projects.status')}</div>
               <div className="futuristic-badge" style={{ fontSize: "0.65rem" }}>
                 {project.status || project.estado || "En Progreso"}
               </div>

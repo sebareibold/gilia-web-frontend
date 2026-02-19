@@ -1,0 +1,175 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "research": "Investigación",
+    "publications": "Publicaciones",
+    "extension": "Extensión",
+    "team": "Equipo",
+    "gallery": "Galería",
+    "changeTheme": "Cambiar tema",
+    "language": "Idioma",
+    "theme": "Tema"
+  },
+  "home": {
+    "heroTitlePart1": "Grupo de Investigación en ",
+    "heroTitleHighlight1": "Lenguajes",
+    "heroTitleConnector": " y ",
+    "heroTitleHighlight2": "Inteligencia Artificial",
+    "heroDescription": "Desarrollamos soluciones innovadoras en inteligencia artificial y procesamiento de lenguaje natural.",
+    "exploreResearch": "Explorar Investigación",
+    "viewPublications": "Ver Publicaciones",
+    "research": "Investigación",
+    "extensionLabel": "Extensión"
+  },
+  "news": {
+    "badge": "Ultimas Novedades",
+    "title": "Descubri Nuestros Ultimos Avances",
+    "description": "Mantenete al dia con nuestras ultimas investigaciones, publicaciones destacadas y avances en IA, PLN y tecnologias emergentes.",
+    "readMore": "Leer mas",
+    "shareNews": "Compartir noticia",
+    "loading": "Cargando las ultimas novedades...",
+    "loadingMore": "Cargando...",
+    "seeMoreNews": "Ver mas novedades",
+    "noNewsAvailable": "No hay novedades disponibles",
+    "noNewsDescription": "Vuelve mas tarde para ver las ultimas novedades de nuestro equipo de investigacion.",
+    "newsBadge": "Novedades"
+  },
+  "history": {
+    "badge": "Nuestra Historia",
+    "title": "La Historia de GILIA",
+    "description": "Conocé el recorrido del Grupo de Investigación en Lenguajes e Inteligencia Artificial de la Facultad de Informática de la Universidad Nacional del Comahue.",
+    "mainAchievements": "Logros Principales",
+    "timeline": {
+      "2010": {
+        "title": "Fundación de GILIA",
+        "description": "Creación del Grupo de Investigación en Lenguajes e Inteligencia Artificial en la Facultad de Informática de la UNCo, mediante Resolución CD FAIF Nº 052/10.",
+        "achievements": ["Conformación del equipo fundador", "Definición de líneas de investigación", "Primeros proyectos acreditados por la Universidad"]
+      },
+      "2012": {
+        "title": "Primeras Publicaciones",
+        "description": "Inicio de la producción científica del grupo con participación activa en congresos nacionales de referencia.",
+        "achievements": ["Publicaciones en JAIIO y WICC", "Presentaciones en congresos nacionales", "Formación de los primeros tesistas"]
+      },
+      "2015": {
+        "title": "Consolidación Académica",
+        "description": "Fortalecimiento de las líneas de investigación en Agentes Inteligentes, Web Semántica, Modelos Formales y Representación del Conocimiento.",
+        "achievements": ["Líneas de investigación consolidadas", "Dirección de tesis de grado y maestría", "Colaboraciones interinstitucionales"]
+      },
+      "2018": {
+        "title": "Expansión del Equipo",
+        "description": "Crecimiento significativo del grupo con la incorporación de nuevos docentes investigadores y la formación activa de recursos humanos.",
+        "achievements": ["Ampliación del plantel de investigadores", "Nuevas líneas en Educación en Computación", "Participación de estudiantes avanzados"]
+      },
+      "2021": {
+        "title": "Vinculación y Extensión",
+        "description": "Desarrollo de proyectos de extensión universitaria y creación de recursos educativos digitales orientados a la comunidad.",
+        "achievements": ["Recursos educativos digitales", "Proyectos de extensión universitaria", "Vinculación con proyectos institucionales UNCo"]
+      },
+      "2024": {
+        "title": "Proyección y Redes",
+        "description": "Participación en redes académicas nacionales y crecimiento sostenido con presencia en múltiples congresos y publicaciones científicas.",
+        "achievements": ["Participación en redes académicas nacionales", "Producción científica continua", "Formación de nuevas generaciones de investigadores"]
+      }
+    }
+  },
+  "about": {
+    "title": "Conoce a GILIA",
+    "errorTitle": "Error al cargar información",
+    "errorDescription": "No se pudo cargar la información del equipo. Por favor, intenta nuevamente más tarde.",
+    "objectivesTitle": "Nuestros Objetivos",
+    "objectivesDescription": "Los pilares fundamentales que guían nuestra investigación y desarrollo en inteligencia artificial.",
+    "email": "Email",
+    "linkedin": "LinkedIn"
+  },
+  "footer": {
+    "description": "Grupo de Investigación en Lenguajes e Inteligencia Artificial. Universidad Nacional del Comahue",
+    "home": "Inicio",
+    "research": "Investigación",
+    "publications": "Publicaciones",
+    "extension": "Extensión",
+    "team": "Equipo",
+    "contact": "Contacto",
+    "gallery": "Galeria",
+    "adminPanel": "Panel Admin",
+    "resources": "Recursos",
+    "access": "Acceso",
+    "copyright": "G.I.L.I.A. Todos los derechos reservados."
+  },
+  "publications": {
+    "title": "Publicaciones Científicas",
+    "description": "Explora nuestras investigaciones, artículos y contribuciones académicas en el campo de la inteligencia artificial, procesamiento de lenguaje natural y tecnologías emergentes.",
+    "loading": "Cargando publicaciones...",
+    "noPublications": "No hay publicaciones",
+    "noPublicationsDescription": "No se encontraron publicaciones con los filtros aplicados.",
+    "viewPublication": "Ver publicación",
+    "notAvailable": "No disponible",
+    "sharePublication": "Compartir publicación",
+    "loadMore": "Ver más publicaciones",
+    "publishedIn": "Publicado en:",
+    "year": "Año",
+    "type": "Tipo",
+    "author": "Autor",
+    "allTypes": "Todos los tipos",
+    "article": "Artículo",
+    "bookChapter": "Capítulo de Libro",
+    "paper": "Paper",
+    "book": "Libro",
+    "technicalReport": "Informe Técnico",
+    "thesis": "Tesis",
+    "yearPlaceholder": "Ej: 2024",
+    "searchByAuthor": "Buscar por autor",
+    "clearFilters": "Limpiar"
+  },
+  "projects": {
+    "researchProject": "Proyecto de Investigación",
+    "start": "Inicio",
+    "end": "Finalización",
+    "responsible": "Responsable",
+    "status": "Estado",
+    "inProgress": "En Progreso",
+    "errorFetching": "Error al obtener el proyecto",
+    "noName": "Proyecto sin nombre",
+    "noDescription": "Sin descripción disponible",
+    "noData": "Sin dato",
+    "noLine": "Sin línea",
+    "viewProject": "Ver proyecto"
+  },
+  "extensionLines": {
+    "title": "Líneas de Extensión",
+    "description": "Proyectos que conectan la universidad con la comunidad, aplicando conocimientos de ciencias de la computación para resolver problemas sociales y promover el desarrollo tecnológico inclusivo.",
+    "loading": "Cargando líneas de extensión...",
+    "extension": "Extensión",
+    "active": "Activa",
+    "noDescription": "Sin descripción disponible",
+    "viewMore": "Ver más",
+    "loadMore": "Ver más líneas de extensión"
+  },
+  "extensionDetails": {
+    "badge": "Línea de Extensión",
+    "description": "Conoce los detalles de esta línea de extensión, sus objetivos, metodología y el impacto que genera en la comunidad.",
+    "loading": "Cargando línea de extensión...",
+    "institutions": "Escuelas e Instituciones Participantes",
+    "projects": "Proyectos",
+    "viewProject": "Ver proyecto",
+    "noName": "Proyecto sin nombre",
+    "noDescription": "Sin descripción disponible"
+  },
+  "researchLine": {
+    "loading": "Cargando línea de investigación...",
+    "projects": "Proyectos",
+    "publications": "Publicaciones",
+    "members": "Integrantes",
+    "noProjects": "No hay proyectos registrados.",
+    "noPublications": "No hay publicaciones registradas.",
+    "noMembers": "No hay integrantes registrados.",
+    "viewPublication": "Ver publicación",
+    "notAvailable": "No disponible",
+    "sharePublication": "Compartir publicación",
+    "publishedIn": "Publicado en:",
+    "present": "Actualidad",
+    "future": "Futuro",
+    "finished": "Finalizó",
+    "ongoing": "En curso",
+    "teamMember": "Miembro del equipo de investigación."
+  }
+}

@@ -6,6 +6,8 @@ import {
   EyeOutlined
 } from "@ant-design/icons"
 import { useTheme } from "../../../../contexts/ThemeContext"
+import { useTranslation } from "react-i18next"
+import TranslatedText from "../../../../components/common/TranslatedText/TranslatedText"
 import "./HomePresentation.css"
 import { useState, useEffect } from "react"
 import { getResearchLines, getExtensionLines } from "../../../../services"
@@ -33,6 +35,7 @@ function useIsMobile(breakpoint = 768) {
 
 export default function HomePresentation() {
   const { theme, isDarkTheme } = useTheme()
+  const { t } = useTranslation()
 
 
   const isMobile = useIsMobile();
@@ -100,8 +103,8 @@ export default function HomePresentation() {
                   {floatingLinesMobile[0].tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
                 </div>
                 <div className="floating-content">
-                  <div className="floating-title">{floatingLinesMobile[0].title || floatingLinesMobile[0].nombre || ''}</div>
-                  <div className="floating-subtitle">{floatingLinesMobile[0].tipo}</div>
+                  <div className="floating-title"><TranslatedText>{floatingLinesMobile[0].title || floatingLinesMobile[0].nombre || ''}</TranslatedText></div>
+                  <div className="floating-subtitle">{floatingLinesMobile[0].tipo === 'Investigación' ? t('home.research') : t('home.extensionLabel')}</div>
                 </div>
               </div>
             </div>
@@ -110,24 +113,24 @@ export default function HomePresentation() {
         {/* Contenido principal centrado */}
         <div className="hero-content-centered">
           <h1 className="hero-title">
-            <span className="hero-title-normal">Grupo de Investigación en </span>
-            <span className="hero-title-highlight">Lenguajes</span>
-            <span className="hero-title-normal"> y </span>
-            <span className="hero-title-highlight">Inteligencia Artificial</span>
+            <span className="hero-title-normal">{t('home.heroTitlePart1')}</span>
+            <span className="hero-title-highlight">{t('home.heroTitleHighlight1')}</span>
+            <span className="hero-title-normal">{t('home.heroTitleConnector')}</span>
+            <span className="hero-title-highlight">{t('home.heroTitleHighlight2')}</span>
           </h1>
 
           <p className="hero-description">
-            Desarrollamos soluciones innovadoras en inteligencia artificial y procesamiento de lenguaje natural.
+            {t('home.heroDescription')}
           </p>
 
           <div className="hero-actions">
             <button className="hero-btn-primary" onClick={handleExploreClick}>
-              <span>Explorar Investigación</span>
+              <span>{t('home.exploreResearch')}</span>
               <ArrowRightOutlined />
             </button>
             <button className="hero-btn-secondary" onClick={handleWatchDemo}>
               <BookOutlined />
-              <span>Ver Publicaciones</span>
+              <span>{t('home.viewPublications')}</span>
             </button>
           </div>
         </div>
@@ -145,8 +148,8 @@ export default function HomePresentation() {
                   {floatingLinesMobile[1].tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
                 </div>
                 <div className="floating-content">
-                  <div className="floating-title">{floatingLinesMobile[1].title || floatingLinesMobile[1].nombre || ''}</div>
-                  <div className="floating-subtitle">{floatingLinesMobile[1].tipo}</div>
+                  <div className="floating-title"><TranslatedText>{floatingLinesMobile[1].title || floatingLinesMobile[1].nombre || ''}</TranslatedText></div>
+                  <div className="floating-subtitle">{floatingLinesMobile[1].tipo === 'Investigación' ? t('home.research') : t('home.extensionLabel')}</div>
                 </div>
               </div>
             </div>
@@ -171,8 +174,8 @@ export default function HomePresentation() {
                       {line.tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
                     </div>
                     <div className="floating-content">
-                      <div className="floating-title">{text}</div>
-                      <div className="floating-subtitle">{line.tipo}</div>
+                      <div className="floating-title"><TranslatedText>{text}</TranslatedText></div>
+                      <div className="floating-subtitle">{line.tipo === 'Investigación' ? t('home.research') : t('home.extensionLabel')}</div>
                     </div>
                   </div>
                 </div>

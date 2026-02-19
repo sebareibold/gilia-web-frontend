@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTheme } from "../../../contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 import { getResearchLineById } from "../../../services";
 import { marked } from "marked";
 import SimpleCarousel from "./SimpleCarousel";
@@ -11,6 +12,7 @@ import {
   CalendarOutlined,
 } from "@ant-design/icons";
 import "./ResearchLineDetails.css";
+import TranslatedText from "../../common/TranslatedText/TranslatedText";
 
 const ResearchLineDetails = () => {
   const [researchLine, setResearchLine] = useState(null);
@@ -18,6 +20,7 @@ const ResearchLineDetails = () => {
   const [publications, setPublications] = useState([]);
   const { id } = useParams();
   const { theme, isDarkTheme } = useTheme();
+  const { t, i18n } = useTranslation();
 ;
   // Nombre del método de servicios utilizado desde services/index.js
 
@@ -46,7 +49,7 @@ const ResearchLineDetails = () => {
           <div className="carousel-loading">
             <div className="loading-spinner" />
             <span className="loading-text">
-              Cargando línea de investigación...
+              {t('researchLine.loading')}
             </span>
           </div>
         </div>
@@ -56,7 +59,7 @@ const ResearchLineDetails = () => {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "—";
-    return new Date(dateStr).toLocaleDateString("es-AR", {
+    return new Date(dateStr).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'es-AR', {
       year: "numeric",
       month: "short",
     });
@@ -67,9 +70,9 @@ const ResearchLineDetails = () => {
     const start = new Date(startDate);
     const end = endDate ? new Date(endDate) : null;
 
-    if (today < start) return "Futuro";
-    if (end && today > end) return "Finalizó";
-    return "En curso";
+    if (today < start) return t('researchLine.future');
+    if (end && today > end) return t('researchLine.finished');
+    return t('researchLine.ongoing');
   };
 
   // Render para cada proyecto
@@ -87,7 +90,7 @@ const ResearchLineDetails = () => {
 
       {/* Seccionde Informacion, nombre, descripcion, fecha inicio, fecha fin, estado */}
       <div className="news-content flex-1 flex flex-col justify-between">
-        <h3 className="news-title text-lg font-bold mb-2">{proyecto.name}</h3>
+        <h3 className="news-title text-lg font-bold mb-2"><TranslatedText>{proyecto.name}</TranslatedText></h3>
         <div 
           className="news-description markdown-content mb-0"
           dangerouslySetInnerHTML={{ __html: marked.parse(proyecto.description || "") }}
@@ -96,7 +99,7 @@ const ResearchLineDetails = () => {
           {/* Rango de fechas */}
           <div>
             {formatDate(proyecto.startDate)} —{" "}
-            {proyecto.endDate ? formatDate(proyecto.endDate) : "Actualidad"}
+            {proyecto.endDate ? formatDate(proyecto.endDate) : t('researchLine.present')}
           </div>
 
           {/* Estado */}
@@ -122,7 +125,7 @@ const ResearchLineDetails = () => {
           </div>
         </div>
         <h3 className="news-title text-lg font-bold mb-2">
-          {pub.title || pub.titulo}
+          <TranslatedText>{pub.title || pub.titulo}</TranslatedText>
         </h3>
         <div className="news-meta text-[0.92rem] text-[var(--color-text-secondary)] mb-2 font-medium">
           <div
@@ -131,7 +134,7 @@ const ResearchLineDetails = () => {
         </div>
         {(pub.journal || pub.publicacion) && (
           <div className="text-xs text-[var(--color-text-muted)] mb-2 italic">
-            Publicado en: {pub.journal || pub.publicacion}
+          {t('researchLine.publishedIn')} {pub.journal || pub.publicacion}
           </div>
         )}
         <div className="news-description markdown-content mb-0">
@@ -147,17 +150,17 @@ const ResearchLineDetails = () => {
               rel="noopener noreferrer"
               className="news-btn-primary flex-1 flex items-center justify-center gap-2 font-semibold text-xs"
             >
-              <span>Ver publicación</span>
+              <span>{t('researchLine.viewPublication')}</span>
               <ArrowRightOutlined />
             </a>
           ) : (
             <div className="news-btn-primary opacity-50 cursor-not-allowed flex-1 flex items-center justify-center gap-2 font-semibold text-base">
-              <span>No disponible</span>
+              <span>{t('researchLine.notAvailable')}</span>
             </div>
           )}
           <button
             className="news-btn-secondary p-2.5 rounded-lg text-lg flex items-center justify-center"
-            aria-label="Compartir publicación"
+            aria-label={t('researchLine.sharePublication')}
           >
             <ShareAltOutlined />
           </button>
@@ -193,7 +196,7 @@ const ResearchLineDetails = () => {
         <p className="news-description news-meta-text mb-0">
           {integrante.workplace ||
             integrante.lugarDeTrabajo ||
-            "Miembro del equipo de investigación."}
+            t('researchLine.teamMember')}
         </p>
       </div>
     </div>
@@ -207,7 +210,7 @@ const ResearchLineDetails = () => {
       <div className="exploration-container max-w-[1400px] mx-auto">
         {/* Título */}
         <div className="section-header">
-          <h2 className="section-title animate-fade-inUp-0-8 ">{researchLine.title}</h2>
+          <h2 className="section-title animate-fade-inUp-0-8 "><TranslatedText>{researchLine.title}</TranslatedText></h2>
         </div>
         {/* Descripción */}
         <div 
@@ -219,7 +222,7 @@ const ResearchLineDetails = () => {
         <div className="multi-card-carousel">
           <div className="carousel-container">
             <h3 className="title-research-line text-center p-6 text-4xl ">
-              Proyectos
+              {t('researchLine.projects')}
             </h3>
             {projects.length > 0 ? (
               <SimpleCarousel
@@ -229,7 +232,7 @@ const ResearchLineDetails = () => {
               />
             ) : (
               <div className="news-meta-text text-center animate-fade-inUp-1">
-                No hay proyectos registrados.
+                {t('researchLine.noProjects')}
               </div>
             )}
           </div>
@@ -240,7 +243,7 @@ const ResearchLineDetails = () => {
         <div className="multi-card-carousel">
           <div className="carousel-container">
             <h3 className="title-research-line text-center text-4xl p-6">
-              Publicaciones
+              {t('researchLine.publications')}
             </h3>
             {publications.length > 0 ? (
               <SimpleCarousel
@@ -250,7 +253,7 @@ const ResearchLineDetails = () => {
               />
             ) : (
               <div className="news-meta-text text-center animate-fade-inUp-1">
-                No hay publicaciones registradas.
+                {t('researchLine.noPublications')}
               </div>
             )}
           </div>
@@ -260,7 +263,7 @@ const ResearchLineDetails = () => {
         <div className="multi-card-carousel">
           <div className="carousel-container">
             <h3 className="title-research-line text-center text-4xl p-6">
-              Integrantes
+              {t('researchLine.members')}
             </h3>
             <div className="flex flex-wrap gap-8 justify-center">
               {(researchLine.people || researchLine.personas) &&
@@ -270,7 +273,7 @@ const ResearchLineDetails = () => {
                 )
               ) : (
                 <div className="news-meta-text text-center animate-fade-inUp-1">
-                  No hay integrantes registrados.
+                  {t('researchLine.noMembers')}
                 </div>
               )}
             </div>

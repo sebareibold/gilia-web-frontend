@@ -12,7 +12,9 @@ import {
   StarOutlined,
 } from "@ant-design/icons"
 import { useTheme } from "../../../contexts/ThemeContext"
+import { useTranslation } from "react-i18next"
 import Loader from "../../common/Loader/Loader"
+import TranslatedText from "../../common/TranslatedText/TranslatedText"
 import "./AboutUs.css"
 import { getAboutInfo, getObjectives, getTeamMembers } from "../../../services"
 
@@ -32,6 +34,7 @@ export default function AboutUs() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const { theme, isDarkTheme } = useTheme()
+  const { t } = useTranslation()
 
 
   // Nombres de métodos utilizados desde services/index.j
@@ -98,9 +101,9 @@ export default function AboutUs() {
       <section className="about-us-section min-h-screen" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="about-container">
           <div className="about-header">
-            <h2 className="about-title">Error al cargar información</h2>
+            <h2 className="about-title">{t('about.errorTitle')}</h2>
             <p className="about-description">
-              No se pudo cargar la información del equipo. Por favor, intenta nuevamente más tarde.
+              {t('about.errorDescription')}
             </p>
           </div>
         </div>
@@ -113,8 +116,8 @@ export default function AboutUs() {
       <div className="about-container">
         {/* Header */}
         <div className="about-header">
-          <h2 className="about-title">Conoce a GILIA</h2>
-          <p className="about-description">{aboutData?.mission || aboutData?.mision}</p>
+          <h2 className="about-title">{t('about.title')}</h2>
+          <p className="about-description"><TranslatedText>{aboutData?.mission || aboutData?.mision}</TranslatedText></p>
         </div>
 
         {/* Grid de miembros del equipo */}
@@ -131,7 +134,7 @@ export default function AboutUs() {
                 
                 <div className="member-basic-info">
                   <h3 className="member-name">{member.name}{" "}{member.lastname}</h3>
-                  <p className="member-role">{member.category || member.categoria || "Investigador"}</p>
+                  <p className="member-role"><TranslatedText>{member.category}</TranslatedText></p>
                 </div>
               </div>
 
@@ -142,7 +145,7 @@ export default function AboutUs() {
                 <div className="member-contact">
                   <a href={`mailto:${member.email}`} className="contact-btn primary-contact" title="Email">
                     <MailOutlined />
-                    <span>Email</span>
+                    <span>{t('about.email')}</span>
                   </a>
                   {member.linkedinLink && (
                     <a
@@ -153,7 +156,7 @@ export default function AboutUs() {
                       title="LinkedIn"
                     >
                       <LinkedinOutlined />
-                      <span>LinkedIn</span>
+                      <span>{t('about.linkedin')}</span>
                     </a>
                   )}
                 </div>
@@ -166,9 +169,9 @@ export default function AboutUs() {
         {/* Sección de objetivos */}
         <div className="objectives-section">
           <div className="objectives-header">
-            <h3 className="objectives-title">Nuestros Objetivos</h3>
+            <h3 className="objectives-title">{t('about.objectivesTitle')}</h3>
             <p className="objectives-description">
-              Los pilares fundamentales que guían nuestra investigación y desarrollo en inteligencia artificial.
+              {t('about.objectivesDescription')}
             </p>
           </div>
 
@@ -181,8 +184,8 @@ export default function AboutUs() {
                   <div className="objective-icon">
                     <IconComponent />
                   </div>
-                  <h4 className="objective-title">{objective.title || objective.titulo}</h4>
-                  <p className="objective-description">{objective.description || objective.descripcion}</p>
+                  <h4 className="objective-title"><TranslatedText>{objective.title || objective.titulo}</TranslatedText></h4>
+                  <p className="objective-description"><TranslatedText>{objective.description || objective.descripcion}</TranslatedText></p>
                 </div>
               )
             })}

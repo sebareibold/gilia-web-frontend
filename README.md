@@ -73,3 +73,55 @@ Si la variable no está definida, el sistema usará los datos mock por defecto e
 
 
 ---
+
+## Internacionalizacion (i18n) - Espanol / Ingles
+
+El proyecto permite cambiar el idioma del sitio completo entre Espanol e Ingles. La traduccion funciona en dos niveles:
+
+### Rutas con prefijo de idioma
+
+Todas las rutas publicas tienen un prefijo de idioma (`/es/` o `/en/`). Esto permite:
+
+- Compartir un link en un idioma especifico (ej: `tudominio.com/en/about` abre en ingles)
+- Mantener el idioma al navegar entre secciones
+- Al entrar a `/` sin prefijo, redirige automaticamente al ultimo idioma usado (o espanol por defecto)
+
+### Estructura relevante
+
+- `src/i18n.js` — Configuracion de i18next, carga los archivos de traduccion y persiste el idioma en localStorage.
+- `src/locales/es.json` — Traducciones en espanol de todos los textos estaticos de la UI.
+- `src/locales/en.json` — Traducciones en ingles.
+- `src/components/common/LanguageWrapper/LanguageWrapper.jsx` — Lee el idioma de la URL y lo sincroniza con i18next antes de renderizar.
+- `src/hooks/useLanguageNavigation.js` — Hook con `langPath()` para armar links con el prefijo de idioma y `toggleLanguage()` para cambiar idioma.
+- `src/services/translationService.js` — Servicio de traduccion automatica para contenido dinamico (usa API gratuita de Google Translate con cache).
+- `src/hooks/useTranslatedText.js` — Hooks para traducir texto dinamico automaticamente.
+- `src/components/common/TranslatedText/TranslatedText.jsx` — Componente que envuelve texto dinamico y lo traduce.
+
+### Textos estaticos (labels, botones, titulos de seccion)
+
+Se usan archivos JSON (`es.json` / `en.json`) con `react-i18next`:
+
+```jsx
+const { t } = useTranslation();
+<h1>{t('home.heroTitlePart1')}</h1>
+```
+
+### Contenido dinamico (datos del backend o mock)
+
+Se envuelve con el componente `<TranslatedText>`, que lo traduce automaticamente al idioma actual:
+
+```jsx
+<TranslatedText>{datoDeLaAPI.titulo}</TranslatedText>
+```
+
+### Boton de idioma
+
+El boton de traduccion se encuentra en la Navbar y alterna entre ES ↔ EN. Cambia la URL y persiste la eleccion en `localStorage`.
+
+### Dependencias
+
+- `react-i18next` — Integracion de i18next con React
+- `i18next` — Framework de internacionalizacion
+
+---
+
