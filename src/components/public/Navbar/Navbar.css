@@ -547,17 +547,41 @@
   justify-content: center;
 }
 
-/* FIX: Asegurar que los botones en movil se vean (texto oscuro en light mode) */
-.navbar-mobile-actions .btn-secondary {
-  color: #333; /* Texto oscuro para contrastar con background claro en light mode */
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
+/* FIX: Asegurar que los botones en movil coincidan con los nav items */
+.navbar-mobile-actions .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  color: rgba(0, 0, 0, 0.8);
+  text-decoration: none;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  font-weight: 600;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  box-shadow: none;
+  flex: 1;
 }
 
-[data-theme="dark"] .navbar-mobile-actions .btn-secondary {
-  color: #bae6fd;
-  background: rgba(14, 165, 233, 0.1);
-  border-color: rgba(56, 189, 248, 0.2);
+[data-theme="dark"] .navbar-mobile-actions .btn {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.navbar-mobile-actions .btn:hover {
+  color: #000;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .navbar-mobile-actions .btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="dark"] .navbar-mobile-actions {

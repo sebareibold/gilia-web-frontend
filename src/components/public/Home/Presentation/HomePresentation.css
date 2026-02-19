@@ -877,3 +877,115 @@
 [data-theme="dark"] .floating-subtitle {
   color: #7dd3fc;
 }
+
+/* ===== MOBILE HERO CAROUSELS ===== */
+.hero-carousel-wrapper {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  z-index: 10;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.hero-carousel-top {
+  top: 5%;
+}
+
+.hero-carousel-bottom {
+  bottom: 15%;
+}
+
+.hero-carousel-track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  /* El ancho debe ser suficiente para contener todos los items. 
+     La animación moverá el track. */
+}
+
+.track-left-to-right {
+  animation: scrollRight 40s linear infinite;
+}
+
+.track-right-to-left {
+  animation: scrollLeft 40s linear infinite;
+}
+
+.carousel-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .carousel-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--color-text-secondary);
+  box-shadow: none;
+}
+
+.carousel-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  font-size: 1.1rem;
+}
+
+[data-theme="dark"] .carousel-icon {
+  color: var(--color-text-secondary);
+}
+
+.carousel-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Keyframes para scroll infinito */
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Ajustes específicos para móviles en el layout del hero con carruseles */
+@media (max-width: 768px) {
+  .hero-content-centered {
+    /* Asegurar espacio vertical para los carruseles */
+    padding-top: 1rem; 
+    padding-bottom: 2.5rem;
+  }
+  
+  .hero-carousel-top {
+    top: 10%; 
+  }
+  
+  .hero-carousel-bottom {
+    bottom: 15%; /* Ajustado para que no tape los botones */
+  }
+}

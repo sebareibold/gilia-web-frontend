@@ -807,6 +807,18 @@ body[data-theme="dark"] {
 @media (max-width: 640px) {
   body {
     padding-top: 64px;
+    /* Fondo más sutil en móviles */
+    background: radial-gradient(
+        circle at 20% 80%,
+        rgba(7, 75, 223, 0.04) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba(43, 91, 252, 0.1) 0%,
+        transparent 50%
+      );
+    background-attachment: fixed;
   }
 
   .container,

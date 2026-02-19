@@ -97,12 +97,6 @@ const Navbar = () => {
       icon: <TeamOutlined />,
       active: isActive("/about"),
     },
-    {/*
-      label: t("navbar.gallery"),
-      path: langPath("/gallery"),
-      icon: <PictureOutlined />,
-      active: isActive("/gallery"),
-    */},
   ]
 
   return (

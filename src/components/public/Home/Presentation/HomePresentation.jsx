@@ -90,26 +90,27 @@ export default function HomePresentation() {
   return (
     <section className="home-presentation" data-theme={isDarkTheme ? "dark" : "light"}>
       <div className="home-container">
-        {/* Card flotante arriba del título (solo mobile) */}
-        {isMobile && showFloating && floatingLinesMobile[0] && (
-          <div className="floating-cards-container floating-mobile-top">
-            <div
-              key={`${floatingLinesMobile[0].tipo}-${floatingLinesMobile[0].id}`}
-              className={`floating-element floating-element-1`}
-              style={{ animationDelay: `0.2s`, width: Math.max(140, Math.min(260, 140 + (floatingLinesMobile[0].title || floatingLinesMobile[0].nombre || '').length * 7)) }}
-            >
-              <div className="floating-card">
-                <div className="floating-icon">
-                  {floatingLinesMobile[0].tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
+        {/* Carrusel Superior (solo mobile) - De Izquierda a Derecha */}
+        {isMobile && showFloating && (
+          <div className="hero-carousel-wrapper hero-carousel-top">
+            <div className="hero-carousel-track track-left-to-right">
+              {/* Duplicamos los items para efecto infinito */}
+              {[...floatingLines, ...floatingLines].map((line, idx) => (
+                <div key={`top-${idx}`} className="carousel-card">
+                  <div className="carousel-icon">
+                    {line.tipo === 'Investigación' ? <EyeOutlined /> : <ApiOutlined />}
+                  </div>
+                  <div className="carousel-content">
+                    <span className="carousel-title">
+                      <TranslatedText>{line.title || line.nombre || ''}</TranslatedText>
+                    </span>
+                  </div>
                 </div>
-                <div className="floating-content">
-                  <div className="floating-title"><TranslatedText>{floatingLinesMobile[0].title || floatingLinesMobile[0].nombre || ''}</TranslatedText></div>
-                  <div className="floating-subtitle">{floatingLinesMobile[0].tipo === 'Investigación' ? t('home.research') : t('home.extensionLabel')}</div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         )}
+
         {/* Contenido principal centrado */}
         <div className="hero-content-centered">
           <h1 className="hero-title">
@@ -135,23 +136,23 @@ export default function HomePresentation() {
           </div>
         </div>
 
-        {/* Card flotante abajo del título (solo mobile) */}
-        {isMobile && showFloating && floatingLinesMobile[1] && (
-          <div className="floating-cards-container floating-mobile-bottom">
-            <div
-              key={`${floatingLinesMobile[1].tipo}-${floatingLinesMobile[1].id}`}
-              className={`floating-element floating-element-2`}
-              style={{ animationDelay: `0.4s`, width: Math.max(140, Math.min(260, 140 + (floatingLinesMobile[1].title || floatingLinesMobile[1].nombre || '').length * 7)) }}
-            >
-              <div className="floating-card">
-                <div className="floating-icon">
-                  {floatingLinesMobile[1].tipo === 'Investigación' ? <EyeOutlined className="floating-icon-svg" /> : <ApiOutlined className="floating-icon-svg" />}
+        {/* Carrusel Inferior (solo mobile) - De Derecha a Izquierda */}
+        {isMobile && showFloating && (
+          <div className="hero-carousel-wrapper hero-carousel-bottom">
+            <div className="hero-carousel-track track-right-to-left">
+              {/* Duplicamos los items para efecto infinito */}
+              {[...floatingLines, ...floatingLines].map((line, idx) => (
+                <div key={`bottom-${idx}`} className="carousel-card">
+                  <div className="carousel-icon">
+                    {line.tipo === 'Investigación' ? <EyeOutlined /> : <ApiOutlined />}
+                  </div>
+                  <div className="carousel-content">
+                    <span className="carousel-title">
+                      <TranslatedText>{line.title || line.nombre || ''}</TranslatedText>
+                    </span>
+                  </div>
                 </div>
-                <div className="floating-content">
-                  <div className="floating-title"><TranslatedText>{floatingLinesMobile[1].title || floatingLinesMobile[1].nombre || ''}</TranslatedText></div>
-                  <div className="floating-subtitle">{floatingLinesMobile[1].tipo === 'Investigación' ? t('home.research') : t('home.extensionLabel')}</div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         )}
