@@ -95,7 +95,10 @@ function App() {
                     path="research-lines/:id"
                     element={<ResearchLineDetails />}
                   />
-                  <Route path="extension/:id" element={<ExtensionDetails />} />
+                  <Route
+                    path="extentions-lines/:id"
+                    element={<ExtensionDetails />}
+                  />
                 </Route>
               </Route>
 

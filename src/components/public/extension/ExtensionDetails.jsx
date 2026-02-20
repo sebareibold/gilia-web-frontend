@@ -11,7 +11,7 @@ import TranslatedText from "../../common/TranslatedText/TranslatedText"
 import { useLanguageNavigation } from "../../../hooks/useLanguageNavigation"
 import SimpleCarousel from "../ResearchLineDetails/SimpleCarousel"
 
-import "./ExtensionDetails.css"
+import "../ResearchLineDetails/ResearchLineDetails.css";
 
 const LineaExtensionDetail = () => {
   const { id } = useParams()
@@ -38,7 +38,7 @@ const LineaExtensionDetail = () => {
 
   if (!extensionLine) {
     return (
-      <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
+      <section className="exploration-section h-screen" data-theme={isDarkTheme ? "dark" : "light"}>
         <div className="exploration-container">
           <div className="carousel-loading">
             <div className="loading-spinner" />
@@ -59,16 +59,16 @@ const LineaExtensionDetail = () => {
     const palabras = description.split(" ")
     const descripcionCorta = palabras.length > 20 ? palabras.slice(0, 20).join(" ") + " ..." : description
     return (
-      <div className="news-card" style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "flex-start", padding: 20, minWidth: 320, maxWidth: 370, margin: "0 auto" }}>
-        <div className="news-image-container" style={{ marginBottom: 14 }}>
+      <div className="news-card flex flex-col h-full justify-start p-6">
+        <div className="news-image-container mb-4.5">
           <img src="/placeholder.svg?height=200&width=350" alt={name} className="news-image" />
           <div className="news-image-overlay" />
         </div>
-        <div className="news-content" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-          <h3 className="news-title" style={{ fontSize: "1rem", marginBottom: 8, fontWeight: 700 }}><TranslatedText>{name}</TranslatedText></h3>
-          <p className="news-description news-meta-text" style={{ fontSize: "0.95rem", marginBottom: 0 }}><TranslatedText>{descripcionCorta}</TranslatedText></p>
-          <div className="news-actions" style={{ marginTop: 16 }}>
-            <Link to={langPath(`/projects/${project.id}`)} className="news-btn-primary" style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+        <div className="news-content flex-1 flex flex-col justify-between">
+          <h3 className="news-title text-lg font-bold mb-2"><TranslatedText>{name}</TranslatedText></h3>
+          <p className="news-description news-meta-text mb-0"><TranslatedText>{descripcionCorta}</TranslatedText></p>
+          <div className="news-actions mt-4">
+            <Link to={langPath(`/projects/${project.id}`)} className="news-btn-primary w-full flex items-center justify-center gap-2">
               <span>{t('extensionDetails.viewProject')}</span>
             </Link>
           </div>
@@ -78,55 +78,52 @@ const LineaExtensionDetail = () => {
   }
 
   return (
-    <section className="exploration-section" data-theme={isDarkTheme ? "dark" : "light"}>
-      <div className="exploration-container" style={{ maxWidth: 1400, margin: "0 auto" }}>
-        {/* Full Screen Hero Section */}
-        <div className="extension-hero">
-          {/* Header */}
-          <div className="section-header">
-            <div className="section-badge">
-              <BranchesOutlined />
-              <span>{t('extensionDetails.badge')}</span>
-            </div>
-            <h2 className="section-title"><TranslatedText>{extensionLine.title || extensionLine.titulo}</TranslatedText></h2>
-            <p className="section-description">
-              {t('extensionDetails.description')}
-            </p>
-          </div>
-          {/* Descripción */}
-          <div className="carousel-container extension-description-content markdown-content" style={{ marginBottom: "2rem" }}>
-            <div
-              style={{ fontSize: "1.1rem", lineHeight: "1.8" }}
-              dangerouslySetInnerHTML={{ __html: descriptionHTML }}
-            />
-          </div>
+    <section className="exploration-section min-h-screen" data-theme={isDarkTheme ? "dark" : "light"}>
+      <div className="exploration-container max-w-[1400px] mx-auto">
+        {/* Header */}
+        <div className="section-header">
+           <h2 className="section-title animate-fade-inUp-0-8"><TranslatedText>{extensionLine.title || extensionLine.titulo}</TranslatedText></h2>
         </div>
+          
+        {/* Descripción */}
+        <div 
+          className="carousel-container mb-8 animate-fade-inUp-1 markdown-content"
+          dangerouslySetInnerHTML={{ __html: descriptionHTML }}
+        />
+        
         {/* Instituciones */}
         {extensionLine.institutions || extensionLine.instituciones ? (
-          <div className="carousel-container" style={{ marginBottom: "2rem" }}>
-            <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "1.35rem", padding: "0.5em 0" }}>
-              <BankOutlined style={{ marginRight: 8 }} />{t('extensionDetails.institutions')}
-            </h3>
-            <div className="news-card">
-              <div className="news-content">
-                <p style={{ color: "var(--color-text-secondary)", margin: 0, lineHeight: "1.6", textAlign: "center" }}>
-                  {extensionLine.institutions || extensionLine.instituciones}
-                </p>
+          <div className="multi-card-carousel">
+            <div className="carousel-container">
+              <h3 className="title-research-line text-center p-6 text-4xl">
+                <BankOutlined style={{ marginRight: 8 }} />{t('extensionDetails.institutions')}
+              </h3>
+              <div className="news-card p-6 text-center">
+                <div className="news-content">
+                  <p className="markdown-content m-0">
+                    {extensionLine.institutions || extensionLine.instituciones}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         ) : null}
+
         {/* Proyectos */}
-        {extensionLine.projects && extensionLine.projects.length > 0 && (
-          <div className="multi-card-carousel">
+        <div className="multi-card-carousel">
             <div className="carousel-container">
-              <h3 className="section-title" style={{ textAlign: "center", margin: "32px 0 24px 0", fontSize: "2rem", padding: "0.5em 0" }}>
-                <FolderOutlined style={{ marginRight: 8 }} />{t('extensionDetails.projects')}
+              <h3 className="title-research-line text-center p-6 text-4xl">
+                {t('extensionDetails.projects')}
               </h3>
-              <SimpleCarousel items={extensionLine.projects} renderItem={renderProject} itemsPerPage={3} />
+              {extensionLine.projects && extensionLine.projects.length > 0 ? (
+                <SimpleCarousel items={extensionLine.projects} renderItem={renderProject} itemsPerPage={3} />
+              ) : (
+                <div className="news-meta-text text-center animate-fade-inUp-1">
+                 {t('researchLine.noProjects')}
+               </div>
+              )}
             </div>
           </div>
-        )}
       </div>
     </section>
   )

@@ -118,7 +118,16 @@
     "thesis": "Thesis",
     "yearPlaceholder": "e.g. 2024",
     "searchByAuthor": "Search by author",
-    "clearFilters": "Clear"
+    "clearFilters": "Clear",
+    "allYears": "All years",
+    "allAuthors": "All authors",
+    "selected_one": "{{count}} selected",
+    "selected_other": "{{count}} selected",
+    "tooltipType": "Publication type",
+    "tooltipDate": "Publication date",
+    "tooltipTitle": "Title",
+    "tooltipDescription": "Description",
+    "tooltipAuthors": "Authors"
   },
   "projects": {
     "researchProject": "Research Project",

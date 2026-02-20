@@ -1,12 +1,10 @@
-"use client";
-
 import { useEffect, useState, useRef } from "react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import {
   SearchOutlined,
-  ShareAltOutlined,
   ArrowRightOutlined,
   CalendarOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { getPublications } from "../../../services";
 import { useLocation } from "react-router-dom";
@@ -21,10 +19,11 @@ const PostList = () => {
   const [publicaciones, setPublicaciones] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagina, setPagina] = useState(1);
-  const [filtro, setFiltro] = useState({ anio: "", tipo: "", linea: linea });
+  const [filtro, setFiltro] = useState({ type: [], year: [], author: [], linea: linea });
   const { theme, isDarkTheme } = useTheme();
   const { t } = useTranslation();
 
+  const [allPublicaciones, setAllPublicaciones] = useState([]); // Unfiltered for extracting options
   const [visibleCount, setVisibleCount] = useState(6);
   const [animatedIndexes, setAnimatedIndexes] = useState(new Set());
   const cardRefs = useRef([]);
@@ -35,6 +34,20 @@ const PostList = () => {
   const visiblePublicaciones = publicaciones.slice(0, visibleCount);
   const hasMore = visibleCount < publicaciones.length;
 
+  // Load all publications once to extract filter options
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const response = await getPublications({});
+        setAllPublicaciones(response?.data || []);
+      } catch (err) {
+        console.error("Error fetching all publicaciones:", err);
+      }
+    };
+    fetchAll();
+  }, []);
+
+  // Load filtered publications
   useEffect(() => {
     const fetchPublicaciones = async () => {
       setLoading(true);
@@ -51,6 +64,24 @@ const PostList = () => {
     fetchPublicaciones();
   }, [pagina, filtro]);
 
+  // Extract unique types and years from ALL publications
+  const availableTypes = [...new Set(allPublicaciones.map((p) => p.type).filter(Boolean))].sort();
+  const availableYears = [...new Set(
+    allPublicaciones
+      .map((p) => {
+        const d = new Date(p.date);
+        return !isNaN(d.getTime()) ? d.getFullYear() : null;
+      })
+      .filter(Boolean)
+  )].sort((a, b) => b - a);
+
+  // Extract unique individual authors from comma-separated strings
+  const availableAuthors = [...new Set(
+    allPublicaciones
+      .flatMap((p) => (p.authors || "").split(",").map((a) => a.trim()))
+      .filter(Boolean)
+  )].sort();
+
   useEffect(() => {
     const observer = new window.IntersectionObserver(
       (entries) => {
@@ -63,15 +94,11 @@ const PostList = () => {
       },
       { threshold: 0.2 }
     );
-    // Header
     if (headerRef.current) observer.observe(headerRef.current);
-    // Filtros
     if (filterRef.current) observer.observe(filterRef.current);
-    // Cards
     cardRefs.current.forEach((ref) => {
       if (ref) observer.observe(ref);
     });
-    // Botón ver más
     if (loadMoreRef.current) observer.observe(loadMoreRef.current);
     return () => {
       if (headerRef.current) observer.unobserve(headerRef.current);
@@ -90,22 +117,34 @@ const PostList = () => {
   };
 
   const handleClearFilters = () => {
-    setFiltro({ anio: "", tipo: "", autores: "" });
+    setFiltro({ type: [], year: [], author: [] });
     setPagina(1);
     setVisibleCount(6);
   };
 
-  const getTypeColor = (tipo) => {
+  const getTypeColor = (type) => {
     const colors = {
-      Artículo: "#E91E63",
+      "Artículo": "#E91E63",
       "Capítulo de Libro": "#9C27B0",
-      Paper: "#2196F3",
-      Libro: "#FF9800",
+      "Paper": "#2196F3",
+      "Libro": "#FF9800",
       "Informe Técnico": "#4CAF50",
-      Tesis: "#795548",
+      "Tesis": "#795548",
     };
-    return colors[tipo] || "#6B7280";
+    return colors[type] || "#6B7280";
   };
+
+  // Grouping logic: group by year extracted from date
+  const groupedPublications = visiblePublicaciones.reduce((acc, pub) => {
+    const dateStr = pub.date || "";
+    const parsed = new Date(dateStr);
+    const year = !isNaN(parsed.getTime()) ? parsed.getFullYear() : "Sin año";
+    if (!acc[year]) acc[year] = [];
+    acc[year].push(pub);
+    return acc;
+  }, {});
+
+  const sortedYears = Object.keys(groupedPublications).sort((a, b) => b - a);
 
   return (
     <section
@@ -136,6 +175,9 @@ const PostList = () => {
             filtro={filtro}
             onChange={handleFiltroChange}
             onClear={handleClearFilters}
+            availableTypes={availableTypes}
+            availableYears={availableYears}
+            availableAuthors={availableAuthors}
           />
         </div>
 
@@ -170,107 +212,77 @@ const PostList = () => {
             </p>
           </div>
         ) : (
-          <div className="multi-card-carousel">
-            <div className="carousel-container">
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-                  gap: "2rem",
-                }}
-              >
-                {visiblePublicaciones.map((pub, idx) => (
-                  <div
-                    key={pub.idPublicacion}
-                    ref={(el) => (cardRefs.current[idx] = el)}
-                    data-index={idx}
-                    className={`news-card${animatedIndexes.has(idx.toString()) ? " animated" : ""}`}
-                    style={{ animationDelay: `${0.7 + idx * 0.1}s` }}
-                  >
-                    {/* Header de la publicación */}
-                    <div className="news-content">
-                      <div className="news-meta">
-                        <span
-                          className="news-category"
-                          style={{
-                            background: getTypeColor(pub.tipo),
-                            color: "white",
-                          }}
-                        >
-                          {pub.tipo}
-                        </span>
-                        <div className="news-views">
-                          <CalendarOutlined />
-                          <span>{pub.date}</span>
+          <div className="publications-list-container">
+            {sortedYears.map((year) => (
+              <div key={year} className="publication-year-group">
+                <h3 className="publication-year-header">{year}</h3>
+                <div className="publication-year-list">
+                  {groupedPublications[year].map((pub) => (
+                    <div
+                      key={pub.id}
+                      className="publication-card"
+                    >
+                      {/* Col 1: Type & Date */}
+                      <div className="pub-col-meta">
+                        {pub.type && (
+                          <span
+                            className="publication-type-badge has-tooltip"
+                            data-tooltip={`${t('publications.tooltipType')}: ${pub.type}`}
+                            style={{
+                              color: getTypeColor(pub.type),
+                              borderColor: getTypeColor(pub.type),
+                              backgroundColor: `${getTypeColor(pub.type)}15`,
+                            }}
+                          >
+                            <TranslatedText>{pub.type}</TranslatedText>
+                          </span>
+                        )}
+                        <div className="pub-date has-tooltip" data-tooltip={`${t('publications.tooltipDate')}: ${pub.date}`}>
+                          <CalendarOutlined /> {pub.date}
                         </div>
                       </div>
 
-                      <h3 className="news-title"><TranslatedText>{pub.title}</TranslatedText></h3>
-
-                      <div
-                        style={{
-                          fontSize: "0.875rem",
-                          color: "var(--color-text-secondary)",
-                          marginBottom: "1rem",
-                          fontWeight: "500",
-                        }}
-                      >
-                        <TranslatedText>{pub.description}</TranslatedText> <div />
+                      {/* Col 2: Title & Description */}
+                      <div className="pub-col-info">
+                        <h4 className="pub-title has-tooltip" data-tooltip={`${t('publications.tooltipTitle')}: ${pub.title}`}>
+                          <TranslatedText>{pub.title}</TranslatedText>
+                        </h4>
+                        <div className="pub-description has-tooltip" data-tooltip={`${t('publications.tooltipDescription')}: ${pub.description}`}>
+                          <TranslatedText>{pub.description}</TranslatedText>
+                        </div>
                       </div>
 
-                      {pub.publicacion && (
-                        <div
-                          style={{
-                            fontSize: "0.8rem",
-                            color: "var(--color-text-muted)",
-                            marginBottom: "1rem",
-                            fontStyle: "italic",
-                          }}
-                        >
-                          Publicado en: {pub.publicationLink}
+                      {/* Col 3: Authors */}
+                      {pub.authors && (
+                        <div className="pub-col-authors has-tooltip" data-tooltip={`${t('publications.tooltipAuthors')}: ${pub.authors}`}>
+                          <UserOutlined className="pub-authors-icon" />
+                          <span className="pub-authors-text">{pub.authors}</span>
                         </div>
                       )}
 
-                      <div className="news-actions">
-                        {pub.publicationLink ? (
-                          <a
-                            href={pub.publicationLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="news-btn-primary"
-                          >
-                            <span>{t('publications.viewPublication')}</span>
-                            <ArrowRightOutlined />
-                          </a>
-                        ) : (
-                          <div
-                            className="news-btn-primary"
-                            style={{ opacity: 0.5, cursor: "not-allowed" }}
-                          >
-                            <span>{t('publications.notAvailable')}</span>
-                          </div>
-                        )}
-                        <button
-                          className="news-btn-secondary"
-                          aria-label={t('publications.sharePublication')}
-                        >
-                          <ShareAltOutlined />
-                        </button>
+                      {/* Col 4: Actions */}
+                      <div className="pub-col-actions">
+                         <a 
+                           href={pub.publicationLink || "#"} 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           className={`action-link-btn ${!pub.publicationLink ? "disabled" : ""}`}
+                         >
+                           {t('publications.viewPublication')} <ArrowRightOutlined />
+                         </a>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            ))}
+
             {/* Botón Ver más */}
             {hasMore && (
               <div
-                className={`load-more-container${animatedIndexes.has("loadmore") ? " animated" : ""}`}
+                className="load-more-container"
                 ref={loadMoreRef}
-                data-index="loadmore"
-                style={{
-                  animationDelay: `${0.3 + visiblePublicaciones.length * 0.1}s`,
-                }}
+                style={{ marginTop: "2rem" }}
               >
                 <button
                   className="load-more-btn"

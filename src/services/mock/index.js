@@ -283,77 +283,91 @@ const mockData = {
     {
       id: 1,
       title: "Publicación 1: Ontologías en la Web",
+      type: "Artículo",
+      authors: "Laura A. Cecchi, Sandra R. Roger",
       description:
         "Un estudio detallado sobre el uso de ontologías en la web semántica y su aplicación en sistemas de información.",
       date: "2023-05-15",
       publicationLink: "https://ejemplo.com/publicacion1",
-      personas: [1, 2], // IDs de Laura Cecchi y Sandra Roger
-      researchline: 1, // ID de la línea de investigación relacionada
+      personas: [1, 2],
+      researchline: 1,
       extensionline: null,
     },
     {
       id: 2,
       title: "Publicación 2: Aprendizaje Automático",
+      type: "Paper",
+      authors: "Gerardo Parra, Pablo Kogan",
       description:
         "Avances recientes en algoritmos de aprendizaje automático aplicados a procesamiento de lenguaje natural.",
       date: "2023-04-22",
       publicationLink: "https://ejemplo.com/publicacion2",
-      personas: [3, 7], // IDs de Gerardo Parra y Pablo Kogan
+      personas: [3, 7],
       researchline: 2,
       extensionline: null,
     },
     {
       id: 3,
       title: "Publicación 3: Sistemas Multiagentes",
+      type: "Capítulo de Libro",
+      authors: "Sandra R. Roger, Claudio Vaucheret, Mario Moya",
       description:
         "Diseño e implementación de sistemas multiagentes para la resolución de problemas complejos.",
       date: "2023-03-10",
       publicationLink: "https://ejemplo.com/publicacion3",
-      personas: [2, 4, 8], // IDs de Sandra Roger, Claudio Vaucheret y Mario Moya
+      personas: [2, 4, 8],
       researchline: 3,
       extensionline: 1,
     },
     {
       id: 4,
       title: "Publicación 4: Lenguajes de Programación",
+      type: "Informe Técnico",
+      authors: "Daniel Dolz, Laura A. Cecchi",
       description:
         "Nuevos paradigmas en lenguajes de programación para inteligencia artificial.",
       date: "2023-02-28",
       publicationLink: "https://ejemplo.com/publicacion4",
-      personas: [6, 1], // IDs de Daniel Dolz y Laura Cecchi
+      personas: [6, 1],
       researchline: 1,
       extensionline: 2,
     },
     {
       id: 5,
       title: "Publicación 5: Aplicaciones de IA en Educación",
+      type: "Tesis",
+      authors: "Maximiliano Klemen, María Laura Pino",
       description:
         "Uso de técnicas de inteligencia artificial para personalizar el aprendizaje.",
       date: "2023-01-15",
       publicationLink: "https://ejemplo.com/publicacion5",
-      personas: [9, 10], // IDs de Maximiliano Klemen y María Laura Pino
+      personas: [9, 10],
       researchline: 2,
       extensionline: 3,
     },
     {
       id: 6,
       title: "Publicación 6: Análisis de Datos",
+      type: "Artículo",
+      authors: "Pablo Kogan, Rodolfo Del Castillo",
       description:
         "Técnicas avanzadas de análisis de datos para grandes volúmenes de información.",
       date: "2022-12-05",
       publicationLink: "https://ejemplo.com/publicacion6",
-      personas: [7, 5], // IDs de Pablo Kogan y Rodolfo Del Castillo
+      personas: [7, 5],
       researchline: 4,
       extensionline: 4,
     },
     {
       id: 7,
       title: "Publicación 7: Redes Neuronales",
+      type: "Paper",
+      authors: "Gerardo Parra, Laura A. Cecchi, Sandra R. Roger",
       description:
         "Aplicación de redes neuronales profundas en problemas de visión por computadora.",
       date: "2022-11-20",
       publicationLink: "https://ejemplo.com/publicacion7",
-      personas: [3, 1, 2], // IDs de Gerardo Parra, Laura Cecchi y Sandra Roger
+      personas: [3, 1, 2],
       researchline: 2,
       extensionline: 5,
     },
@@ -830,14 +844,22 @@ export async function getPublications(filters = {}) {
   await delay(800);
   let filteredPublications = mockData.publications.map(mapPublication);
 
-  if (filters.year) {
+  if (filters.year && filters.year.length > 0) {
+    const years = Array.isArray(filters.year) ? filters.year.map(Number) : [Number(filters.year)];
     filteredPublications = filteredPublications.filter(
-      (pub) => pub.year === Number.parseInt(filters.year)
+      (pub) => years.includes(new Date(pub.date).getFullYear())
     );
   }
-  if (filters.type) {
+  if (filters.type && filters.type.length > 0) {
+    const types = Array.isArray(filters.type) ? filters.type : [filters.type];
     filteredPublications = filteredPublications.filter(
-      (pub) => pub.type === filters.type
+      (pub) => types.includes(pub.type)
+    );
+  }
+  if (filters.author && filters.author.length > 0) {
+    const authors = Array.isArray(filters.author) ? filters.author : [filters.author];
+    filteredPublications = filteredPublications.filter(
+      (pub) => pub.authors && authors.some((a) => pub.authors.includes(a))
     );
   }
   if (filters.researchLineId) {

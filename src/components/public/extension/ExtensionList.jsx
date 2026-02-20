@@ -104,7 +104,7 @@ const LineaExtensionList = () => {
                     </p>
 
                     <div className="news-actions">
-                      <Link to={langPath(`/extension/${item.id || item.idLineaExtension}`)} className="news-btn-primary">
+                      <Link to={langPath(`/extentions-lines/${item.id || item.idLineaExtension}`)} className="news-btn-primary">
                         <span>{t('extensionLines.viewMore')}</span>
                         <ArrowRightOutlined />
                       </Link>
