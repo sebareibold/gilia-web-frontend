@@ -18,18 +18,12 @@ const PostList = () => {
   const linea = state?.linea || "";
   const [publicaciones, setPublicaciones] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [pagina, setPagina] = useState(1);
   const [filtro, setFiltro] = useState({ type: [], year: [], author: [], linea: linea });
   const { theme, isDarkTheme } = useTheme();
   const { t } = useTranslation();
 
   const [allPublicaciones, setAllPublicaciones] = useState([]); // Unfiltered for extracting options
   const [visibleCount, setVisibleCount] = useState(6);
-  const [animatedIndexes, setAnimatedIndexes] = useState(new Set());
-  const cardRefs = useRef([]);
-  const filterRef = useRef(null);
-  const headerRef = useRef(null);
-  const loadMoreRef = useRef(null);
 
   const visiblePublicaciones = publicaciones.slice(0, visibleCount);
   const hasMore = visibleCount < publicaciones.length;
@@ -62,7 +56,7 @@ const PostList = () => {
     };
 
     fetchPublicaciones();
-  }, [pagina, filtro]);
+  }, [filtro]);
 
   // Extract unique types and years from ALL publications
   const availableTypes = [...new Set(allPublicaciones.map((p) => p.type).filter(Boolean))].sort();
@@ -82,43 +76,13 @@ const PostList = () => {
       .filter(Boolean)
   )].sort();
 
-  useEffect(() => {
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = entry.target.dataset.index;
-            setAnimatedIndexes((prev) => new Set([...prev, index]));
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-    if (headerRef.current) observer.observe(headerRef.current);
-    if (filterRef.current) observer.observe(filterRef.current);
-    cardRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
-    return () => {
-      if (headerRef.current) observer.unobserve(headerRef.current);
-      if (filterRef.current) observer.unobserve(filterRef.current);
-      cardRefs.current.forEach((ref) => {
-        if (ref) observer.unobserve(ref);
-      });
-      if (loadMoreRef.current) observer.unobserve(loadMoreRef.current);
-    };
-  }, [visiblePublicaciones, hasMore]);
-
   const handleFiltroChange = (e) => {
     setFiltro({ ...filtro, [e.target.name]: e.target.value });
-    setPagina(1);
     setVisibleCount(6);
   };
 
   const handleClearFilters = () => {
     setFiltro({ type: [], year: [], author: [] });
-    setPagina(1);
     setVisibleCount(6);
   };
 
@@ -153,11 +117,7 @@ const PostList = () => {
     >
       <div className="exploration-container">
         {/* Header */}
-        <div
-          className={`section-header${animatedIndexes.has("header") ? " animated" : ""}`}
-          ref={headerRef}
-          data-index="header"
-        >
+        <div className="section-header">
           <h2 className="section-title">{t('publications.title')}</h2>
           <p className="post-section-description">
             {t('publications.description')}
@@ -165,12 +125,7 @@ const PostList = () => {
         </div>
 
         {/* Filtros */}
-        <div
-          ref={filterRef}
-          data-index="filters"
-          className={`filters-animated${animatedIndexes.has("filters") ? " animated" : ""}`}
-          style={{ animationDelay: "0.2s" }}
-        >
+        <div className="filters-container">
           <PublicationFilters
             filtro={filtro}
             onChange={handleFiltroChange}
@@ -281,7 +236,6 @@ const PostList = () => {
             {hasMore && (
               <div
                 className="load-more-container"
-                ref={loadMoreRef}
                 style={{ marginTop: "2rem" }}
               >
                 <button
