@@ -1,464 +1,267 @@
-/* ======== Contendor Padre de la seccion Admin Home ======== */
-.admin-home {
-  max-width: 1600px;
-  margin: 0 auto;
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column; /*  cambia el eje principal de fila (por defecto) a columna */
-  align-items: center; /* Centra los ítems en el eje secundario (que ahora es el horizontal/X) */
-} 
+/* AdminHome.css Mejorado */
 
-.admin-home > * {
-  position: relative;
-  z-index: 1;
+.admin-home {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
 }
 
-/* ========= Seccion del Header de Bienvenida ======= */
+/* Header */
 .admin-home-header {
-  margin-bottom: 3rem;
-  text-align: center;
+  margin-bottom: 2rem;
+  text-align: left;
 }
 
 .admin-welcome-text {
-  padding: 2rem 0;
+  padding: 0;
 }
 
 .admin-welcome-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.08));
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #eff6ff;
   color: #3b82f6;
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: 99px;
   font-size: 0.75rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  backdrop-filter: blur(10px);
 }
 
 .admin-welcome-title {
-  font-size: 2.2rem;
+  font-size: 2.5rem;
   font-weight: 800;
-  margin: 0 0 0.5rem 0;
-  background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.03em;
 }
 
 .admin-welcome-subtitle {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #64748b;
-  margin: 0;
-  font-weight: 500;
-  opacity: 0.9;
+  max-width: 600px;
 }
 
-.admin-welcome-icon {
-  font-size: 4rem;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  opacity: 0.7;
-  filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.2));
+/* Quick Guide */
+.admin-quick-guide {
+  margin-bottom: 3rem;
 }
 
-/* ============ Seccion netas de Admin Home =========== */
-.admin-section-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 2rem;
+.guide-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  position: relative;
+  gap: 1.5rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.admin-section-title::before {
-  content: "";
-  width: 6px;
-  height: 32px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
-  border-radius: 3px;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+.guide-icon {
+  font-size: 2rem;
+  color: #3b82f6;
+  background: #f0f7ff;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
 }
 
-.admin-section-title::after {
-  content: "";
-  flex: 1;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.2) 50%, transparent 100%);
-  margin-left: 1rem;
+.guide-content h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  color: #1e293b;
 }
 
-/*  =========== Cards de Accesso Rapido =========*/
-.admin-quick-actions-section {
-  margin-bottom: 4rem;
-  width: 80%;
+.guide-content p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.95rem;
 }
 
-.admin-quick-actions-grid {
+/* Section Header */
+.section-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.admin-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.section-tag {
+  font-size: 0.8rem;
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* CARDS GRID */
+.admin-cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
-.admin-quick-action-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
-  padding: 1.5rem;
-  border-radius: 20px;
-  backdrop-filter: blur(20px) saturate(120%);
-  border: 2px solid rgba(59, 130, 246, 0.12);
-  box-shadow: 0 16px 48px rgba(59, 130, 246, 0.08), 0 8px 24px rgba(139, 92, 246, 0.06), inset 0 1px 0
-    rgba(255, 255, 255, 0.9);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+.admin-action-card-wrapper {
   text-decoration: none;
+  display: flex;
 }
 
-.admin-quick-action-card::before {
+.admin-action-card-v2 {
+  background: white;
+  padding: 2rem;
+  border-radius: 24px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-action-card-v2::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, transparent 0%, currentColor 50%, transparent 100%);
-  opacity: 0.6;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-color);
+  opacity: 0.5;
+  transition: width 0.3s ease;
 }
 
-.admin-quick-action-card::after {
-  content: "";
-  position: absolute;
-  top: 20px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, currentColor 0%, transparent 70%);
-  opacity: 0.03;
-  border-radius: 50%;
-  pointer-events: none;
+.admin-action-card-v2:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* Se utilizan estilos de coloreo diferentes para cada uno de los cards */
-.admin-quick-action-card.blue {
-  color: #3b82f6;
-}
-.admin-quick-action-card.green {
-  color: #10b981;
-}
-.admin-quick-action-card.purple {
-  color: #8b5cf6;
-}
-.admin-quick-action-card.orange {
-  color: #f59e0b;
-}
-.admin-quick-action-card.cyan {
-  color: #06b6d4;
-}
-.admin-quick-action-card.red {
-  color: #ef4444;
+.admin-action-card-v2:hover::before {
+  width: 8px;
+  opacity: 1;
 }
 
-.admin-quick-action-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 24px 64px rgba(59, 130, 246, 0.15), 0 12px 32px rgba(139, 92, 246, 0.1), inset 0 1px 0
-    rgba(255, 255, 255, 1);
-  border-color: rgba(59, 130, 246, 0.25);
-}
-
-.admin-quick-action-header {
+.card-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1.5rem;
-}
-
-.admin-quick-action-icon {
-  font-size: 2.5rem;
-  color: inherit;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-}
-
-.admin-quick-action-badge {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.08));
-  color: #3b82f6;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  backdrop-filter: blur(10px);
-}
-
-.admin-quick-action-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin: 0 0 0.75rem 0;
-  letter-spacing: -0.01em;
-}
-
-.admin-quick-action-description {
-  color: #64748b;
-  margin: 0 0 1.5rem 0;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-/* Acciones rápidas específicas */
-.admin-quick-actions-list {
-  margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.admin-quick-action-item {
-  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: rgba(248, 250, 252, 0.5);
-  border: 1px solid rgba(59, 130, 246, 0.08);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #475569;
+  margin-bottom: 1.5rem;
 }
 
-.admin-quick-action-item:hover {
-  background: rgba(59, 130, 246, 0.05);
-  border-color: rgba(59, 130, 246, 0.15);
-  transform: translateX(4px);
-}
-
-.admin-quick-action-item-icon {
-  font-size: 1rem;
-  color: inherit;
-}
-
-.admin-quick-action-item-label {
-  flex: 1;
-}
-
-.admin-quick-action-item-arrow {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  transition: all 0.3s ease;
-}
-
-.admin-quick-action-item:hover .admin-quick-action-item-arrow {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
-.admin-action-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-}
-
-.admin-action-btn {
+.card-icon {
+  font-size: 2rem;
+  color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color), white 90%);
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.admin-action-card-v2:hover .card-icon {
+  transform: scale(1.1);
+}
+
+.card-arrow {
+  color: #cbd5e1;
+  font-size: 1.25rem;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.admin-action-card-v2:hover .card-arrow {
+  color: var(--accent-color);
+  transform: translateX(5px);
+}
+
+.card-body h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.card-body p {
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.card-footer {
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
-  position: relative;
-  overflow: hidden;
+  margin-top: auto;
 }
 
-.admin-action-btn::before {
+.action-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  background: color-mix(in srgb, var(--accent-color), white 92%);
+  padding: 6px 12px;
+  border-radius: 99px;
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 80%);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.action-tag::before {
   content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.5s;
+  width: 5px;
+  height: 5px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-color);
 }
 
-.admin-action-btn:hover::before {
-  left: 100%;
-}
-
-.admin-action-add {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
-  color: #059669;
-  border: 1px solid rgba(34, 197, 94, 0.2);
-}
-
-.admin-action-add:hover {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.1));
+.admin-action-card-v2:hover .action-tag {
+  background: color-mix(in srgb, var(--accent-color), white 85%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-color), transparent 90%);
 }
 
-.admin-action-view {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
-  color: #2563eb;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+.admin-dashboard-footer {
+  margin-top: 4rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
 }
 
-.admin-action-view:hover {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.1));
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
-}
-
-.admin-action-edit {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
-  color: #d97706;
-  border: 1px solid rgba(245, 158, 11, 0.2);
-}
-
-.admin-action-edit:hover {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.1));
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
-}
-
-.admin-action-delete {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
-  color: #dc2626;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-}
-
-.admin-action-delete:hover {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.1));
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
-}
-
-.admin-action-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .admin-quick-actions-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
+/* Responsive */
 @media (max-width: 768px) {
-  .admin-home {
-    padding: 1.5rem;
-  }
-
-  /* Título más pequeño en móvil */
   .admin-welcome-title {
-    font-size: 1.8rem;
-  }
-
-  .admin-welcome-subtitle {
-    font-size: 0.9rem;
-  }
-
-  .admin-section-title {
-    font-size: 1.5rem;
-  }
-
-  .admin-quick-actions-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .admin-quick-action-card {
-    padding: 1.5rem;
-  }
-
-
-  .admin-action-buttons {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .admin-home {
-    padding: 1rem;
-  }
-
-  /* Título aún más pequeño en móviles pequeños */
-  .admin-welcome-title {
-    font-size: 1.6rem;
-  }
-
-  .admin-section-title {
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .admin-quick-action-card {
-    padding: 1.25rem;
-  }
-
-  .admin-quick-action-icon {
     font-size: 2rem;
   }
-
-  .admin-action-buttons {
+  
+  .admin-cards-grid {
     grid-template-columns: 1fr;
-    gap: 0.5rem;
   }
-
-}
-
-/* Animaciones de entrada */
-.admin-quick-action-card:nth-child(1) {
-  animation-delay: 0.1s;
-}
-.admin-quick-action-card:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.admin-quick-action-card:nth-child(3) {
-  animation-delay: 0.3s;
-}
-.admin-quick-action-card:nth-child(4) {
-  animation-delay: 0.4s;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.admin-quick-action-card {
-  animation: slideInUp 0.6s ease-out both;
-}
-
-/* Mejoras para el glass morphism */
-@supports (backdrop-filter: blur(20px)) {
-  .admin-welcome,
-  .admin-quick-action-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+  
+  .admin-home {
+    padding: 1.5rem;
   }
 }

@@ -14,6 +14,9 @@ import {
   MenuOutlined,
   ProjectOutlined,
   SettingOutlined,
+  BellOutlined,
+  LockOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import "./AdminLayout.css";
 import "../../styles/AdminCommon.css";
@@ -50,6 +53,16 @@ const MENU_ITEMS = [
     icon: <UserOutlined />,
     label: "Equipo",
   },
+  {
+    key: "news",
+    icon: <BellOutlined />,
+    label: "Novedades",
+  },
+  {
+    key: "users",
+    icon: <LockOutlined />,
+    label: "Usuarios",
+  },
   /*
   {
     key: "gallery",
@@ -58,9 +71,9 @@ const MENU_ITEMS = [
   }, 
   */
   {
-    key: "configuration",
-    icon: <SettingOutlined />,
-    label: "Configuración",
+    key: "content",
+    icon: <FileTextOutlined />,
+    label: "Contenido Estático",
   },
 ];
 
@@ -95,7 +108,7 @@ const useBodyStyles = () => {
   }, []);
 };
 
-// Navbar mobile
+// Navbar mobile (Header con hamburguesa)
 const MobileAppBar = ({ user, isMenuOpen, onToggleMenu }) => (
   <div className="mobile-appbar">
     <div className="mobile-appbar-content">
@@ -110,32 +123,6 @@ const MobileAppBar = ({ user, isMenuOpen, onToggleMenu }) => (
         <MenuOutlined />
       </button>
     </div>
-
-    {isMenuOpen && (
-      <div className="mobile-dropdown-menu">
-        {MENU_ITEMS.map((item) => (
-          <Link
-            key={item.key}
-            to={item.key}
-            className="mobile-dropdown-item"
-            onClick={onToggleMenu}
-          >
-            <span className="mobile-item-icon">{item.icon}</span>
-            <span className="mobile-item-label">{item.label}</span>
-          </Link>
-        ))}
-        <button
-          onClick={() => {
-            onToggleMenu();
-            // handleLogout will be passed from parent
-          }}
-          className="mobile-dropdown-item mobile-logout"
-        >
-          <LogoutOutlined className="mobile-item-icon" />
-          <span className="mobile-item-label">Cerrar Sesión</span>
-        </button>
-      </div>
-    )}
   </div>
 );
 
@@ -257,11 +244,17 @@ const AdminLayout = () => {
 
   return (
     <div className="admin-layout-gradient admin-theme">
-      {/*  <div className="mobile-only">
-          <MobileAppBar user={user} isMenuOpen={mobileMenuOpen} onToggleMenu={toggleMobileMenu} />
-        </div>
+      {/* Navbar para móvil (Hamburguesa) */}
+      <MobileAppBar 
+        user={user} 
+        isMenuOpen={mobileMenuOpen} 
+        onToggleMenu={toggleMobileMenu} 
+      />
 
-        {mobileMenuOpen && <div className="mobile-simple-overlay" onClick={() => setMobileMenuOpen(false)} />} */}
+      {/* Overlay para cerrar el menú al hacer clic fuera */}
+      {mobileMenuOpen && (
+        <div className="mobile-simple-overlay" onClick={() => setMobileMenuOpen(false)} />
+      )}
 
       <aside
         className={`admin-sidebar-transparent ${mobileMenuOpen ? "mobile-open" : ""} ${!sidebarOpen ? "collapsed" : "stable"}`}

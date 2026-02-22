@@ -11,17 +11,23 @@ import {
   PlusOutlined,
   SearchOutlined,
   TeamOutlined,
+  ArrowLeftOutlined,
+  SaveOutlined,
+  SettingOutlined,
+  InfoCircleOutlined,
+  GithubOutlined,
+  LinkedinOutlined,
+  UserOutlined,
 } from "@ant-design/icons"
-import "./AdminTeam.css"
 
 const AdminEquipo = () => {
-  const [teamMembers, setTeamMembers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filterRole, setFilterRole] = useState("all")
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [currentMember, setCurrentMember] = useState(null)
-  const [isSaving, setIsSaving] = useState(false)
+  const [teamMembers, setTeamMembers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterRole, setFilterRole] = useState("all");
+  const [viewMode, setViewMode] = useState("list"); // "list" | "edit"
+  const [currentMember, setCurrentMember] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     fetchMembers();
@@ -46,31 +52,78 @@ const AdminEquipo = () => {
     }
   };
 
+  const emptyMember = {
+    name: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    academicRole: "",
+    title: "",
+    githubLink: "",
+    linkedinLink: "",
+    isAuthor: false,
+    bio: "",
+  };
+
   const handleOpenModal = (member = null) => {
-    setCurrentMember(member);
-    setIsModalOpen(true);
+    setCurrentMember(member
+      ? {
+          ...member,
+          name: member.name || "",
+          lastname: member.lastname || "",
+          email: member.email || "",
+          phone: member.phone || "",
+          academicRole: member.academicRole || member.category || "",
+          title: member.title || "",
+          githubLink: member.githubLink || "",
+          linkedinLink: member.linkedinLink || "",
+          isAuthor: member.isAuthor ?? false,
+          bio: member.bio || "",
+        }
+      : { ...emptyMember }
+    );
+    setViewMode("edit");
   };
 
-  const handleCloseModal = () => {
-    setCurrentMember(null);
-    setIsModalOpen(false);
+  const handleCloseEditor = (force = false) => {
+    if (!force && isDirty()) {
+      Modal.confirm({
+        title: "Cambios sin guardar",
+        content: "¿Estás seguro de que deseas salir? Se perderán los cambios realizados.",
+        okText: "Descartar",
+        cancelText: "Seguir editando",
+        onOk: () => {
+          setViewMode("list");
+          setCurrentMember(null);
+        },
+      });
+    } else {
+      setViewMode("list");
+      setCurrentMember(null);
+    }
   };
 
-  const handleSave = async (formData) => {
+  const isDirty = () => {
+    if (!currentMember) return false;
+    const original = teamMembers.find(m => m.id === currentMember.id) || emptyMember;
+    return JSON.stringify(currentMember) !== JSON.stringify(original);
+  };
+
+  const handleSave = async () => {
     const isUpdating = currentMember && currentMember.id;
     setIsSaving(true);
-   /*  try {
-      if (isUpdating) {
-        await dataService.updatePersona(currentMember.id, formData);
-      } else {
-        await dataService.createPersona(formData);
-      }
+    try {
+      // Simulation
+      console.log("Saving team member:", currentMember);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       notification.success({
         message: `Miembro ${isUpdating ? 'Actualizado' : 'Creado'}`,
         description: `El miembro del equipo se ha ${isUpdating ? 'actualizado' : 'creado'} correctamente.`,
       });
       fetchMembers();
-      handleCloseModal();
+      setViewMode("list");
+      setCurrentMember(null);
     } catch (error) {
       console.error("Error al guardar el miembro:", error);
       notification.error({
@@ -79,7 +132,7 @@ const AdminEquipo = () => {
       });
     } finally {
       setIsSaving(false);
-    } */
+    }
   };
 
   const handleDelete = (id) => {
@@ -110,8 +163,8 @@ const AdminEquipo = () => {
 
   const filteredMembers = teamMembers;
 
-    // Extraer roles únicos de los miembros del equipo, usando 'especialidad'
-  const roles = ["all", ...new Set(teamMembers.map(member => member.especialidad).filter(Boolean))];
+  // Roles únicos usando academicRole
+  const roles = ["all", ...new Set(teamMembers.map(m => m.academicRole || m.category).filter(Boolean))];
 
   if (loading) {
     return (
@@ -132,160 +185,254 @@ const AdminEquipo = () => {
         <div className="admin-floating-element admin-floating-element-3"></div>
       </div>
 
-      <div className="admin-unified-header">
-        <h1 className="admin-unified-title">
-          <TeamOutlined />
-          Gestión del Equipo
-        </h1>
-        <p className="admin-unified-subtitle">Administra los miembros del equipo de investigación GILIA</p>
+      {viewMode === "list" ? (
+        <>
+          <div className="admin-unified-header">
+            <h1 className="admin-unified-title">
+              <TeamOutlined />
+              Gestión del Equipo
+            </h1>
+            <p className="admin-unified-subtitle">Administra los miembros del equipo de investigación GILIA</p>
 
-        <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
-          <PlusOutlined /> Agregar Miembro
-        </button>
-      </div>
+            <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
+              <PlusOutlined /> Agregar Miembro
+            </button>
+          </div>
 
-      <div className="admin-unified-filters">
-        <div className="admin-unified-search">
-          <SearchOutlined className="admin-unified-search-icon" />
-          <input
-            type="text"
-            placeholder="Buscar por nombre, email o departamento..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+          <div className="admin-unified-filters">
+            <div className="admin-unified-search">
+              <SearchOutlined className="admin-unified-search-icon" />
+              <input
+                type="text"
+                placeholder="Buscar por nombre, email o departamento..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-        <select
-          value={filterRole}
-          onChange={(e) => setFilterRole(e.target.value)}
-          className="admin-unified-filter-select"
-        >
-          {roles.map((role) => (
-            <option key={role} value={role}>
-              {role === "all" ? "Todos los roles" : role}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {filteredMembers.length === 0 ? (
-        <div className="admin-unified-empty">
-          <TeamOutlined className="admin-unified-empty-icon" />
-          <h3 className="admin-unified-empty-title">No se encontraron miembros</h3>
-          <p className="admin-unified-empty-description">
-            No hay miembros que coincidan con los criterios de búsqueda.
-          </p>
-        </div>
-      ) : (
-        <div className="admin-unified-table-container">
-          <table className="admin-unified-table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Teléfono</th>
-
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredMembers.map((member) => (
-                <tr key={member.id}>
-                  <td>
-                    <strong>{member.name}</strong> {" "}
-                    <strong>{member.lastname}</strong>
-                  </td>
-                  <td>
-                    <MailOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
-                    {member.email}
-                  </td>
-                  <td>
-                    <PhoneOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
-                    {member.phone}
-                  </td>
-
-                  <td>
-                    <div className="admin-table-actions">
-                      <button className="admin-table-btn admin-table-btn-edit" title="Editar" onClick={() => handleOpenModal(member)}>
-                        <EditOutlined />
-                      </button>
-                      <button className="admin-table-btn admin-table-btn-delete" title="Eliminar" onClick={() => handleDelete(member.id)}>
-                        <DeleteOutlined />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+            <select
+              value={filterRole}
+              onChange={(e) => setFilterRole(e.target.value)}
+              className="admin-unified-filter-select"
+            >
+              {roles.map((role) => (
+                <option key={role} value={role}>
+                  {role === "all" ? "Todos los roles" : role}
+                </option>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </select>
+          </div>
+
+          {filteredMembers.length === 0 ? (
+            <div className="admin-unified-empty">
+              <TeamOutlined className="admin-unified-empty-icon" />
+              <h3 className="admin-unified-empty-title">No se encontraron miembros</h3>
+              <p className="admin-unified-empty-description">
+                No hay miembros que coincidan con los criterios de búsqueda.
+              </p>
+            </div>
+          ) : (
+            <div className="modern-table-container">
+              <table className="modern-admin-table">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Título</th>
+                    <th>Rol Académico</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMembers.map((member) => (
+                    <tr key={member.id}>
+                      <td data-label="Nombre">
+                        <strong>{member.name} {member.lastname}</strong>
+                      </td>
+                      <td data-label="Título">
+                        {member.title || "—"}
+                      </td>
+                      <td data-label="Rol Académico">
+                        <span className="status-badge pending">
+                          {member.academicRole || member.category || "—"}
+                        </span>
+                      </td>
+                      <td data-label="Email">
+                        <MailOutlined style={{ marginRight: "0.5rem", color: "#64748b" }} />
+                        {member.email}
+                      </td>
+                      <td className="actions-cell">
+                        <div className="modern-actions">
+                          <button className="btn-action btn-action-edit" title="Editar" onClick={() => handleOpenModal(member)}>
+                            <EditOutlined /> Modificar
+                          </button>
+                          <button className="btn-action btn-action-delete" title="Eliminar" onClick={() => handleDelete(member.id)}>
+                            <DeleteOutlined /> Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      ) : (
+        <TeamMemberEditor 
+          member={currentMember}
+          setMember={setCurrentMember}
+          onSave={handleSave}
+          onCancel={() => handleCloseEditor()}
+          isSaving={isSaving}
+        />
       )}
-
-      {isModalOpen && <FormModal member={currentMember} onSave={handleSave} onClose={handleCloseModal} isSaving={isSaving} />}
     </div>
-  )
-}
-
-const FormModal = ({ member, onSave, onClose, isSaving }) => {
-  const [formData, setFormData] = useState(
-    member || {
-      nombre: "",
-      apellido: "",
-      especialidad: "",
-      lugar_trabajo: "",
-      lugar_nacimiento: "",
-      email: "",
-      phone: "",
-    }
   );
+};
 
+const TeamMemberEditor = ({ member, setMember, onSave, onCancel, isSaving }) => {
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
+    const { name, value, type, checked } = e.target;
+    setMember(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   };
 
   return (
-    <div className="admin-unified-modal-backdrop">
-      <div className="admin-unified-modal">
-        <h2>{member ? "Editar" : "Nuevo"} Miembro del Equipo</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="admin-unified-form-group">
-            <label>Nombre</label>
-            <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required />
+    <div className="admin-editor-container">
+      <div className="admin-editor-header">
+        <div className="admin-editor-header-left">
+          <div className="admin-editor-breadcrumb" onClick={onCancel}>
+            <ArrowLeftOutlined /> Volver al listado
           </div>
-          <div className="admin-unified-form-group">
-            <label>Apellido</label>
-            <input type="text" name="apellido" value={formData.apellido} onChange={handleChange} required />
-          </div>
-          <div className="admin-unified-form-group">
-            <label>Especialidad (Rol)</label>
-            <input type="text" name="especialidad" value={formData.especialidad} onChange={handleChange} />
-          </div>
-          <div className="admin-unified-form-group">
-            <label>Lugar de Trabajo (Departamento)</label>
-            <input type="text" name="lugar_trabajo" value={formData.lugar_trabajo} onChange={handleChange} />
-          </div>
-          <div className="admin-unified-form-group">
-            <label>Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} />
-          </div>
-          <div className="admin-unified-form-group">
-            <label>Teléfono</label>
-            <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
-          </div>
-          <div className="admin-unified-modal-actions">
-            <button type="button" className="admin-unified-secondary-btn" onClick={onClose}>Cancelar</button>
-            <button type="submit" className="admin-unified-primary-btn" disabled={isSaving}>
-              {isSaving ? 'Guardando...' : 'Guardar'}
-            </button>
-          </div>
-        </form>
+          <h2 className="admin-editor-title">
+            {member.id ? `Editando: ${member.name} ${member.lastname}` : "Nueva Persona"}
+          </h2>
+        </div>
+        <div className="admin-editor-actions">
+          <button className="btn-action btn-action-edit" onClick={onCancel} style={{ marginRight: '0.5rem' }}>
+            Cancelar
+          </button>
+          <button className="admin-unified-primary-btn" onClick={onSave} disabled={isSaving}>
+            <SaveOutlined /> {isSaving ? "Guardando..." : "Guardar Cambios"}
+          </button>
+        </div>
       </div>
+
+      <div className="admin-editor-layout">
+        <div className="admin-editor-main">
+
+          {/* Datos personales */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title"><SettingOutlined /> Datos Personales</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="admin-editor-row-2">
+                <div className="editor-form-group">
+                  <label className="editor-label">Nombre</label>
+                  <input type="text" name="name" className="editor-input"
+                    value={member.name} onChange={handleChange} required />
+                </div>
+                <div className="editor-form-group">
+                  <label className="editor-label">Apellido</label>
+                  <input type="text" name="lastname" className="editor-input"
+                    value={member.lastname} onChange={handleChange} required />
+                </div>
+              </div>
+              <div className="editor-form-group">
+                <label className="editor-label">Biografía</label>
+                <textarea
+                  name="bio"
+                  className="editor-textarea"
+                  style={{ minHeight: '140px' }}
+                  value={member.bio}
+                  onChange={handleChange}
+                  placeholder="Breve reseña personal y profesional..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Contacto */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title"><MailOutlined /> Contacto</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="admin-editor-row-2">
+                <div className="editor-form-group">
+                  <label className="editor-label">Email Institucional</label>
+                  <input type="email" name="email" className="editor-input"
+                    value={member.email} onChange={handleChange} />
+                </div>
+                <div className="editor-form-group">
+                  <label className="editor-label"><PhoneOutlined /> Teléfono</label>
+                  <input type="text" name="phone" className="editor-input"
+                    value={member.phone} onChange={handleChange} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Redes */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title"><InfoCircleOutlined /> Redes y Enlaces</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="editor-form-group">
+                <label className="editor-label"><GithubOutlined /> Perfil de GitHub</label>
+                <input type="text" name="githubLink" className="editor-input"
+                  value={member.githubLink} onChange={handleChange} placeholder="https://github.com/..." />
+              </div>
+              <div className="editor-form-group">
+                <label className="editor-label"><LinkedinOutlined /> Perfil de LinkedIn</label>
+                <input type="text" name="linkedinLink" className="editor-input"
+                  value={member.linkedinLink} onChange={handleChange} placeholder="https://linkedin.com/in/..." />
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="admin-editor-sidebar">
+
+          {/* Rol académico */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title"><UserOutlined /> Rol Académico</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="editor-form-group">
+                <label className="editor-label">Título</label>
+                <input type="text" name="title" className="editor-input"
+                  value={member.title} onChange={handleChange}
+                  placeholder="Ej:  APU, Lic., Ing., Dr., Mg." />
+              </div>
+              <div className="editor-form-group">
+                <label className="editor-label">Rol / Cargo</label>
+                <input type="text" name="academicRole" className="editor-input"
+                  value={member.academicRole} onChange={handleChange}
+                  placeholder="Ej: Investigador, Director, Tesista" />
+              </div>
+              <div className="editor-form-group" style={{ marginBottom: 0 }}>
+                <label className="editor-checkbox-item" style={{ border: 'none', background: 'transparent', padding: '0.25rem 0', gap: '0.75rem' }}>
+                  <input
+                    type="checkbox"
+                    name="isAuthor"
+                    checked={member.isAuthor}
+                    onChange={handleChange}
+                    style={{ width: 16, height: 16, accentColor: '#3b82f6' }}
+                  />
+                  <span style={{ fontWeight: 500, color: '#334155' }}>Es autor de publicaciones</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   );
 };

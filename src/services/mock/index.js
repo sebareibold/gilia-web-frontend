@@ -283,15 +283,14 @@ const mockData = {
     {
       id: 1,
       title: "Publicación 1: Ontologías en la Web",
-      type: "Artículo",
-      authors: "Laura A. Cecchi, Sandra R. Roger",
-      description:
-        "Un estudio detallado sobre el uso de ontologías en la web semántica y su aplicación en sistemas de información.",
+      type: "Articulo",
+      description: "### Introducción\nUn estudio detallado sobre el uso de **ontologías** en la web semántica.\n\n#### Objetivos\n- Integrar datos.\n- Mejorar consultas.",
       date: "2023-05-15",
       publicationLink: "https://ejemplo.com/publicacion1",
+      document: "paper_ontologias.pdf",
       personas: [1, 2],
-      researchline: 1,
-      extensionline: null,
+      researchLines: [1],
+      extensionLines: []
     },
     {
       id: 2,
@@ -507,13 +506,11 @@ const mockData = {
     },
   ],
 
-  // ===== DATOS MOCK PARA USURIOS =====
-  Users: {
-    emial: "admin@email.com",
-    password: "admin123",
-    role: "desarrolador",
-    is_active: true,
-  },
+  // ===== DATOS MOCK PARA USUARIOS =====
+  users: [
+    { id: 1, email: "admin@gilia.com", role: "admin", is_active: true },
+    { id: 2, email: "editor@gilia.com", role: "editor", is_active: true },
+  ],
 
   // ===== DATOS MOCK PARA INFORMACIÓN PÚBLICA =====
   aboutInfo: {
@@ -665,6 +662,56 @@ const mockData = {
       featured: true,
     },
   ],
+
+  // ===== HERRAMIENTAS (TOOLS) MOCK =====
+  tools: [
+    {
+      id: 1,
+      name: "GILIA Framework",
+      description: "Un framework para el desarrollo ágil de aplicaciones con ontologías.",
+      link: "https://github.com/gilia/framework"
+    },
+    {
+      id: 2,
+      name: "NLP Toolkit",
+      description: "Herramientas de pre-procesamiento de texto para español de la Patagonia.",
+      link: "https://github.com/gilia/nlp-toolkit"
+    },
+    {
+      id: 3,
+      name: "RoboVise",
+      description: "Software de visualización para sistemas robóticos embebidos.",
+      link: "https://github.com/gilia/robovise"
+    }
+  ],
+  
+  staticContent: {
+    home: {
+      title: "Investigación, Desarrollo e Innovación en Inteligencia Artificial",
+      description: "Grupo de Investigación en Lenguajes de Programación, Inteligencia Artificial y Educación en Ciencias de la Computación.",
+      buttons: [
+        { label: "Proyectos", link: "/projects" },
+        { label: "Ver Más", link: "/about" }
+      ],
+      newsTitle: "Novedades y Eventos",
+      newsDescription: "Mantenete al tanto de nuestras últimas actividades e investigaciones de vanguardia.",
+      magicText: "Potenciando el futuro a través de la inteligencia artificial y el procesamiento del lenguaje natural.",
+      historyTitle: "Nuestra Historia",
+      historyDescription: "Más de una década de trayectoria en la formación de recursos humanos y el avance científico."
+    },
+    publications: {
+      title: "Producción Científica",
+      description: "Explora nuestra lista de papers, artículos y tesis desarrolladas por el equipo de GILIA."
+    },
+    institutional: {
+      title: "Sobre el Grupo GILIA",
+      description: "El Grupo de Investigación en Lenguajes e Inteligencia Artificial (GILIA) fue creado en 2010 en la Facultad de Informática de la UNCo."
+    },
+    team: {
+      title: "Nuestro Equipo",
+      description: "Un grupo diverso de investigadores, docentes y estudiantes comprometidos con la excelencia académica."
+    }
+  }
 };
 
 // Simulación de delay para APIs
@@ -705,9 +752,15 @@ function mapResearchLine(l) {
 }
 
 function mapPublication(pub) {
-  // "publicacion" (es) duplicates journal; we prefer journal
-  const { publicacion, ...rest } = pub;
-  return { ...rest };
+  return {
+    ...pub,
+    description: pub.description || pub.descripcion || "",
+    publicationLink: pub.publicationLink || pub.link || "",
+    document: pub.document || pub.archivo || null,
+    researchLines: pub.researchLines || (pub.researchline ? [pub.researchline] : []),
+    extensionLines: pub.extensionLines || (pub.extensionline ? [pub.extensionline] : []),
+    personas: pub.personas || []
+  };
 }
 
 function mapGalleryItem(i) {
@@ -721,7 +774,15 @@ function mapExtensionLine(l) {
     title: l.title || l.nombre,
     description: l.description || l.descripcion,
     projects: l.projects || l.proyectos || [],
+    relatedNews: l.relatedNews || [],
+    relatedTools: l.relatedTools || [],
+    relatedProjects: l.relatedProjects || [],
+    relatedPublications: l.relatedPublications || [],
   };
+}
+
+function mapTool(t) {
+  return { ...t };
 }
 
 function mapAboutInfo(info) {
@@ -1061,8 +1122,82 @@ export async function accessToTheBackoffice(credentials) {
   return result;
 }
 
+// ===== HERRAMIENTAS =====
+export async function getTools() {
+  await delay(400);
+  return { 
+    data: mockData.tools.map(mapTool),
+    meta: {
+      pagination: {
+        total: mockData.tools.length
+      }
+    }
+  };
+}
+
 // Trabajarlo en el futuro, para poder asegurara que toda la informacion
 export async function getToken() {
   const token = {};
   return token;
+}
+// ===== USUARIOS =====
+export async function getUsers() {
+  await delay(600);
+  return [...mockData.users];
+}
+
+export async function saveUser(user) {
+  await delay(800);
+  if (user.id) {
+    mockData.users = mockData.users.map(u => u.id === user.id ? { ...user, password: undefined } : u);
+  } else {
+    const newUser = { ...user, id: Date.now(), password: undefined };
+    mockData.users.push(newUser);
+  }
+  return { success: true };
+}
+
+export async function deleteUser(id) {
+  await delay(500);
+  mockData.users = mockData.users.filter(u => u.id !== id);
+  return { success: true };
+}
+
+// ===== CONTENIDO ESTÁTICO =====
+export async function getStaticContent() {
+  await delay(500);
+  return { ...mockData.staticContent };
+}
+
+export async function saveStaticContent(content) {
+  await delay(800);
+  mockData.staticContent = { ...content };
+  return { success: true };
+}
+
+export async function getHistory() {
+  await delay(400);
+  return [...mockData.aboutInfo.history];
+}
+
+export async function saveHistory(history) {
+  await delay(600);
+  mockData.aboutInfo.history = [...history];
+  return { success: true };
+}
+
+export async function saveObjective(objective) {
+  await delay(600);
+  if (objective.id) {
+    mockData.objectives = mockData.objectives.map(o => o.id === objective.id ? objective : o);
+  } else {
+    mockData.objectives.push({ ...objective, id: Date.now() });
+  }
+  return { success: true };
+}
+
+export async function deleteObjective(id) {
+  await delay(400);
+  mockData.objectives = mockData.objectives.filter(o => o.id !== id);
+  return { success: true };
 }

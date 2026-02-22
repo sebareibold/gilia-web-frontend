@@ -1,156 +1,147 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { dataService } from "../../../services/dataService"
-import { notification, Modal } from "antd"
+import { useState, useEffect } from "react";
+import dataService from "../../../services/dataService";
+import { notification, Modal } from "antd";
 import {
-  AppstoreOutlined,
+  PictureOutlined,
+  PlusOutlined,
   EditOutlined,
   DeleteOutlined,
   EyeOutlined,
   SearchOutlined,
-  UploadOutlined,
-  DownloadOutlined,
-} from "@ant-design/icons"
-import "./AdminGallery.css"
+  ArrowLeftOutlined,
+  SaveOutlined,
+  CloseOutlined,
+  TagsOutlined,
+  SettingOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 
 const AdminGaleria = () => {
-  const [imagenes, setImagenes] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filterCategory, setFilterCategory] = useState("all")
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [currentImagen, setCurrentImagen] = useState(null)
-  const [selectedFile, setSelectedFile] = useState(null)
-
-  const API_URL = 'http://localhost:3000';
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
+  const [viewMode, setViewMode] = useState("list"); // "list" | "edit"
+  const [currentItem, setCurrentItem] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    fetchImagenes();
+    fetchImages();
   }, []);
 
-  const fetchImagenes = async () => {
+  const fetchImages = async () => {
     setLoading(true);
     try {
       const response = await dataService.getGaleria();
-      setImagenes(response.data);
+      setImages(response.data);
     } catch (error) {
-      console.error("Error al obtener las imágenes:", error);
+      console.error("Error al obtener la galería:", error);
       notification.error({
-        message: 'Error de Carga',
-        description: 'No se pudieron cargar las imágenes. Por favor, intente de nuevo más tarde.',
+        message: "Error de Carga",
+        description: "No se pudieron cargar las imágenes de la galería.",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleOpenModal = (imagen = null) => {
-    setCurrentImagen(imagen ? { ...imagen } : { titulo: '', descripcion: '', categoria: 'General' });
-    setSelectedFile(null);
-    setIsModalOpen(true);
+  const categories = ["all", ...new Set(images.map((img) => img.category))];
+
+  const handleOpenModal = (item = null) => {
+    setCurrentItem(item ? { ...item } : { 
+      url: "", 
+      title: "", 
+      description: "", 
+      category: "General",
+      tags: []
+    });
+    setViewMode("edit");
   };
 
-  const handleCancelModal = () => {
-    setIsModalOpen(false);
-    setCurrentImagen(null);
-    setSelectedFile(null);
+  const handleCloseEditor = (force = false) => {
+    if (!force && isDirty()) {
+      Modal.confirm({
+        title: "Cambios sin guardar",
+        content: "¿Estás seguro de que deseas salir? Se perderán los cambios realizados.",
+        okText: "Descartar",
+        cancelText: "Seguir editando",
+        onOk: () => {
+          setViewMode("list");
+          setCurrentItem(null);
+        },
+      });
+    } else {
+      setViewMode("list");
+      setCurrentItem(null);
+    }
   };
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+  const isDirty = () => {
+    if (!currentItem) return false;
+    const original = images.find(img => img.id === currentItem.id) || {
+      url: "", 
+      title: "", 
+      description: "", 
+      category: "General",
+      tags: []
+    };
+    
+    return JSON.stringify(currentItem) !== JSON.stringify(original);
   };
 
   const handleSave = async () => {
-    if (!currentImagen.titulo || !currentImagen.categoria) {
-      notification.error({ message: 'Campos requeridos', description: 'El título y la categoría son obligatorios.' });
-      return;
-    }
-
+    const isUpdating = currentItem && currentItem.id;
+    setIsSaving(true);
     try {
-      if (currentImagen.id) {
-        const response = await dataService.updateImagen(currentImagen.id, {
-          titulo: currentImagen.titulo,
-          descripcion: currentImagen.descripcion,
-          categoria: currentImagen.categoria,
-        });
-        setImagenes((prev) => prev.map((img) => (img.id === currentImagen.id ? response.data : img)));
-        notification.success({ message: 'Imagen Actualizada' });
-      } else {
-        if (!selectedFile) {
-          notification.error({ message: 'Archivo requerido', description: 'Por favor, selecciona un archivo de imagen.' });
-          return;
-        }
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('titulo', currentImagen.titulo);
-        formData.append('descripcion', currentImagen.descripcion);
-        formData.append('categoria', currentImagen.categoria);
-
-        const response = await dataService.uploadImagen(formData);
-        setImagenes((prev) => [...prev, response.data]);
-        notification.success({ message: 'Imagen Subida' });
-      }
-      handleCancelModal();
-      fetchImagenes();
+      // Simulation
+      console.log("Saving gallery item:", currentItem);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      notification.success({
+        message: `Imagen ${isUpdating ? "Actualizada" : "Agregada"}`,
+        description: `La galería se ha ${isUpdating ? "actualizado" : "ampliado"} correctamente.`,
+      });
+      fetchImages();
+      setViewMode("list");
+      setCurrentItem(null);
     } catch (error) {
-      console.error("Error al guardar la imagen:", error);
-      notification.error({ message: 'Error al Guardar' });
+      console.error("Error al guardar en la galería:", error);
+      notification.error({
+        message: "Error al Guardar",
+        description: `No se pudo ${isUpdating ? "actualizar" : "agregar"} la imagen.`,
+      });
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleDelete = (id) => {
     Modal.confirm({
-      title: '¿Estás seguro de que deseas eliminar esta imagen?',
-      content: 'Esta acción no se puede deshacer.',
-      okText: 'Eliminar',
-      okType: 'danger',
-      cancelText: 'Cancelar',
+      title: "¿Estás seguro de que deseas eliminar esta imagen?",
+      content: "Esta acción no se puede deshacer.",
+      okText: "Eliminar",
+      okType: "danger",
+      cancelText: "Cancelar",
       onOk: async () => {
-        try {
-          await dataService.deleteImagen(id);
-          setImagenes((prev) => prev.filter((img) => img.id !== id));
-          notification.success({
-            message: 'Imagen Eliminada',
-            description: 'La imagen ha sido eliminada correctamente.',
-          });
-        } catch (error) {
-          console.error("Error al eliminar la imagen:", error);
-          notification.error({
-            message: 'Error al Eliminar',
-            description: 'No se pudo eliminar la imagen.',
-          });
-        }
+        notification.success({
+          message: "Imagen Eliminada",
+          description: "La imagen ha sido eliminada correctamente.",
+        });
+        setImages(prev => prev.filter(img => img.id !== id));
       },
     });
   };
 
-  const filteredImagenes = imagenes.filter((imagen) => {
+  const filteredImages = images.filter((img) => {
     const matchesSearch =
-      (imagen.titulo?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-      (imagen.descripcion?.toLowerCase() || '').includes(searchTerm.toLowerCase())
-
-    const matchesFilter = filterCategory === "all" || imagen.categoria === filterCategory
-
-    return matchesSearch && matchesFilter
-  })
-
-  const getCategoriaColor = (categoria) => {
-    switch (categoria) {
-      case "Laboratorio":
-        return "admin-unified-badge-active"
-      case "Eventos":
-        return "admin-unified-badge-active"
-      case "Equipo":
-        return "admin-unified-badge-active"
-      case "Proyectos":
-        return "admin-unified-badge-pending"
-      case "Publicaciones":
-        return "admin-unified-badge-inactive"
-      default:
-        return "admin-unified-badge-pending"
-    }
-  }
+      img.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      img.category?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      filterCategory === "all" || img.category === filterCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   if (loading) {
     return (
@@ -160,7 +151,7 @@ const AdminGaleria = () => {
           <p>Cargando galería...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -171,182 +162,277 @@ const AdminGaleria = () => {
         <div className="admin-floating-element admin-floating-element-3"></div>
       </div>
 
-      <div className="admin-unified-header">
-        <h1 className="admin-unified-title">
-          <AppstoreOutlined />
-          Galería de Imágenes
-        </h1>
-        <p className="admin-unified-subtitle">
-          Gestiona las imágenes y recursos multimedia del sitio web GILIA. Organiza fotos de eventos, proyectos y
-          equipo.
-        </p>
+      {viewMode === "list" ? (
+        <>
+          <div className="admin-unified-header">
+            <h1 className="admin-unified-title">
+              <PictureOutlined />
+              Galería Multimedia
+            </h1>
+            <p className="admin-unified-subtitle">
+              Administra las imágenes y recursos visuales del grupo GILIA.
+              Organiza por categorías y mantén actualizada la presencia visual.
+            </p>
 
-        <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
-          <UploadOutlined />
-          Subir Imágenes
-        </button>
-      </div>
-
-      <div className="admin-unified-filters">
-        <div className="admin-unified-search">
-          <SearchOutlined className="admin-unified-search-icon" />
-          <input
-            type="text"
-            placeholder="Buscar por título, descripción o tags..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-
-        <select
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-          className="admin-unified-filter-select"
-        >
-          <option value="all">Todas las categorías</option>
-          <option value="Laboratorio">Laboratorio</option>
-          <option value="Eventos">Eventos</option>
-          <option value="Equipo">Equipo</option>
-          <option value="Proyectos">Proyectos</option>
-          <option value="Publicaciones">Publicaciones</option>
-        </select>
-      </div>
-
-      {filteredImagenes.length === 0 ? (
-        <div className="admin-unified-empty">
-          <AppstoreOutlined className="admin-unified-empty-icon" />
-          <h3 className="admin-unified-empty-title">No hay imágenes</h3>
-          <p className="admin-unified-empty-description">
-            {searchTerm || filterCategory !== "all"
-              ? "No se encontraron resultados para los filtros aplicados."
-              : "Comienza subiendo tu primera imagen a la galería."}
-          </p>
-          {!searchTerm && filterCategory === "all" && (
-            <button className="admin-unified-primary-btn" onClick={() => handleOpenModal()}>
-              <UploadOutlined />
-              Subir Primera Imagen
-            </button>
-          )}
-        </div>
-      ) : (
-        <div className="admin-unified-table-container">
-          <table className="admin-unified-table">
-            <thead>
-              <tr>
-                <th>Imagen</th>
-                <th>Información</th>
-                <th>Categoría</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredImagenes.map((imagen) => (
-                <tr key={imagen.id}>
-                  <td>
-                    <img
-                      src={`${API_URL}${imagen.url}`}
-                      alt={imagen.titulo}
-                      style={{
-                        width: "80px",
-                        height: "60px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                        border: "1px solid rgba(102, 126, 234, 0.1)",
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <strong>{imagen.titulo}</strong>
-                    <br />
-                    <small style={{ color: "#64748b", lineHeight: "1.4" }}>
-                      {imagen.descripcion?.substring(0, 80)}...
-                    </small>
-                  </td>
-                  <td>
-                    <span className={`admin-unified-badge ${getCategoriaColor(imagen.categoria)}`}>
-                      {imagen.categoria}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="admin-table-actions">
-                      <button className="admin-table-btn admin-table-btn-view" title="Ver">
-                        <EyeOutlined />
-                      </button>
-                      <button className="admin-table-btn admin-table-btn-view" title="Descargar">
-                        <DownloadOutlined />
-                      </button>
-                      <button className="admin-table-btn admin-table-btn-edit" title="Editar" onClick={() => handleOpenModal(imagen)}>
-                        <EditOutlined />
-                      </button>
-                      <button
-                        className="admin-table-btn admin-table-btn-delete"
-                        title="Eliminar"
-                        onClick={() => handleDelete(imagen.id)}
-                      >
-                        <DeleteOutlined />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      <Modal
-        title={currentImagen?.id ? "Editar Imagen" : "Subir Nueva Imagen"}
-        open={isModalOpen}
-        onOk={handleSave}
-        onCancel={handleCancelModal}
-        okText="Guardar"
-        cancelText="Cancelar"
-      >
-        <form className="admin-unified-form">
-          <div className="admin-unified-form-group">
-            <label>Título</label>
-            <input
-              type="text"
-              value={currentImagen?.titulo || ''}
-              onChange={(e) => setCurrentImagen({ ...currentImagen, titulo: e.target.value })}
-            />
-          </div>
-          <div className="admin-unified-form-group">
-            <label>Descripción</label>
-            <textarea
-              rows="3"
-              value={currentImagen?.descripcion || ''}
-              onChange={(e) => setCurrentImagen({ ...currentImagen, descripcion: e.target.value })}
-            />
-          </div>
-          <div className="admin-unified-form-group">
-            <label>Categoría</label>
-            <select
-              value={currentImagen?.categoria || 'General'}
-              onChange={(e) => setCurrentImagen({ ...currentImagen, categoria: e.target.value })}
+            <button
+              className="admin-unified-primary-btn"
+              onClick={() => handleOpenModal()}
             >
-              <option value="General">General</option>
-              <option value="Laboratorio">Laboratorio</option>
-              <option value="Eventos">Eventos</option>
-              <option value="Equipo">Equipo</option>
-              <option value="Proyectos">Proyectos</option>
-              <option value="Publicaciones">Publicaciones</option>
-            </select>
+              <PlusOutlined />
+              Agregar Imagen
+            </button>
           </div>
-          {!currentImagen?.id && (
-            <div className="admin-unified-form-group">
-              <label>Archivo de Imagen</label>
+
+          <div className="admin-unified-filters">
+            <div className="admin-unified-search">
+              <SearchOutlined className="admin-unified-search-icon" />
               <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
+                type="text"
+                placeholder="Buscar imágenes..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-          )}
-        </form>
-      </Modal>
-    </div>
-  )
-}
 
-export default AdminGaleria
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="admin-unified-filter-select"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat === "all" ? "Todas las categorías" : cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {filteredImages.length === 0 ? (
+            <div className="admin-unified-empty">
+              <PictureOutlined className="admin-unified-empty-icon" />
+              <h3 className="admin-unified-empty-title">Galería vacía</h3>
+              <p className="admin-unified-empty-description">
+                {searchTerm || filterCategory !== "all"
+                  ? "No hay imágenes que coincidan con los filtros."
+                  : "Tu galería aún no tiene contenido visual."}
+              </p>
+            </div>
+          ) : (
+            <div className="modern-table-container">
+              <table className="modern-admin-table">
+                <thead>
+                  <tr>
+                    <th>Miniatura</th>
+                    <th>Información</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredImages.map((img) => (
+                    <tr key={img.id}>
+                      <td data-label="Miniatura">
+                        <img 
+                          src={img.url} 
+                          alt={img.title} 
+                          style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '8px' }}
+                        />
+                      </td>
+                      <td data-label="Información">
+                        <strong>{img.title}</strong>
+                        <p style={{ fontSize: '0.8rem', color: '#64748b', margin: 0 }}>{img.description?.substring(0, 50)}...</p>
+                      </td>
+                      <td data-label="Categoría">
+                        <span className="status-badge pending">{img.category}</span>
+                      </td>
+                      <td className="actions-cell">
+                        <div className="modern-actions">
+                          <button
+                            className="btn-action btn-action-view"
+                            title="Ver"
+                            onClick={() => handleOpenModal(img)}
+                          >
+                            <EyeOutlined /> Ver
+                          </button>
+                          <button
+                            className="btn-action btn-action-edit"
+                            title="Modificar"
+                            onClick={() => handleOpenModal(img)}
+                          >
+                            <EditOutlined /> Modificar
+                          </button>
+                          <button
+                            className="btn-action btn-action-delete"
+                            title="Eliminar"
+                            onClick={() => handleDelete(img.id)}
+                          >
+                            <DeleteOutlined /> Eliminar
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      ) : (
+        <GalleryItemEditor 
+          item={currentItem}
+          setItem={setCurrentItem}
+          onSave={handleSave}
+          onCancel={() => handleCloseEditor()}
+          isSaving={isSaving}
+        />
+      )}
+    </div>
+  );
+};
+
+const GalleryItemEditor = ({ item, setItem, onSave, onCancel, isSaving }) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setItem(prev => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="admin-editor-container">
+      <div className="admin-editor-header">
+        <div className="admin-editor-header-left">
+          <div className="admin-editor-breadcrumb" onClick={onCancel}>
+            <ArrowLeftOutlined /> Volver a la galería
+          </div>
+          <h2 className="admin-editor-title">
+            {item.id ? `Detalles de Imagen` : "Nueva Imagen"}
+          </h2>
+        </div>
+        <div className="admin-editor-actions">
+          <button className="btn-action btn-action-edit" onClick={onCancel} style={{ marginRight: '0.5rem' }}>
+            Cancelar
+          </button>
+          <button className="admin-unified-primary-btn" onClick={onSave} disabled={isSaving}>
+            <SaveOutlined /> {isSaving ? "Guardando..." : "Guardar Cambios"}
+          </button>
+        </div>
+      </div>
+
+      <div className="admin-editor-layout">
+        <div className="admin-editor-main">
+          {/* Seccion Info */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title"><SettingOutlined /> Información de la Imagen</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="editor-form-group">
+                <label className="editor-label">Título / Alt Text</label>
+                <input 
+                  type="text" 
+                  name="title"
+                  className="editor-input" 
+                  value={item.title} 
+                  onChange={handleChange}
+                  placeholder="Título descriptivo de la imagen..."
+                />
+              </div>
+              <div className="editor-form-group">
+                <label className="editor-label">Descripción larga</label>
+                <textarea 
+                  name="description"
+                  className="editor-textarea" 
+                  style={{ minHeight: '120px' }}
+                  value={item.description} 
+                  onChange={handleChange}
+                  placeholder="Contexto adicional sobre la imagen..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Gestión de Archivo */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title"><PictureOutlined /> Recurso Multimedia</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="editor-form-group">
+                <label className="editor-label">URL de la Imagen</label>
+                <input 
+                  type="url" 
+                  name="url"
+                  className="editor-input" 
+                  value={item.url} 
+                  onChange={handleChange}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+              </div>
+              <div className="image-upload-preview" style={{ maxWidth: '100%', height: '300px' }}>
+                {item.url ? (
+                  <img src={item.url} alt="Preview" style={{ objectFit: 'contain' }} />
+                ) : (
+                  <div style={{ textAlign: 'center', color: '#94a3b8' }}>
+                    <PlusOutlined style={{ fontSize: '2rem', marginBottom: '1rem' }} />
+                    <p>Pega una URL o sube un archivo</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="admin-editor-sidebar">
+          {/* Clasificación */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title">Clasificación</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="editor-form-group">
+                <label className="editor-label"><InfoCircleOutlined /> Categoría</label>
+                <select 
+                  name="category"
+                  className="editor-select"
+                  value={item.category}
+                  onChange={handleChange}
+                >
+                  <option value="General">General</option>
+                  <option value="Eventos">Eventos</option>
+                  <option value="Investigación">Investigación</option>
+                  <option value="Equipo">Equipo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Etiquetas */}
+          <div className="admin-editor-card">
+            <div className="admin-editor-card-header">
+              <h3 className="admin-editor-card-title"><TagsOutlined /> Etiquetas</h3>
+            </div>
+            <div className="admin-editor-card-body">
+              <div className="tag-input-container">
+                <input 
+                  type="text" 
+                  className="tag-input-field" 
+                  placeholder="Agregar etiquetas..." 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="admin-editor-footer">
+        <button className="btn-action btn-action-edit" onClick={onCancel}>
+          Cancelar
+        </button>
+        <button className="admin-unified-primary-btn" onClick={onSave} disabled={isSaving}>
+          <SaveOutlined /> {isSaving ? "Guardando..." : "Guardar Cambios"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default AdminGaleria;

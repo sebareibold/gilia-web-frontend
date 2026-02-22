@@ -1160,7 +1160,6 @@
 }
 
 .carousel-nav-btn:hover:not(:disabled) {
-  transform: scale(1.1);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 

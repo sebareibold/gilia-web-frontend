@@ -13,8 +13,18 @@ import {
   getExtensionLines as mockGetExtensionLines, 
   getExtensionLine as mockGetExtensionLine, 
   getNews as mockGetNews, 
-  getNewsItem as mockGetNewsItem ,
-  accessToTheBackoffice as mockAccessToTheBackoffice
+  getNewsItem as mockGetNewsItem,
+  getTools as mockGetTools,
+  accessToTheBackoffice as mockAccessToTheBackoffice,
+  getUsers as mockGetUsers,
+  saveUser as mockSaveUser,
+  deleteUser as mockDeleteUser,
+  getStaticContent as mockGetStaticContent,
+  saveStaticContent as mockSaveStaticContent,
+  getHistory as mockGetHistory,
+  saveHistory as mockSaveHistory,
+  saveObjective as mockSaveObjective,
+  deleteObjective as mockDeleteObjective
 } from "./mock";
 
 // Exportamos SIEMPRE desde mock para que la app funcione ahora sin errores de export faltantes
@@ -41,7 +51,17 @@ export const getExtensionLines = mockGetExtensionLines;
 export const getExtensionLineById = mockGetExtensionLine;
 export const getNews = mockGetNews;
 export const getNewsItem = mockGetNewsItem;
+export const getTools = mockGetTools;
 export const accessToTheBackoffice = mockAccessToTheBackoffice;
+export const getUsers = async () => ({ data: await mockGetUsers() });
+export const saveUser = mockSaveUser;
+export const deleteUser = mockDeleteUser;
+export const getStaticContent = async () => ({ data: await mockGetStaticContent() });
+export const saveStaticContent = mockSaveStaticContent;
+export const getHistory = async () => ({ data: await mockGetHistory() });
+export const saveHistory = mockSaveHistory;
+export const saveObjective = mockSaveObjective;
+export const deleteObjective = mockDeleteObjective;
 
 
 // Adicionales usados en componentes públicos

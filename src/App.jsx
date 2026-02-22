@@ -42,11 +42,17 @@ const AdminTeam = lazy(() => import("./components/admin/AdminTeam/AdminTeam"));
 const AdminGallery = lazy(
   () => import("./components/admin/AdminGallery/AdminGallery")
 );
-const AdminSettings = lazy(
-  () => import("./components/admin/AdminSettings/AdminSettings")
+const AdminStaticContent = lazy(
+  () => import("./components/admin/AdminStaticContent/AdminStaticContent")
 );
 const AdminExtensionLines = lazy(
   () => import("./components/admin/AdminExtensionLines/AdminExtensionLines")
+);
+const AdminNews = lazy(
+  () => import("./components/admin/AdminNews/AdminNews")
+);
+const AdminUsers = lazy(
+  () => import("./components/admin/AdminUsers/AdminUsers")
 );
 
 import "./App.css";
@@ -124,7 +130,9 @@ function App() {
                 <Route path="projects" element={<AdminProjects />} />
                 <Route path="team" element={<AdminTeam />} />
                 <Route path="gallery" element={<AdminGallery />} />
-                <Route path="configuration" element={<AdminSettings />} />
+                <Route path="news" element={<AdminNews />} />
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="content" element={<AdminStaticContent />} />
               </Route>
 
               {/* Ruta catch-all: redirige a raiz */}

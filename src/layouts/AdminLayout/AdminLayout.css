@@ -551,26 +551,107 @@
 }
 
 /* Responsive */
+/* Mobile Navigation */
+.mobile-appbar {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  z-index: 1001;
+  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+  padding: 0 1.5rem;
+}
+
+.mobile-appbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.mobile-user-display {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mobile-username {
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.1rem;
+}
+
+.mobile-menu-toggle {
+  background: #f1f5f9;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-toggle:active {
+  transform: scale(0.9);
+  background: #e2e8f0;
+}
+
+.mobile-simple-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @media (max-width: 768px) {
+  .mobile-appbar {
+    display: block;
+  }
+
   .admin-sidebar-transparent {
     transform: translateX(-100%);
+    z-index: 1100; /* Por encima de la appbar */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .admin-sidebar-transparent.mobile-open {
     transform: translateX(0);
-    width: 280px; /* Asegurar ancho completo en móvil cuando está abierto */
+    width: 280px !important;
   }
 
   .admin-main-wrapper {
     margin-left: 0 !important;
-    transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-top: 74px !important; /* Espacio para la MobileAppBar */
   }
 
-  .admin-sidebar-transparent.mobile-open + .admin-main-wrapper {
-    margin-left: 280px !important;
+  .admin-sidebar-toggle {
+    display: none !important; /* No necesitamos el Toggle de colapsar en móvil */
   }
-
-  .admin-sidebar-toggle.mobile-visible {
-    display: none;
+  
+  .admin-user-header {
+    margin-left: 0;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(102, 126, 234, 0.05);
   }
 }
