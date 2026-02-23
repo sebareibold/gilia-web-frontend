@@ -24,7 +24,19 @@ import {
   getHistory as mockGetHistory,
   saveHistory as mockSaveHistory,
   saveObjective as mockSaveObjective,
-  deleteObjective as mockDeleteObjective
+  deleteObjective as mockDeleteObjective,
+  saveProject as mockSaveProject,
+  deleteProject as mockDeleteProject,
+  saveMember as mockSaveMember,
+  deleteMember as mockDeleteMember,
+  saveNews as mockSaveNews,
+  deleteNews as mockDeleteNews,
+  saveResearchLine as mockSaveResearchLine,
+  deleteResearchLine as mockDeleteResearchLine,
+  savePublication as mockSavePublication,
+  deletePublication as mockDeletePublication,
+  saveGalleryItem as mockSaveGalleryItem,
+  deleteGalleryItem as mockDeleteGalleryItem
 } from "./mock";
 
 // Exportamos SIEMPRE desde mock para que la app funcione ahora sin errores de export faltantes
@@ -62,6 +74,18 @@ export const getHistory = async () => ({ data: await mockGetHistory() });
 export const saveHistory = mockSaveHistory;
 export const saveObjective = mockSaveObjective;
 export const deleteObjective = mockDeleteObjective;
+export const saveProject = mockSaveProject;
+export const deleteProject = mockDeleteProject;
+export const saveMember = mockSaveMember;
+export const deleteMember = mockDeleteMember;
+export const saveNews = mockSaveNews;
+export const deleteNews = mockDeleteNews;
+export const saveResearchLine = mockSaveResearchLine;
+export const deleteResearchLine = mockDeleteResearchLine;
+export const savePublication = mockSavePublication;
+export const deletePublication = mockDeletePublication;
+export const saveGalleryItem = mockSaveGalleryItem;
+export const deleteGalleryItem = mockDeleteGalleryItem;
 
 
 // Adicionales usados en componentes públicos

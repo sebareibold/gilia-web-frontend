@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react";
-import dataService from "../../../services/dataService";
+import { getGalleryItems } from "../../../services";
 import { notification, Modal } from "antd";
 import {
   PictureOutlined,
@@ -34,7 +34,7 @@ const AdminGaleria = () => {
   const fetchImages = async () => {
     setLoading(true);
     try {
-      const response = await dataService.getGaleria();
+      const response = await getGalleryItems();
       setImages(response.data);
     } catch (error) {
       console.error("Error al obtener la galería:", error);

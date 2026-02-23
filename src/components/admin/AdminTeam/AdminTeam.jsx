@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { getTeamMembers } from "../../../services"
+import { getTeamMembers, saveMember, deleteMember } from "../../../services"
 import { notification, Modal } from "antd"
 import {
   MailOutlined,
@@ -115,7 +115,7 @@ const AdminEquipo = () => {
     try {
       // Simulation
       console.log("Saving team member:", currentMember);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await saveMember(currentMember);
       
       notification.success({
         message: `Miembro ${isUpdating ? 'Actualizado' : 'Creado'}`,
@@ -142,9 +142,9 @@ const AdminEquipo = () => {
       okText: 'Eliminar',
       okType: 'danger',
       cancelText: 'Cancelar',
-      /* onOk: async () => {
+      onOk: async () => {
         try {
-          await dataService.deletePersona(id);
+          await deleteMember(id);
           setTeamMembers((prev) => prev.filter((member) => member.id !== id));
           notification.success({
             message: 'Miembro Eliminado',
@@ -157,7 +157,7 @@ const AdminEquipo = () => {
             description: 'No se pudo eliminar el miembro del equipo.',
           });
         }
-      }, */
+      },
     });
   };
 

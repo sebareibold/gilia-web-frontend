@@ -1196,6 +1196,108 @@ export async function saveObjective(objective) {
   return { success: true };
 }
 
+// ===== PROYECTOS =====
+export async function saveProject(project) {
+  await delay(800);
+  if (project.id) {
+    mockData.projects = mockData.projects.map(p => p.id === project.id ? project : p);
+  } else {
+    mockData.projects.push({ ...project, id: Date.now() });
+  }
+  return { success: true };
+}
+
+export async function deleteProject(id) {
+  await delay(500);
+  mockData.projects = mockData.projects.filter(p => p.id !== id);
+  return { success: true };
+}
+
+// ===== EQUIPO =====
+export async function saveMember(member) {
+  await delay(800);
+  if (member.id) {
+    mockData.teamMembers = mockData.teamMembers.map(m => m.id === member.id ? member : m);
+  } else {
+    mockData.teamMembers.push({ ...member, id: Date.now() });
+  }
+  return { success: true };
+}
+
+export async function deleteMember(id) {
+  await delay(500);
+  mockData.teamMembers = mockData.teamMembers.filter(m => m.id !== id);
+  return { success: true };
+}
+
+// ===== NOVEDADES =====
+export async function saveNews(newsItem) {
+  await delay(800);
+  if (newsItem.id) {
+    mockData.news = mockData.news.map(n => n.id === newsItem.id ? newsItem : n);
+  } else {
+    mockData.news.push({ ...newsItem, id: Date.now() });
+  }
+  return { success: true };
+}
+
+export async function deleteNews(id) {
+  await delay(500);
+  mockData.news = mockData.news.filter(n => n.id !== id);
+  return { success: true };
+}
+
+// ===== LÍNEAS DE INVESTIGACIÓN =====
+export async function saveResearchLine(line) {
+  await delay(800);
+  if (line.id) {
+    mockData.researchLines = mockData.researchLines.map(l => l.id === line.id ? line : l);
+  } else {
+    mockData.researchLines.push({ ...line, id: Date.now() });
+  }
+  return { success: true };
+}
+
+export async function deleteResearchLine(id) {
+  await delay(500);
+  mockData.researchLines = mockData.researchLines.filter(l => l.id !== id);
+  return { success: true };
+}
+
+// ===== PUBLICACIONES =====
+export async function savePublication(publication) {
+  await delay(800);
+  if (publication.id) {
+    mockData.publications = mockData.publications.map(p => p.id === publication.id ? publication : p);
+  } else {
+    mockData.publications.push({ ...publication, id: Date.now() });
+  }
+  return { success: true };
+}
+
+export async function deletePublication(id) {
+  await delay(500);
+  mockData.publications = mockData.publications.filter(p => p.id !== id);
+  return { success: true };
+}
+
+// ===== GALERÍA =====
+export async function saveGalleryItem(item) {
+  await delay(800);
+  if (item.id) {
+    mockData.galleryItems = mockData.galleryItems.map(g => g.id === item.id ? item : g);
+  } else {
+    mockData.galleryItems.push({ ...item, id: Date.now() });
+  }
+  return { success: true };
+}
+
+export async function deleteGalleryItem(id) {
+  await delay(500);
+  mockData.galleryItems = mockData.galleryItems.filter(g => g.id !== id);
+  return { success: true };
+}
+
 export async function deleteObjective(id) {
   await delay(400);
   mockData.objectives = mockData.objectives.filter(o => o.id !== id);

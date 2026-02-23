@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getProjects, getResearchLines, getTeamMembers } from "../../../services";
+import { getProjects, getResearchLines, getTeamMembers, saveProject, deleteProject } from "../../../services";
 import ReactMarkdown from "react-markdown";
 import { notification, Modal } from "antd";
 import {
@@ -113,7 +113,7 @@ const AdminProyectos = () => {
     try {
       // Simulation
       console.log("Saving project:", currentProyecto);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await saveProject(currentProyecto);
       
       notification.success({
         message: `Proyecto ${isUpdating ? "Actualizado" : "Creado"}`,
@@ -138,8 +138,8 @@ const AdminProyectos = () => {
       okType: "danger",
       cancelText: "Cancelar",
       onOk: async () => {
-        /*   try {
-          await dataService.deleteProyecto(id);
+        try {
+          await deleteProject(id);
           setProyectos((prev) => prev.filter((p) => p.id !== id));
           notification.success({
             message: "Proyecto Eliminado",
@@ -151,7 +151,7 @@ const AdminProyectos = () => {
             message: "Error al Eliminar",
             description: "No se pudo eliminar el proyecto.",
           });
-        } */
+        }
       },
     });
   };
