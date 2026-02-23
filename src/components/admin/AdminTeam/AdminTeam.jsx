@@ -1,4 +1,3 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { getTeamMembers, saveMember, deleteMember } from "../../../services"

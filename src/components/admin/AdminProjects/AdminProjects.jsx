@@ -1,4 +1,3 @@
-"use client";
 
 import { useState, useEffect } from "react";
 import { getProjects, getResearchLines, getTeamMembers, saveProject, deleteProject } from "../../../services";

@@ -1,4 +1,3 @@
-"use client";
 
 import { useState, useEffect } from "react";
 import { getPublications, getTeamMembers, getResearchLines, getExtensionLines } from "../../../services";
