@@ -1,4 +1,3 @@
-"use client"
 
 import PropTypes from "prop-types"
 import { ArrowRightOutlined, UserOutlined } from "@ant-design/icons"

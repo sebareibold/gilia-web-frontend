@@ -10,7 +10,7 @@ import {
   EyeInvisibleOutlined,
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
-import Illustration from "../../../assets/admin/login-illustration.png";
+import Illustration from "../../../Assets/admin/login-illustration.png";
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({
