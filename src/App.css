@@ -827,7 +827,7 @@ body[data-theme="dark"] {
 
 @media (max-width: 640px) {
   body {
-    padding-top: 64px;
+    padding-top: 0px;
   }
   
   /* Fondo más sutil en móviles movido a #root */
